@@ -1,0 +1,26 @@
+{
+  "name": "@site/main",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "7.0.5",
+    "@astrojs/react": "6.0.2",
+    "@astrojs/svelte": "9.0.1",
+    "@site/post-search": "workspace:*",
+    "@site/theme-toggle": "workspace:*",
+    "astro": "7.2.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "svelte": "5.56.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "typescript": "7.0.2"
+  }
+}

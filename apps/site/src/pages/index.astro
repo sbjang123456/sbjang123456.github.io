@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base>
+  <h1>sbjang의 홈</h1>
+  <p>Astro 아일랜드 아키텍처 기반 개인 사이트입니다.</p>
+  <ul>
+    <li>
+      <strong>사이트 뼈대</strong> — Astro가 빌드 타임에 정적 HTML로 생성
+    </li>
+    <li>
+      <strong>회고</strong> — MDX 콘텐츠 컬렉션. 검색창은 React 아일랜드
+      (워크스페이스 패키지 <code>@site/post-search</code>)
+    </li>
+    <li>
+      <strong>테마 토글</strong> — 헤더 오른쪽 버튼은 Svelte 아일랜드
+      (워크스페이스 패키지 <code>@site/theme-toggle</code>)
+    </li>
+    <li><strong>이력서</strong> — 정적 페이지</li>
+  </ul>
+</Base>

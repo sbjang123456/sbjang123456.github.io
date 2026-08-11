@@ -1,0 +1,23 @@
+{
+  "name": "sbjang123456.github.io",
+  "private": true,
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @site/main dev",
+    "build": "pnpm -r build",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  }
+}

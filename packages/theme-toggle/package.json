@@ -1,0 +1,15 @@
+{
+  "name": "@site/theme-toggle",
+  "private": true,
+  "type": "module",
+  "svelte": "./src/ThemeToggle.svelte",
+  "exports": {
+    ".": {
+      "svelte": "./src/ThemeToggle.svelte",
+      "default": "./src/ThemeToggle.svelte"
+    }
+  },
+  "peerDependencies": {
+    "svelte": "^5.0.0"
+  }
+}

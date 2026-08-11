@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import { PostSearch } from '@site/post-search';
+import Base from '../../layouts/Base.astro';
+
+const posts = (await getCollection('retrospect')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+// 아일랜드로 넘기는 props는 직렬화 가능해야 한다 (Date 객체 대신 문자열)
+const summaries = posts.map((post) => ({
+  id: post.id,
+  title: post.data.title,
+  date: post.data.date.toISOString().slice(0, 10),
+  url: `/retrospect/${post.id}/`,
+}));
+---
+
+<Base title="회고 — sbjang">
+  <h1>회고</h1>
+  <PostSearch client:load posts={summaries} />
+  <ul>
+    {
+      posts.map((post) => (
+        <li>
+          <a href={`/retrospect/${post.id}/`}>{post.data.title}</a>{' '}
+          <time datetime={post.data.date.toISOString()}>
+            {post.data.date.toISOString().slice(0, 10)}
+          </time>
+        </li>
+      ))
+    }
+  </ul>
+</Base>
