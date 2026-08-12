@@ -1,0 +1,66 @@
+---
+import { type Career, formatPeriod } from '../data';
+import { findProject } from '../projects/index';
+import './disclosure.css';
+import ProjectDisclosure from './project-disclosure.astro';
+
+interface Props {
+  career: Career;
+}
+
+const { career } = Astro.props;
+---
+
+{/*
+  `name`을 주면 한 번에 하나만 열리는 아코디언 동작을 브라우저가 맡는다.
+  모르는 브라우저에서는 여러 개가 열릴 뿐 기능은 그대로다.
+  <details> 중첩(회사 > 프로젝트)은 정상 동작한다.
+*/}
+<details
+  id={career.slug}
+  name="career"
+  data-disclosure
+  class="group rounded-xl border border-border bg-card"
+>
+  {/* <summary>의 콘텐츠 모델은 "구문 콘텐츠 또는 제목 하나"다 —
+      제목을 쓰려면 h3가 summary의 유일한 자식이어야 한다 */}
+  <summary
+    class="cursor-pointer list-none rounded-xl px-4 py-3 outline-none hover:bg-accent/40 focus-visible:ring-[3px] focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden"
+  >
+    <h3
+      data-slot="career-org"
+      class="flex flex-wrap items-baseline gap-x-3 font-medium"
+    >
+      <svg
+        class="size-3.5 shrink-0 self-center text-muted-foreground transition-transform group-open:rotate-90"
+        viewBox="0 0 12 12"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="m4 2 4 4-4 4"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+      <span>
+        {career.org}
+        <span class="text-muted-foreground"> · {career.role}</span>
+      </span>
+      <span
+        class="ml-auto text-sm font-normal text-muted-foreground tabular-nums"
+      >
+        {formatPeriod(career)}
+      </span>
+    </h3>
+  </summary>
+
+  <div class="flex flex-col gap-1 px-4 pt-1 pb-4">
+    {
+      career.projects.map((project) => (
+        <ProjectDisclosure project={findProject(project)} />
+      ))
+    }
+  </div>
+</details>

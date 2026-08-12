@@ -58,19 +58,96 @@ test.describe('네비게이션', () => {
   });
 });
 
+/**
+ * 프로젝트 상세를 펼친다.
+ *
+ * 닫힌 채로 재면 무조건 통과한다 — 진짜 넘침 원인(코드 블록, 스크린샷)은
+ * 펼친 뒤에야 레이아웃에 들어온다.
+ */
+const expand = async (page: Page, selector: string) => {
+  const summaries = page.locator(selector);
+  for (let i = 0; i < (await summaries.count()); i += 1) {
+    await summaries.nth(i).click();
+  }
+};
+
 test.describe('이력서', () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
-  test('좁은 화면에서 가로로 넘치지 않는다', async ({ page }) => {
-    await page.goto('/resume/');
-
-    // 프로젝트 이름이 길어 nowrap 요소로 깔면 조용히 가로 스크롤이 생긴다
-    const { scroll, viewport } = await page.evaluate(() => ({
+  const width = (page: Page) =>
+    page.evaluate(() => ({
       scroll: document.documentElement.scrollWidth,
       viewport: document.documentElement.clientWidth,
     }));
 
+  test('랜딩이 좁은 화면에서 가로로 넘치지 않는다', async ({ page }) => {
+    await page.goto('/resume/');
+    await expand(page, 'main details > summary');
+
+    const { scroll, viewport } = await width(page);
     expect(scroll).toBeLessThanOrEqual(viewport);
+  });
+
+  test('전체보기가 좁은 화면에서 가로로 넘치지 않는다', async ({ page }) => {
+    await page.goto('/resume/all/');
+
+    // 코드 블록과 스크린샷이 몰려 있는 첫 회사를 열고 잰다
+    await page.locator('main ol > li:first-child > details > summary').click();
+    await expand(page, 'main ol > li:first-child details details > summary');
+
+    const { scroll, viewport } = await width(page);
+    expect(scroll).toBeLessThanOrEqual(viewport);
+  });
+});
+
+test.describe('이력서 전체보기', () => {
+  test('랜딩에서 전체보기로 들어간다', async ({ page }) => {
+    await page.goto('/resume/');
+    await page.getByRole('link', { name: '이력서 전체보기' }).click();
+
+    await expect(page).toHaveURL('/resume/all/');
+    // 네비게이션은 하위 경로에서도 이력서 탭을 켜 둔다
+    await expect(
+      nav(page).getByRole('link', { name: '이력서' }),
+    ).toHaveAttribute('aria-current', 'page');
+  });
+
+  test('회사를 누르면 프로젝트가 펼쳐지고 다시 누르면 접힌다', async ({
+    page,
+  }) => {
+    await page.goto('/resume/all/');
+
+    const company = page.locator('#storelink');
+    const projects = company.locator('details').first();
+
+    await expect(projects).not.toBeVisible();
+    await company.locator('> summary').click();
+    await expect(projects).toBeVisible();
+    await company.locator('> summary').click();
+    await expect(projects).not.toBeVisible();
+  });
+
+  test('한 번에 한 회사만 열린다', async ({ page }) => {
+    await page.goto('/resume/all/');
+
+    await page.locator('#storelink > summary').click();
+    await expect(page.locator('#storelink')).toHaveAttribute('open', '');
+
+    await page.locator('#wmpo > summary').click();
+    await expect(page.locator('#wmpo')).toHaveAttribute('open', '');
+    await expect(page.locator('#storelink')).not.toHaveAttribute('open', '');
+  });
+
+  test('프로젝트를 열면 스크린샷이 실제로 로드된다', async ({ page }) => {
+    await page.goto('/resume/all/');
+    await page.locator('#hanssem > summary').click();
+    await page.locator('#mds > summary').click();
+
+    const image = page.locator('#mds img').first();
+    await expect(image).toBeVisible();
+    await expect
+      .poll(() => image.evaluate((el: HTMLImageElement) => el.naturalWidth))
+      .toBeGreaterThan(0);
   });
 });
 
@@ -145,5 +222,20 @@ test.describe('점진적 향상', () => {
 
     await page.goto('/');
     await expect(page.locator('h1')).toContainText('sbjang의 홈');
+  });
+
+  test('JS가 없어도 이력서 상세를 펼쳐 볼 수 있다', async ({ page }) => {
+    // <details>를 고른 이유를 못 박는 테스트. React 아코디언이었다면
+    // 상세가 서버 HTML에 아예 없어 여기서 막힌다.
+    await page.goto('/resume/all/');
+
+    const body = page.locator('#mds > div');
+    await expect(body).not.toBeVisible();
+
+    await page.locator('#hanssem > summary').click();
+    await page.locator('#mds > summary').click();
+
+    await expect(body).toBeVisible();
+    await expect(body).toContainText('업무');
   });
 });

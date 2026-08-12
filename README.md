@@ -10,22 +10,24 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 ├── apps/
 │   └── site/                 # Astro 호스트 — 유일한 배포 단위 (dev :4321)
 │       └── src/
-│           ├── pages/        # /, /resume/, /retrospect/, /retrospect/[id]/
+│           ├── pages/        # /, /resume/, /resume/all/, /retrospect/, /retrospect/[id]/
 │           ├── content/      # 회고 MDX (콘텐츠 컬렉션)
 │           ├── layouts/      # 공통 레이아웃 (헤더 네비 + 테마)
 │           └── test/         # Container API 헬퍼 + 페이지 테스트
 ├── packages/
 │   ├── ui/                   # shadcn/ui 컴포넌트 (CLI 생성물 그대로)
-│   ├── resume/               # Astro 패키지 — 이력 데이터 + 섹션 컴포넌트
+│   ├── resume/               # Astro 패키지 — 이력 데이터 + 프로젝트 상세 + 섹션
 │   ├── post-search/          # React 아일랜드 — 회고 목록 검색
 │   └── theme-toggle/         # Svelte 아일랜드 — 다크/라이트 전환
+├── scripts/                  # Notion 임포터 (수동 실행, 빌드와 무관)
 ├── e2e/                      # Playwright — 빌드 산출물 대상 E2E
 └── .github/workflows/deploy.yml  # main 푸시 시 lint → test → build → Pages 배포
 ```
 
 - **회고**: `src/content/retrospect/*.mdx` 파일이 곧 글. frontmatter(`title`, `date`)를 콘텐츠 컬렉션 스키마로 검증하고, 목록·본문 모두 정적 HTML로 생성된다. JS 없이도 콘텐츠 전체가 보인다.
 - **아일랜드**: 한 페이지에 React(`client:load` 검색창)와 Svelte(테마 토글)가 공존하며 각자 독립적으로 하이드레이션된다. 아일랜드에 넘기는 props는 직렬화 가능해야 한다.
-- **이력서**: 순수 정적 페이지. 내용(`packages/resume/src/data.ts`)과 마크업(`src/sections/*.astro`)을 갈라 뒀다 — 내용을 고칠 때 `.astro`를 열 필요가 없고, 나중에 PDF나 JSON Resume 같은 다른 렌더러를 붙일 때 데이터만 읽으면 된다. 아일랜드가 아니라 클라이언트 JS는 0바이트다. 내용의 원본은 Notion 이력서고, 회사별 프로젝트는 이름만 옮겨 왔다(상세는 아직 없음).
+- **이력서**: 두 밀도로 나뉜 정적 페이지다. `/resume/`는 훑어보기 — 재직 중인 회사의 프로젝트만 펼쳐 볼 수 있고 나머지는 이름만 나열한다. `/resume/all/`은 회사·기간·역할만 늘어놓고 회사를 누르면 그 회사 프로젝트가 펼쳐진다. 내용(`data.ts` + `projects/`)과 마크업(`sections/`·`career/`·`project/`)을 갈라 뒀다 — 내용을 고칠 때 `.astro`를 열 필요가 없고, 나중에 PDF나 JSON Resume 같은 다른 렌더러를 붙일 때 데이터만 읽으면 된다.
+- **펼침은 `<details>`다** — shadcn accordion(React)이 아니다. Radix Collapsible은 닫힌 콘텐츠를 아예 렌더하지 않아(`children: isOpen && children`) 상세 18,000자가 서버 HTML에서 통째로 사라진다. 크롤러·Cmd+F·인쇄·JS 미사용자가 모두 못 본다. `<details>`는 상세가 항상 HTML에 있고, 키보드·스크린리더·인쇄·아코디언 묶기(`name` 속성)를 브라우저가 책임진다. **덕분에 이력서의 클라이언트 JS는 상세를 다 싣고도 여전히 0바이트다** — 페이지 테스트가 `astro-island` 개수 1(헤더 테마 토글)을 못 박아 지킨다.
 - **디자인 시스템**: Tailwind CSS v4 + shadcn/ui. 컴포넌트는 `packages/ui`에 두고 Astro 페이지와 React 아일랜드가 함께 쓴다. Astro에서 쓰면 하이드레이션 없이 정적 HTML로만 렌더된다.
 
 > 이전 구조(런타임 Module Federation 셸/리모트)는 `mfa-runtime` 브랜치에 보존되어 있다. 런타임 통합 실험은 그 브랜치 README 참고.
@@ -39,9 +41,10 @@ pnpm build          # 빌드 → apps/site/dist
 pnpm lint           # Biome 검사
 pnpm lint:fix       # Biome 자동 수정
 pnpm test           # 유닛 + E2E 전부
-pnpm test:unit      # Vitest만 (빠름, ~3초)
+pnpm test:unit      # Vitest만 (빠름, ~4초)
 pnpm test:watch     # Vitest 워치 모드
 pnpm test:e2e       # 빌드 후 Playwright
+pnpm import:notion  # Notion 이력서 → packages/resume (수동)
 ```
 
 로컬에서 배포 산출물 확인:
@@ -66,6 +69,37 @@ date: 2026-08-11
 
 파일명이 URL이 된다: `2026-08-11-foo.mdx` → `/retrospect/2026-08-11-foo/`
 
+## Notion 가져오기
+
+이력서 본문은 Notion(`Subin's Resume`)이 원본이다. 회사별 프로젝트 상세 38쪽을 `scripts/import-notion.ts`가 저장소로 옮긴다.
+
+```sh
+pnpm import:notion              # 전체 (글 + 이미지)
+pnpm import:notion --no-images  # 글만 — 빠른 반복
+pnpm import:notion --refresh    # .notion-cache 무시하고 다시 받는다
+pnpm import:notion:check        # 재생성해 커밋본과 비교만 (쓰기 없음)
+```
+
+**콘텐츠 컬렉션 로더로 상시 연결하지 않고 수동 실행으로 둔 이유**: 그렇게 하면 `astro build`가 Notion에 의존하고, `deploy.yml`이 빌드 성공에 배포를 걸어 두었으므로 Notion 장애가 곧 배포 장애가 된다. 이력서는 1년에 몇 번 바뀐다.
+
+- 원본 응답과 원본 이미지는 `.notion-cache/`에 남는다(git 제외). 재실행과 `--check`가 오프라인·무료가 된다.
+- 이미지는 `notion.site/image/` 프록시로만 받힌다 — S3 원본 URL은 직접 열면 403이다. `sharp`로 webp 1280px q80(애니메이션은 768px q60)으로 줄여 `packages/resume/src/assets/projects/`에 넣는다.
+- 임포터는 node의 타입 스트리핑으로 `.ts`를 그대로 실행한다. 그래서 `engines.node`가 `>=22.18`이다.
+
+### 스크린샷 가리기
+
+Notion 원본에는 사내 시스템 화면이 그대로 담겨 있다. 공개 사이트로 나가면 안 되는 부분은 `scripts/notion/redactions.ts`에 좌표로 적어 두고 임포터가 검은 막대로 덮는다. 컬럼 제목은 남겨 무엇을 가렸는지 알 수 있게 한다.
+
+- 좌표는 **리사이즈를 마친 뒤**(가로 1280px) 기준이다. 규칙에 이미지 크기를 함께 적고, 임포터가 대조해 다르면 **멈춘다** — Notion에서 스크린샷을 갈아 끼웠을 때 엉뚱한 곳을 가린 채 공개되는 일을 막는다.
+- `redactions.test.ts`가 커밋된 webp를 열어 그 영역이 정말 덮였는지 픽셀로 잰다. 규칙만 검사하면 임포터를 안 돌리고 커밋한 경우를 놓친다.
+- 지금 가리는 것: 시공협력기사 성명·휴대전화번호(`homefurnishing-install-1`), 작업자 사번(`mds-1`), 농지 지번 주소·농가고유번호(`farmland-info-1`).
+
+**손으로 고칠 자리는 `packages/resume/src/projects/slugs.ts` 하나다.** 프로젝트 이름이 대부분 한글이라 자동 슬러그화는 빈 문자열이나 퍼센트 인코딩을 낳는다. `이름 → ascii 슬러그` 38줄을 손으로 쓰고 임포터는 **읽기만** 한다. 슬러그가 이미지 파일명·`#앵커`·`<details>` id에 함께 쓰여 재실행이 바이트 단위로 결정적이다.
+
+이름은 `data.ts`의 `Career.projects`와 상세를 잇는 조인 키다(공백 차이는 임포터가 흡수한다). 어긋나면 화면이 조용히 비는 대신 `projects/index.test.ts`가 이름을 찍어 실패한다.
+
+**생성물은 `packages/resume/src/projects/generated/`에만 둔다.** 최상단에 `@generated` 표시가 있고, `.gitattributes`가 `linguist-generated`로, `biome.json`이 검사 제외로 잡아 둔다. 타임스탬프는 넣지 않는다 — 매 실행마다 diff가 생기면 `--check`가 무의미해진다.
+
 ## 패키지 추가 방법
 
 1. `packages/<이름>/`에 패키지 생성. `exports`가 소스를 직접 가리킨다 (빌드 단계 없음)
@@ -89,14 +123,15 @@ date: 2026-08-11
 
 Vitest(유닛·컴포넌트) + Playwright(E2E). 테스트 파일은 대상 소스 옆에 두고, E2E만 `e2e/`에 모은다.
 
-루트 `vitest.config.ts`가 5개 프로젝트를 묶는다 — 실행 환경과 컴파일러가 서로 달라 하나로 합칠 수 없다.
+루트 `vitest.config.ts`가 6개 프로젝트를 묶는다 — 실행 환경과 컴파일러가 서로 달라 하나로 합칠 수 없다.
 
 | 프로젝트 | 환경 | 대상 |
 |---|---|---|
 | `ui` | node | `cn()` — 순수 함수 |
 | `post-search` | happy-dom + React | 검색 아일랜드 (Testing Library) |
 | `theme-toggle` | happy-dom + Svelte | 테마 토글 아일랜드 |
-| `resume` | node | 이력 데이터 — `formatPeriod`, 스키마 |
+| `resume` | node | 이력 데이터 — `formatPeriod`, 스키마, 상세와의 정합 |
+| `scripts` | node | Notion 블록 → `Project` 정규화 (커밋된 픽스처) |
 | `site` | node + Astro | `.astro` 레이아웃·페이지 (Container API) |
 
 `site` 프로젝트는 `apps/site/vitest.config.ts`에서 `getViteConfig`로 `astro.config.mjs`의 통합(mdx·react·svelte·tailwind)을 그대로 물려받는다 — 실제 빌드와 같은 파이프라인으로 `.astro`가 변환된다. 헬퍼는 `apps/site/src/test/container.ts`.
@@ -109,6 +144,7 @@ E2E는 `astro dev`가 아니라 **`astro preview`** 위에서 돈다. Pages에 �
 - **Container API에서 `getCollection`은 글을 못 읽는다.** 콘텐츠 스토어(`.astro/data-store.json`)는 **dev 서버만** 만든다 — `astro sync`도 `astro build`도 만들지 않는다. 그래서 컬렉션을 쓰는 페이지 테스트는 `vi.mock('astro:content')`로 고정 데이터를 주입하고, 페이지 자신의 로직(정렬·직렬화·마크업)만 본다. 실제 MDX가 렌더되는지는 E2E가 본다. dev 서버를 한 번이라도 띄운 로컬에선 스토어가 남아 있어 진짜 컬렉션으로도 통과하니, **이 차이를 모르면 CI에서만 깨진다.**
 - **Container API에서 `Astro.site`는 항상 `undefined`다.** astro 7.2.0의 `AstroContainer.create()`는 `astroConfig` 옵션을 타입으로만 받고 구현에서 버리며, 컨테이너 매니페스트에 `site` 필드 자체가 없다. 그래서 `base.astro`는 `Astro.site ?? Astro.url`로 되돌린다. 테스트는 `request`에 절대 URL을 넘겨 origin을 정한다.
 - **E2E에서 아일랜드를 건드리기 전에 하이드레이션을 기다릴 것.** Astro는 `<astro-island>`에 `ssr` 속성을 달아 보내고 하이드레이션 후 지운다. `e2e/site.spec.ts`의 `hydrated()` 헬퍼가 `:not([ssr])`로 이걸 기다린다. 안 기다리면 React가 리스너를 붙이기 전에 입력이 들어가 조용히 실패한다.
+- **`<details>`를 `:target`으로 열지 말 것.** `#슬러그` 앵커로 들어온 항목을 `[data-disclosure]:target::details-content { block-size: auto }`로 펼치면 화면엔 열려 보이지만 `[open]` 속성은 그대로다 — 사용자가 눌러도 접히지 않는 상태가 된다(직접 확인). Chromium은 조각 이동 시 조상 `<details>`를 알아서 열어 주므로 앵커는 그쪽에 맡긴다. 그 기능이 없는 브라우저에선 앵커가 아무 일도 하지 않을 뿐, 잘못 동작하지는 않는다.
 - **Svelte 컴포넌트 테스트엔 설정 두 줄이 필요하다** — `resolve.conditions: ['browser']`(없으면 `svelte/index-server.js`가 잡혀 `mount()`가 없다)와 `server.deps.inline`(testing-library의 `.svelte.js` 헬퍼가 룬을 써서 컴파일을 거쳐야 한다).
 
 ### CI

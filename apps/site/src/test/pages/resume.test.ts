@@ -1,7 +1,7 @@
 import type { Resume } from '@site/resume/data';
 import { resume } from '@site/resume/data';
 import { beforeAll, describe, expect, it } from 'vitest';
-import ResumePage from '../../pages/resume.astro';
+import ResumePage from '../../pages/resume/index.astro';
 import { createContainer, parse, url } from '../container';
 
 // 워크스페이스 패키지(@site/resume)의 .astro가 앱을 통해 실제로 렌더되는지 본다.
@@ -60,11 +60,30 @@ describe('resume.astro', () => {
   });
 
   it('경력마다 프로젝트를 함께 보여준다', () => {
+    // 재직 중인 회사는 <summary>로, 나머지는 정적 목록으로 그려진다 —
+    // 렌더링 방식이 갈려도 이름은 전부 있어야 한다
     const projects = resume.careers.flatMap((career) => career.projects);
 
     expect(
-      cardContent(1)?.querySelectorAll('[data-slot="projects"] li'),
+      cardContent(1)?.querySelectorAll('[data-project-name]'),
     ).toHaveLength(projects.length);
+  });
+
+  it('재직 중인 회사의 프로젝트만 펼칠 수 있다', () => {
+    const current = resume.careers.find((career) => !career.to);
+    const details = [...(cardContent(1)?.querySelectorAll('details') ?? [])];
+
+    expect(details).toHaveLength(current?.projects.length ?? 0);
+    // 상세가 서버 HTML에 실제로 들어 있어야 한다 (크롤러·Cmd+F·인쇄)
+    expect(details[0]?.textContent).toContain('업무');
+    for (const detail of details)
+      expect(detail.hasAttribute('open')).toBe(false);
+  });
+
+  it('전체보기로 가는 링크를 둔다', () => {
+    const footer = doc.querySelector('[data-slot="card-footer"] a');
+
+    expect(footer?.getAttribute('href')).toBe('/resume/all/');
   });
 
   it('스택을 분류별로 나눠 보여준다', () => {

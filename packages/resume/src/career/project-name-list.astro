@@ -1,0 +1,30 @@
+---
+interface Props {
+  projects: string[];
+  /** 상세를 볼 수 있는 전체보기 항목으로 걸 링크. 없으면 글자만 나열한다. */
+  href?: (project: string) => string;
+}
+
+const { projects, href } = Astro.props;
+---
+
+{/* 프로젝트 이름은 한 줄에 안 들어갈 만큼 길다 — 배지(nowrap)로 깔면
+    좁은 화면에서 가로 스크롤이 생긴다. 목록으로 흘린다. */}
+<ul class="flex flex-col gap-0.5 text-xs text-muted-foreground">
+  {
+    projects.map((project) => (
+      <li data-project-name>
+        {href ? (
+          <a
+            href={href(project)}
+            class="rounded-sm underline decoration-border underline-offset-4 outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          >
+            {project}
+          </a>
+        ) : (
+          project
+        )}
+      </li>
+    ))
+  }
+</ul>

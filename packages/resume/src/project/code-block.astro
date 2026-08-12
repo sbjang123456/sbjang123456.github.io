@@ -1,0 +1,21 @@
+---
+interface Props {
+  language: string;
+  code: string;
+}
+
+const { language, code } = Astro.props;
+---
+
+{/*
+  전부 디렉터리 트리다. 가장 긴 것이 119줄이라 그대로 펼치면 코드 블록 하나가
+  프로젝트 상세 전체보다 길어진다 — 높이를 묶고 안에서 스크롤시킨다.
+  가로도 마찬가지로 페이지가 아니라 이 블록이 스크롤돼야 한다.
+  스크롤 영역은 키보드로도 닿아야 해서 tabindex를 준다.
+*/}
+<pre
+  data-language={language}
+  tabindex="0"
+  class="max-h-96 overflow-auto overscroll-contain rounded-lg border border-border bg-muted/40 p-3 text-xs leading-relaxed text-muted-foreground outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"><code
+    >{code}</code
+  ></pre>

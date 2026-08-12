@@ -24,6 +24,14 @@ export default defineConfig({
         },
       },
       {
+        test: {
+          name: 'scripts',
+          root: './scripts',
+          environment: 'node',
+          include: ['**/*.test.ts'],
+        },
+      },
+      {
         plugins: [react()],
         test: {
           name: 'post-search',

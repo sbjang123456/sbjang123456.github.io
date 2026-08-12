@@ -1,0 +1,24 @@
+---
+import { projectImage } from '../projects/assets';
+
+interface Props {
+  file: string;
+  alt: string;
+}
+
+const { file, alt } = Astro.props;
+
+// width/height를 붙여야 이미지가 늦게 와도 본문이 밀리지 않는다 (CLS).
+const image = projectImage(file);
+---
+
+{/* 밝은 UI 스크린샷이 다크 배경에서 그냥 떠 보여 테두리로 묶는다 */}
+<img
+  src={image.src}
+  alt={alt}
+  width={image.width}
+  height={image.height}
+  loading="lazy"
+  decoding="async"
+  class="h-auto w-full rounded-lg ring-1 ring-border"
+/>

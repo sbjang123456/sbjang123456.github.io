@@ -1,0 +1,39 @@
+---
+import type { Link } from '../data';
+
+interface Props {
+  text: string;
+  links?: Link[];
+}
+
+const { text, links = [] } = Astro.props;
+
+// Notion 링크 멘션은 본문에 "‣" 한 글자로만 와서 글자가 비고 링크만 남는다.
+// 반대로 불릿이 통째로 URL 하나인 경우도 있어 — 그때 글자와 링크를 나란히
+// 그리면 같은 주소가 두 번 보인다. 링크 라벨이 글자와 같으면 글자를 링크로 만든다.
+const inline = links.length === 1 && links[0]?.label === text;
+const trailing = inline ? [] : links;
+
+const linkClass =
+  'rounded-sm underline underline-offset-4 outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 break-all';
+---
+
+{
+  inline ? (
+    <a href={links[0]?.href} class={linkClass}>
+      {text}
+    </a>
+  ) : (
+    text
+  )
+}
+{
+  trailing.map((link) => (
+    <>
+      {' '}
+      <a href={link.href} class={linkClass}>
+        {link.label}
+      </a>
+    </>
+  ))
+}

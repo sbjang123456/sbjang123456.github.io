@@ -1,0 +1,44 @@
+---
+import type { ProjectSection } from '../projects/types';
+import CodeBlock from './code-block.astro';
+import ProjectFigure from './project-figure.astro';
+import RichText from './rich-text.astro';
+import TaskList from './task-list.astro';
+
+interface Props {
+  section: ProjectSection;
+}
+
+const { section } = Astro.props;
+
+// Notion에서 헤딩보다 앞선 내용은 제목 없는 섹션으로 온다 (5개 페이지가 그렇다).
+const { heading, blocks } = section;
+---
+
+<section class="flex flex-col gap-2">
+  {
+    heading && (
+      <h5 class="text-xs font-semibold tracking-tight text-foreground">
+        {heading}
+      </h5>
+    )
+  }
+  {
+    blocks.map((block) => {
+      switch (block.kind) {
+        case 'tasks':
+          return <TaskList items={block.items} />;
+        case 'text':
+          return (
+            <p class="break-words text-muted-foreground">
+              <RichText text={block.text} links={block.links} />
+            </p>
+          );
+        case 'image':
+          return <ProjectFigure file={block.file} alt={block.alt} />;
+        case 'code':
+          return <CodeBlock language={block.language} code={block.code} />;
+      }
+    })
+  }
+</section>

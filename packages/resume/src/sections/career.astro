@@ -1,11 +1,14 @@
 ---
+import { buttonVariants } from '@site/ui/components/button';
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@site/ui/components/card';
+import CareerProjects from '../career/career-projects.astro';
 import { type Career, formatPeriod } from '../data';
 
 interface Props {
@@ -29,7 +32,7 @@ const { careers } = Astro.props;
           {careers.map((career) => (
             <li class="flex flex-col gap-2">
               <div class="flex flex-wrap items-baseline justify-between gap-x-3">
-                <h3 class="font-medium">
+                <h3 data-slot="career-org" class="font-medium">
                   {career.org}
                   <span class="text-muted-foreground"> · {career.role}</span>
                 </h3>
@@ -45,19 +48,12 @@ const { careers } = Astro.props;
                 </ul>
               )}
               {career.projects.length > 0 && (
-                /* 프로젝트 이름은 한 줄에 안 들어갈 만큼 길다 — 배지(nowrap)로
-                   깔면 좁은 화면에서 가로 스크롤이 생긴다. 목록으로 흘린다. */
-                <div
-                  data-slot="projects"
-                  class="mt-1 flex flex-col gap-1 border-l-2 border-border pl-3"
-                >
-                  <h4 class="text-xs font-medium">프로젝트</h4>
-                  <ul class="flex flex-col gap-0.5 text-xs text-muted-foreground">
-                    {career.projects.map((project) => (
-                      <li>{project}</li>
-                    ))}
-                  </ul>
-                </div>
+                /* 재직 중인 회사만 펼쳐 본다 — 회사 이름을 코드에 박지 않으려고
+                   `to`가 없다는 사실에서 유도한다. 이직해도 저절로 맞는다. */
+                <CareerProjects
+                  projects={career.projects}
+                  expandable={!career.to}
+                />
               )}
             </li>
           ))}
@@ -65,4 +61,12 @@ const { careers } = Astro.props;
       )
     }
   </CardContent>
+  <CardFooter>
+    <a
+      href="/resume/all/"
+      class={buttonVariants({ variant: 'outline', size: 'sm' })}
+    >
+      이력서 전체보기 →
+    </a>
+  </CardFooter>
 </Card>

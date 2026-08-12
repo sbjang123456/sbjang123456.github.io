@@ -1,0 +1,38 @@
+/*
+ * <details> 펼침 연출. 클라이언트 JS는 0바이트로 둔다.
+ *
+ * ::details-content를 모르는 브라우저에서는 트랜지션 없이 즉시 열릴 뿐
+ * 기능은 그대로다 — 열고 닫기는 브라우저가 책임진다.
+ */
+
+[data-disclosure] {
+  /* height: auto 로의 트랜지션을 허용한다. 상속되는 속성이라 여기서 한 번 켠다 */
+  interpolate-size: allow-keywords;
+}
+
+[data-disclosure]::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 0.2s ease,
+    content-visibility 0.2s allow-discrete;
+}
+
+[data-disclosure][open]::details-content {
+  block-size: auto;
+}
+
+/*
+ * `#슬러그` 앵커는 CSS로 열지 않는다.
+ *
+ * `:target::details-content { block-size: auto }`로 펼치면 화면엔 열려 보이지만
+ * `[open]` 속성은 그대로라, 사용자가 눌러도 접히지 않는 상태가 된다(직접 확인).
+ * 브라우저가 조각 이동 시 조상 <details>를 알아서 여는 쪽에 맡긴다 — 그 기능이
+ * 없는 브라우저에서는 앵커가 아무 일도 하지 않을 뿐, 잘못 동작하지는 않는다.
+ */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-disclosure]::details-content {
+    transition: none;
+  }
+}

@@ -5,17 +5,24 @@
  * 이 파일만 읽으면 된다. 내용을 고칠 때 .astro를 열 필요도 없다.
  *
  * 원본은 Notion 이력서(Subin`s Resume). 회사별 Projects의 상세 페이지는
- * 아직 옮기지 않았고 이름만 가져왔다.
+ * `scripts/import-notion.ts`가 `src/projects/generated/`로 옮긴다.
  */
 
 export type Career = {
+  /** URL 앵커와 `<details>` id에 쓰는 ascii 식별자. 프로젝트 상세의 조인 키. */
+  slug: string;
   org: string;
   role: string;
   /** YYYY-MM 형식. 재직 중이면 `to`를 비운다. */
   from: string;
   to?: string;
   highlights: string[];
-  /** 회사에서 수행한 프로젝트 이름. 상세 설명은 아직 없다. */
+  /**
+   * 회사에서 수행한 프로젝트 이름 — 표시 순서대로.
+   *
+   * 이 이름이 상세(`src/projects`)와의 조인 키다. 여기서 이름을 고치면
+   * `src/projects/slugs.ts`도 같이 고쳐야 한다 — 어긋나면 테스트가 잡는다.
+   */
   projects: string[];
 };
 
@@ -66,6 +73,7 @@ export const resume: Resume = {
   ],
   careers: [
     {
+      slug: 'hanssem',
       org: '한샘',
       role: 'Front-end Engineer',
       from: '2023-08',
@@ -89,6 +97,7 @@ export const resume: Resume = {
       ],
     },
     {
+      slug: 'storelink',
       org: '스토어링크',
       role: 'Front-end Engineer',
       from: '2022-05',
@@ -108,6 +117,7 @@ export const resume: Resume = {
       ],
     },
     {
+      slug: 'wmpo',
       org: '위메프오',
       role: 'Front-end Engineer',
       from: '2021-10',
@@ -126,6 +136,7 @@ export const resume: Resume = {
       ],
     },
     {
+      slug: 'innopam',
       org: '이노팸',
       role: 'R&D Engineer',
       from: '2019-07',
@@ -150,6 +161,7 @@ export const resume: Resume = {
       ],
     },
     {
+      slug: 'shinhan',
       org: '신한항업',
       role: 'Software Engineer',
       from: '2018-04',
@@ -166,6 +178,7 @@ export const resume: Resume = {
       ],
     },
     {
+      slug: 'spatial-info',
       org: '공간정보기술',
       role: 'Software Engineer',
       from: '2014-09',

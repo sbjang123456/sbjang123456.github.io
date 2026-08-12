@@ -6,7 +6,11 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!packages/ui/src/components"]
+    "includes": [
+      "**",
+      "!packages/ui/src/components",
+      "!packages/resume/src/projects/generated"
+    ]
   },
   "css": {
     "parser": {

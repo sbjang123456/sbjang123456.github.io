@@ -1,0 +1,52 @@
+---
+import ProjectBody from '../project/project-body.astro';
+import type { Project } from '../projects/types';
+import './disclosure.css';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+{/*
+  shadcn accordion(React)이 아니라 <details>인 이유: Radix는 닫힌 콘텐츠를
+  아예 렌더하지 않아 상세가 서버 HTML에서 통째로 사라진다 (크롤러·Cmd+F·인쇄가
+  못 본다). <details>는 항상 HTML에 있고 키보드·스크린리더도 브라우저 몫이다.
+*/}
+<details
+  id={project.slug}
+  data-disclosure
+  class="group rounded-md border border-border/60 bg-card/30"
+>
+  <summary
+    class="flex cursor-pointer list-none items-start gap-1.5 rounded-md px-2.5 py-2 outline-none hover:bg-accent/40 focus-visible:ring-[3px] focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden"
+  >
+    <svg
+      class="mt-1 size-3 shrink-0 text-muted-foreground transition-transform group-open:rotate-90"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="m4 2 4 4-4 4"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+    <span class="flex min-w-0 flex-col gap-0.5">
+      <span data-project-name class="text-xs font-medium break-keep">
+        {project.name}
+      </span>
+      <span class="text-xs break-keep text-muted-foreground">
+        {project.summary}
+      </span>
+    </span>
+  </summary>
+
+  <div class="px-2.5 pt-1 pb-3">
+    <ProjectBody project={project} />
+  </div>
+</details>

@@ -4,7 +4,9 @@
   "type": "module",
   "exports": {
     ".": "./src/resume.astro",
-    "./data": "./src/data.ts"
+    "./all": "./src/resume-all.astro",
+    "./data": "./src/data.ts",
+    "./projects": "./src/projects/index.ts"
   },
   "dependencies": {
     "@site/ui": "workspace:*"

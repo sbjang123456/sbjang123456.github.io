@@ -1,0 +1,30 @@
+---
+import type { TaskNode } from '../projects/types';
+import RichText from './rich-text.astro';
+
+interface Props {
+  items: TaskNode[];
+  /** 중첩 깊이. 0단만 점을 채우고 아래는 흐리게 — 최대 4단까지 온다. */
+  depth?: number;
+}
+
+const { items, depth = 0 } = Astro.props;
+---
+
+<ul
+  class:list={[
+    'flex list-disc flex-col gap-1 break-words pl-5 marker:text-muted-foreground/60',
+    depth === 0 ? 'text-foreground/90' : 'mt-1 text-muted-foreground',
+  ]}
+>
+  {
+    items.map((item) => (
+      <li>
+        <RichText text={item.text} links={item.links} />
+        {item.children && (
+          <Astro.self items={item.children} depth={depth + 1} />
+        )}
+      </li>
+    ))
+  }
+</ul>

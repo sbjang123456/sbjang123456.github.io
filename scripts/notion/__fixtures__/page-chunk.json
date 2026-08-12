@@ -1,0 +1,2029 @@
+{
+  "57d16704-c27c-47ee-ac8a-360ae63a89bd": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "57d16704-c27c-47ee-ac8a-360ae63a89bd",
+        "type": "callout",
+        "properties": {
+          "title": [["Projects"]]
+        },
+        "content": [
+          "19d967b1-1fff-4d5c-8c81-4d942e391ef6",
+          "cd542a92-33a7-4592-b21d-318b89e1c47d",
+          "a7605126-eaef-42c6-a884-3e53c60c0442",
+          "2d7af9ad-0471-4db0-a114-73464eda6f8d"
+        ]
+      }
+    }
+  },
+  "19d967b1-1fff-4d5c-8c81-4d942e391ef6": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "19d967b1-1fff-4d5c-8c81-4d942e391ef6",
+        "type": "divider"
+      }
+    }
+  },
+  "cd542a92-33a7-4592-b21d-318b89e1c47d": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "cd542a92-33a7-4592-b21d-318b89e1c47d",
+        "type": "text",
+        "properties": {
+          "title": [
+            [
+              "‣",
+              [
+                [
+                  "p",
+                  "c1811407-e22f-41c4-851d-32ccfb135b7b",
+                  "dd9539cb-fb5f-4678-b0cb-4a86f5fe658e"
+                ]
+              ]
+            ],
+            [" "]
+          ]
+        }
+      }
+    }
+  },
+  "a7605126-eaef-42c6-a884-3e53c60c0442": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "a7605126-eaef-42c6-a884-3e53c60c0442",
+        "type": "text",
+        "properties": {
+          "title": [
+            [
+              "‣",
+              [
+                [
+                  "p",
+                  "7d6de3c4-fc55-489f-a4c5-e6a471cdddfd",
+                  "dd9539cb-fb5f-4678-b0cb-4a86f5fe658e"
+                ]
+              ]
+            ],
+            [" "]
+          ]
+        }
+      }
+    }
+  },
+  "2d7af9ad-0471-4db0-a114-73464eda6f8d": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "2d7af9ad-0471-4db0-a114-73464eda6f8d",
+        "type": "text",
+        "properties": {
+          "title": [
+            [
+              "‣",
+              [
+                [
+                  "p",
+                  "2a0480c0-3eb8-4d64-81f9-14ba2b1f5a6e",
+                  "dd9539cb-fb5f-4678-b0cb-4a86f5fe658e"
+                ]
+              ]
+            ],
+            [" "]
+          ]
+        }
+      }
+    }
+  },
+  "63d1c3b3-a764-4a16-8b12-f0df8b1306d6": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "63d1c3b3-a764-4a16-8b12-f0df8b1306d6",
+        "type": "page",
+        "properties": {
+          "BAod": [["0.5"]],
+          "MQiC": [
+            [
+              "Vite,Rollup,vitest,storybook,vanilla-extract,pnpm,turborepo,monorepo,react-testing-library,Typescript,React"
+            ]
+          ],
+          "aBeX": [["Front-End"]],
+          "gWTJ": [["한샘"]],
+          "nTgV": [
+            [
+              "‣",
+              [
+                [
+                  "d",
+                  {
+                    "type": "daterange",
+                    "end_date": "2024-01-31",
+                    "start_date": "2023-10-23"
+                  }
+                ]
+              ]
+            ]
+          ],
+          "title": [["ERP 디자인 시스템 개발"]]
+        },
+        "content": [
+          "c9e26b4a-22ec-49ac-afe1-06b208fca5f8",
+          "966978fc-927b-4d71-8d6d-233e91854dfb",
+          "b6a7583c-4ec7-447b-84fe-86b4a51da75e",
+          "b1808aa2-2141-476c-b6d4-eb548dbc8263",
+          "7d319ca7-07dd-47cc-86ec-88b36d4ced1a",
+          "3560b464-2a34-4070-9099-d6baf160242a",
+          "4931ccf5-4407-42e5-8f25-8dcc5270b964",
+          "0c8b734c-f48a-42c8-a6c9-3137cfb58c5f",
+          "2bb40fe9-6fd0-4824-9883-872441e3ff1f",
+          "041af51b-d63b-474a-9cbe-4668856861fc",
+          "6884d68f-ad97-4445-a6e9-14caee5432e1",
+          "284c277a-e723-406b-99b2-2121e50d9b4f",
+          "212e8b95-42a3-4be6-a5d1-efd7655f7eda",
+          "61aec88d-6693-4572-b379-f931bdda67a0",
+          "0313dc3a-ad30-47f7-a74d-51bf5e748e59",
+          "276bba71-b612-40b2-aab2-76b42d2ea26f",
+          "2113a609-062d-4ed6-98fc-f17ae6ed8a0f",
+          "3c34831c-0dc6-422e-9488-be483bce07a9",
+          "fa71ae73-3210-496f-9be7-c87a75f7ea08",
+          "6505b4aa-2ae2-4b85-9e38-d30a83a05b59",
+          "643c38d3-31bd-4c0b-a984-894a5cf05725",
+          "e0317ab3-146b-43c9-b43f-b01d8f34430b",
+          "7b5fd753-97bd-438e-98c2-397ea8e55939",
+          "27137536-38ff-4a90-af72-bdf2877e777e"
+        ]
+      }
+    }
+  },
+  "c9e26b4a-22ec-49ac-afe1-06b208fca5f8": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "c9e26b4a-22ec-49ac-afe1-06b208fca5f8",
+        "type": "text",
+        "properties": {
+          "title": [["ERP 개발팀의 UI 표준을 위한 디자인 시스템 개발"]]
+        }
+      }
+    }
+  },
+  "966978fc-927b-4d71-8d6d-233e91854dfb": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "966978fc-927b-4d71-8d6d-233e91854dfb",
+        "type": "text"
+      }
+    }
+  },
+  "b6a7583c-4ec7-447b-84fe-86b4a51da75e": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "b6a7583c-4ec7-447b-84fe-86b4a51da75e",
+        "type": "sub_header",
+        "properties": {
+          "title": [["업무"]]
+        }
+      }
+    }
+  },
+  "b1808aa2-2141-476c-b6d4-eb548dbc8263": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "b1808aa2-2141-476c-b6d4-eb548dbc8263",
+        "type": "divider"
+      }
+    }
+  },
+  "7d319ca7-07dd-47cc-86ec-88b36d4ced1a": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "7d319ca7-07dd-47cc-86ec-88b36d4ced1a",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            [
+              "turborepo, pnpm, rollup, typescript, react, vanilla-extract, storybook, vitest 기술 점검 및 선택"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "3560b464-2a34-4070-9099-d6baf160242a": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "3560b464-2a34-4070-9099-d6baf160242a",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            [
+              "디자인시스템을 통해 기획자들이 공통 컴포넌트를 참고 및 사용해서 기획문서를 작성할 수 있도록 가이드하고, 이를 통해 의사소통 비용을 줄이며 상대적으로 완성된 기획서를 얻을 수 있는 효과를 기대."
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "4931ccf5-4407-42e5-8f25-8dcc5270b964": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "4931ccf5-4407-42e5-8f25-8dcc5270b964",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["기간계 디자인 시스템 구축 리딩"]]
+        },
+        "content": ["4da19f46-5402-45a7-abcd-6d0fbce5967c"]
+      }
+    }
+  },
+  "4da19f46-5402-45a7-abcd-6d0fbce5967c": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "4da19f46-5402-45a7-abcd-6d0fbce5967c",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["코딩 컨벤션 정의"]]
+        },
+        "content": [
+          "0eac1caf-e6f7-4645-8329-3cffb97f73c7",
+          "936b7d49-5f8c-4132-a0b6-0112c47ee5e6",
+          "31c268ce-4f08-456f-a7eb-185ddc01ecd0",
+          "67983eca-ce7e-42db-8b9f-0f2dd90cf15c"
+        ]
+      }
+    }
+  },
+  "0eac1caf-e6f7-4645-8329-3cffb97f73c7": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "0eac1caf-e6f7-4645-8329-3cffb97f73c7",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["컴포넌트 파일명 : "],
+            ["PascalCase", [["c"]]],
+            [" vs "],
+            ["KebabCase", [["c"]]],
+            [" → "],
+            ["KebabCase", [["c"]]]
+          ]
+        }
+      }
+    }
+  },
+  "936b7d49-5f8c-4132-a0b6-0112c47ee5e6": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "936b7d49-5f8c-4132-a0b6-0112c47ee5e6",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["컴포넌트 선언 : "],
+            ["익명함수표현식", [["c"]]],
+            [" vs "],
+            ["기명함수선언식", [["c"]]],
+            [" → "],
+            ["기명함수선언식", [["c"]]]
+          ]
+        }
+      }
+    }
+  },
+  "31c268ce-4f08-456f-a7eb-185ddc01ecd0": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "31c268ce-4f08-456f-a7eb-185ddc01ecd0",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["내보내기 : "],
+            ["named export", [["c"]]],
+            [" vs "],
+            ["default export", [["c"]]],
+            [" → "],
+            ["named export", [["c"]]]
+          ]
+        }
+      }
+    }
+  },
+  "67983eca-ce7e-42db-8b9f-0f2dd90cf15c": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "67983eca-ce7e-42db-8b9f-0f2dd90cf15c",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["barrel index", [["c"]]], [" 사용여부 → 사용"]]
+        }
+      }
+    }
+  },
+  "0c8b734c-f48a-42c8-a6c9-3137cfb58c5f": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "0c8b734c-f48a-42c8-a6c9-3137cfb58c5f",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["디자인시스템 패키지 구조를 설계 및 정의"]]
+        },
+        "content": [
+          "9a063aff-9327-4b1e-94ac-cb3c878a11e1",
+          "62722033-ac8b-4aea-be65-fbc23f5ee06c",
+          "aa8b9b91-6638-47e5-b65f-be13f8a58ac2",
+          "e53dbe31-87b5-4ff4-ac2b-c43767c4bd38"
+        ]
+      }
+    }
+  },
+  "9a063aff-9327-4b1e-94ac-cb3c878a11e1": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "9a063aff-9327-4b1e-94ac-cb3c878a11e1",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["eslint 커스텀 정의"]]
+        }
+      }
+    }
+  },
+  "62722033-ac8b-4aea-be65-fbc23f5ee06c": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "62722033-ac8b-4aea-be65-fbc23f5ee06c",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["icons 패키지 정의 "]]
+        },
+        "content": ["9f668f8f-8a2d-4cce-a252-a761cdc00446"]
+      }
+    }
+  },
+  "9f668f8f-8a2d-4cce-a252-a761cdc00446": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "9f668f8f-8a2d-4cce-a252-a761cdc00446",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["svg 아이콘을 "],
+            ["@svgr/cli", [["c"]]],
+            [" 를 활용하여 자동 생성"]
+          ]
+        }
+      }
+    }
+  },
+  "aa8b9b91-6638-47e5-b65f-be13f8a58ac2": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "aa8b9b91-6638-47e5-b65f-be13f8a58ac2",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["design-system 패키지 정의"]]
+        },
+        "content": ["f898a3fa-707f-4017-a6c0-20163c56255e"]
+      }
+    }
+  },
+  "f898a3fa-707f-4017-a6c0-20163c56255e": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "f898a3fa-707f-4017-a6c0-20163c56255e",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["CSS-in-JS", [["c"]]],
+            [" vs "],
+            ["vanilla-extract", [["c"]]],
+            [" → "],
+            ["vanilla-extract", [["c"]]]
+          ]
+        },
+        "content": [
+          "a2928ba8-d23f-4e6e-bb64-49a1769f3e9d",
+          "8b62829f-f2df-4cb3-9e83-c09b71d58d19"
+        ]
+      }
+    }
+  },
+  "a2928ba8-d23f-4e6e-bb64-49a1769f3e9d": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "a2928ba8-d23f-4e6e-bb64-49a1769f3e9d",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            [
+              "React Server Componet 에서 원활한 사용을 위해 build 타임에 css를 추출해주는 vanilla-extract 선택"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "8b62829f-f2df-4cb3-9e83-c09b71d58d19": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "8b62829f-f2df-4cb3-9e83-c09b71d58d19",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["tailwind", [["c"]]],
+            [
+              " 는 클래스명의 길어짐으로 인한 팀원들의 불호와 props 에 따른 스타일을 좀 더 효율적으로 관리되는 "
+            ],
+            ["vanilla-extract", [["c"]]],
+            [" 로 채택"]
+          ]
+        }
+      }
+    }
+  },
+  "e53dbe31-87b5-4ff4-ac2b-c43767c4bd38": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "e53dbe31-87b5-4ff4-ac2b-c43767c4bd38",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["storybook 패키지 정의 "]]
+        },
+        "content": [
+          "4f0a2575-adf7-4913-bdcb-34f34000cbc1",
+          "539b0d03-2fa6-4b7b-a2f5-e3885febdc2f"
+        ]
+      }
+    }
+  },
+  "4f0a2575-adf7-4913-bdcb-34f34000cbc1": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "4f0a2575-adf7-4913-bdcb-34f34000cbc1",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            [
+              "UI 구성 요소를 독립적으로 개발하고 디자인 시스템 패키지에 종속적으로 관리하지 않기 위해 분리"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "539b0d03-2fa6-4b7b-a2f5-e3885febdc2f": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "539b0d03-2fa6-4b7b-a2f5-e3885febdc2f",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["icons 패키지와 design-system 패키지를 참조 "]]
+        }
+      }
+    }
+  },
+  "2bb40fe9-6fd0-4824-9883-872441e3ff1f": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "2bb40fe9-6fd0-4824-9883-872441e3ff1f",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["번들 환경 구성"]]
+        },
+        "content": ["6376d169-e7c6-46e6-bfa3-b9eac0d593d7"]
+      }
+    }
+  },
+  "6376d169-e7c6-46e6-bfa3-b9eac0d593d7": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "6376d169-e7c6-46e6-bfa3-b9eac0d593d7",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["최초 rollup 으로 구성 → vite 환경으로 변경"]]
+        }
+      }
+    }
+  },
+  "041af51b-d63b-474a-9cbe-4668856861fc": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "041af51b-d63b-474a-9cbe-4668856861fc",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["공통 디자인 요소 토큰화"]]
+        },
+        "content": ["fbd5a5ec-410a-4877-a663-a08cacc94cb2"]
+      }
+    }
+  },
+  "fbd5a5ec-410a-4877-a663-a08cacc94cb2": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "fbd5a5ec-410a-4877-a663-a08cacc94cb2",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["각 컴포넌트가 공통으로 사용할 스타일 css 토큰화"]]
+        },
+        "content": [
+          "644876a4-4bf0-4812-a664-741fc4da0a5c",
+          "9424862a-4eb6-4782-9737-3a9e60a76954",
+          "2e5c3ad1-b097-4dc9-ab19-58625eb36a1b"
+        ]
+      }
+    }
+  },
+  "644876a4-4bf0-4812-a664-741fc4da0a5c": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "644876a4-4bf0-4812-a664-741fc4da0a5c",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            [
+              "opacity, border, space, neutral color, brand color, accent color 등을 사전 정의"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "9424862a-4eb6-4782-9737-3a9e60a76954": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "9424862a-4eb6-4782-9737-3a9e60a76954",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["vanilla-extract 를 통해 global 에 위에서 생성한 토큰 변수를 생성"]
+          ]
+        }
+      }
+    }
+  },
+  "2e5c3ad1-b097-4dc9-ab19-58625eb36a1b": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "2e5c3ad1-b097-4dc9-ab19-58625eb36a1b",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["atomic 한 css 사용을 위한 sprinkles 정의"]]
+        }
+      }
+    }
+  },
+  "6884d68f-ad97-4445-a6e9-14caee5432e1": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "6884d68f-ad97-4445-a6e9-14caee5432e1",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["컴포넌트 개발"]]
+        },
+        "content": [
+          "58d016ff-7b1d-4010-8841-6a10038a12a7",
+          "f30757e3-0f47-4084-ab4b-d5c743f16f9b"
+        ]
+      }
+    }
+  },
+  "58d016ff-7b1d-4010-8841-6a10038a12a7": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "58d016ff-7b1d-4010-8841-6a10038a12a7",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["탭 메뉴 컴포넌트 개발"]]
+        }
+      }
+    }
+  },
+  "f30757e3-0f47-4084-ab4b-d5c743f16f9b": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "f30757e3-0f47-4084-ab4b-d5c743f16f9b",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["타이포그래피 컴포넌트 개발"]]
+        }
+      }
+    }
+  },
+  "284c277a-e723-406b-99b2-2121e50d9b4f": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "284c277a-e723-406b-99b2-2121e50d9b4f",
+        "type": "text"
+      }
+    }
+  },
+  "212e8b95-42a3-4be6-a5d1-efd7655f7eda": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "212e8b95-42a3-4be6-a5d1-efd7655f7eda",
+        "type": "sub_header",
+        "properties": {
+          "title": [["작업 결과물"]]
+        }
+      }
+    }
+  },
+  "61aec88d-6693-4572-b379-f931bdda67a0": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "61aec88d-6693-4572-b379-f931bdda67a0",
+        "type": "divider"
+      }
+    }
+  },
+  "0313dc3a-ad30-47f7-a74d-51bf5e748e59": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "0313dc3a-ad30-47f7-a74d-51bf5e748e59",
+        "type": "code",
+        "properties": {
+          "title": [
+            [
+              ".\n├── package.json\n├── packages (9개의 package)\n│   ├── erp-design-system\n│   ├── erp-icons\n│   ├── erp-storybook\n│   ├── eslint-config-hanssem\n│   └── utils\n├── pnpm-lock.yaml\n├── pnpm-workspace.yaml\n└── turbo.json"
+            ]
+          ],
+          "language": [["Shell"]]
+        }
+      }
+    }
+  },
+  "276bba71-b612-40b2-aab2-76b42d2ea26f": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "276bba71-b612-40b2-aab2-76b42d2ea26f",
+        "type": "image",
+        "properties": {
+          "size": [["91.2KB"]],
+          "title": [["Untitled"]],
+          "source": [
+            [
+              "https://prod-files-secure.s3.us-west-2.amazonaws.com/dd9539cb-fb5f-4678-b0cb-4a86f5fe658e/d5315c54-5f65-447d-a4b2-bd12e3fb224e/Untitled.png"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "2113a609-062d-4ed6-98fc-f17ae6ed8a0f": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "2113a609-062d-4ed6-98fc-f17ae6ed8a0f",
+        "type": "image",
+        "properties": {
+          "size": [["83.5KB"]],
+          "title": [["Untitled"]],
+          "source": [
+            [
+              "https://prod-files-secure.s3.us-west-2.amazonaws.com/dd9539cb-fb5f-4678-b0cb-4a86f5fe658e/657890f7-cc5a-400b-bdcf-7b7b9cf2d302/Untitled.png"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "3c34831c-0dc6-422e-9488-be483bce07a9": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "3c34831c-0dc6-422e-9488-be483bce07a9",
+        "type": "text"
+      }
+    }
+  },
+  "fa71ae73-3210-496f-9be7-c87a75f7ea08": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "fa71ae73-3210-496f-9be7-c87a75f7ea08",
+        "type": "sub_sub_header",
+        "properties": {
+          "title": [["vite 환경 변경으로 변경"]]
+        }
+      }
+    }
+  },
+  "6505b4aa-2ae2-4b85-9e38-d30a83a05b59": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "6505b4aa-2ae2-4b85-9e38-d30a83a05b59",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["vitest 사용으로 환경 통일"]]
+        }
+      }
+    }
+  },
+  "643c38d3-31bd-4c0b-a984-894a5cf05725": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "643c38d3-31bd-4c0b-a984-894a5cf05725",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            [
+              "기존 rollup 번들러에 따로 트랜스파일러를 추가해야했음 -> vite 는 기본적으로 rollup (+esbuild) 를 기본"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "e0317ab3-146b-43c9-b43f-b01d8f34430b": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "e0317ab3-146b-43c9-b43f-b01d8f34430b",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["빌드 속도 "], ["비교", [["i"]]]]
+        },
+        "content": ["c89b6651-ffa9-45b2-a2fd-38a4b2bd6a5e"]
+      }
+    }
+  },
+  "c89b6651-ffa9-45b2-a2fd-38a4b2bd6a5e": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "c89b6651-ffa9-45b2-a2fd-38a4b2bd6a5e",
+        "type": "table",
+        "content": [
+          "51a7a544-809c-4a60-8f17-53d8c3eeb95d",
+          "b287be1a-9e8c-4718-8f13-47bdd5bc4ddb",
+          "0e6e657f-7be5-41f8-9019-6a66a178a510"
+        ]
+      }
+    }
+  },
+  "51a7a544-809c-4a60-8f17-53d8c3eeb95d": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "51a7a544-809c-4a60-8f17-53d8c3eeb95d",
+        "type": "table_row",
+        "properties": {
+          "aK}y": [["Vite", [["b"]]]],
+          "kRET": [["패키지별 빌드속도", [["b"]]]],
+          "rKhU": [["Rollup", [["b"]]]]
+        }
+      }
+    }
+  },
+  "b287be1a-9e8c-4718-8f13-47bdd5bc4ddb": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "b287be1a-9e8c-4718-8f13-47bdd5bc4ddb",
+        "type": "table_row",
+        "properties": {
+          "aK}y": [["약 2s (대부분 이내)"]],
+          "kRET": [["@hanssem/icons", [["c"]]]],
+          "rKhU": [["약 3s"]]
+        }
+      }
+    }
+  },
+  "0e6e657f-7be5-41f8-9019-6a66a178a510": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "0e6e657f-7be5-41f8-9019-6a66a178a510",
+        "type": "table_row",
+        "properties": {
+          "aK}y": [["약 3~3.2s 내외"]],
+          "kRET": [["@hanssem/erp-design-system", [["c"]]]],
+          "rKhU": [["4.2~4.3s 내외"]]
+        }
+      }
+    }
+  },
+  "7b5fd753-97bd-438e-98c2-397ea8e55939": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "7b5fd753-97bd-438e-98c2-397ea8e55939",
+        "type": "text",
+        "properties": {
+          "title": [
+            [
+              "※ 빌드속도만 놓고보면 최소 30% 차이로 보여짐 (물론 아직 패키지가 적다는 점도 고려바랍니다.)"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "27137536-38ff-4a90-af72-bdf2877e777e": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "27137536-38ff-4a90-af72-bdf2877e777e",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            [
+              "빌드속도는 같은 모듈번들러를 사용하기 때문에 차이가 없어야 하는것이 맞지만, 내부적인 설정차이가 있는것으로 판단됨.(상대적으로 적은 설정으로 번들러 최적화설정을 쉽게 할 수 있을 것으로 판단)"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "309a76d3-c2cf-4376-8dba-8be0e9dfebad": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "309a76d3-c2cf-4376-8dba-8be0e9dfebad",
+        "type": "page",
+        "properties": {
+          "BAod": [["0.8"]],
+          "MQiC": [["React,css,recoil,Antd"]],
+          "aBeX": [["Front-End"]],
+          "gWTJ": [["한샘"]],
+          "nTgV": [
+            [
+              "‣",
+              [
+                [
+                  "d",
+                  {
+                    "type": "daterange",
+                    "end_date": "2025-02-12",
+                    "start_date": "2023-09-01"
+                  }
+                ]
+              ]
+            ]
+          ],
+          "title": [["홈퍼니싱 시공 PC/모바일 운영"]]
+        },
+        "content": [
+          "d3163340-75c9-433f-a7cc-196de8463eed",
+          "f57d68f6-b0b9-4977-a0fb-80722942efbd",
+          "74017fbf-46b0-4386-b152-f7d4ad3b7ddf",
+          "d5ac5d7b-d670-46cc-9ae8-37952fa7315c",
+          "d817ccb4-fde9-408a-bb43-23326af8ad17",
+          "22481762-e8a6-471e-a78f-104c6fd2f2c3",
+          "ca676b06-8cba-4c13-abf9-28567eb0f9c2",
+          "b6d7efb8-9131-4f38-81e1-605dc7b3d4a0",
+          "19517209-adf8-47ec-9a0e-ba4b46dab133",
+          "aeba9924-4be2-46cd-a506-b754c7af09d0"
+        ]
+      }
+    }
+  },
+  "d3163340-75c9-433f-a7cc-196de8463eed": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "d3163340-75c9-433f-a7cc-196de8463eed",
+        "type": "text",
+        "properties": {
+          "title": [["시스템 운영 및 개선"]]
+        }
+      }
+    }
+  },
+  "f57d68f6-b0b9-4977-a0fb-80722942efbd": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "f57d68f6-b0b9-4977-a0fb-80722942efbd",
+        "type": "text"
+      }
+    }
+  },
+  "74017fbf-46b0-4386-b152-f7d4ad3b7ddf": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "74017fbf-46b0-4386-b152-f7d4ad3b7ddf",
+        "type": "sub_header",
+        "properties": {
+          "title": [["업무"]]
+        }
+      }
+    }
+  },
+  "d5ac5d7b-d670-46cc-9ae8-37952fa7315c": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "d5ac5d7b-d670-46cc-9ae8-37952fa7315c",
+        "type": "divider"
+      }
+    }
+  },
+  "d817ccb4-fde9-408a-bb43-23326af8ad17": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "d817ccb4-fde9-408a-bb43-23326af8ad17",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["상용 Dhtmlx 그리드 라이브러리 메모리 누수 분석 및 개선 요청"]
+          ]
+        },
+        "content": [
+          "83ac9cfd-ec01-4755-bcb5-a9f72db88935",
+          "3acaa73b-d38e-484b-b93b-720c2d7b6223",
+          "ddc4de2a-0cf0-4fdc-a351-06d7eaea87c2"
+        ]
+      }
+    }
+  },
+  "83ac9cfd-ec01-4755-bcb5-a9f72db88935": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "83ac9cfd-ec01-4755-bcb5-a9f72db88935",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            [
+              "크롬 개발자모드의 performance 탭에서 그리드 스크롤링 시 리스너가 증가했다가 다시 감소되지 않는 현상 발견"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "3acaa73b-d38e-484b-b93b-720c2d7b6223": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "3acaa73b-d38e-484b-b93b-720c2d7b6223",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            [
+              "이 후, 라이브러리 소스코드내용 점검 결과 컬럼의 필터 이벤트가 이미 있어도 계속 add 되는 소스 발견"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "ddc4de2a-0cf0-4fdc-a351-06d7eaea87c2": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "ddc4de2a-0cf0-4fdc-a351-06d7eaea87c2",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["상용 업체에 개선 요청"]]
+        }
+      }
+    }
+  },
+  "22481762-e8a6-471e-a78f-104c6fd2f2c3": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "22481762-e8a6-471e-a78f-104c6fd2f2c3",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["FE 파트 리딩(정기배포를 위한 일정 플래닝)"]]
+        },
+        "content": [
+          "674aada0-0368-481e-98bb-4aae265cd7f0",
+          "135483cf-5b21-48ee-9462-e9c125d88673",
+          "77f27982-65d8-4839-a1a8-45f4c2910187",
+          "4865650a-8c36-4138-a4b6-ba9f277f121e"
+        ]
+      }
+    }
+  },
+  "674aada0-0368-481e-98bb-4aae265cd7f0": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "674aada0-0368-481e-98bb-4aae265cd7f0",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["기획 회의 참여 및 기술적 점검"]]
+        }
+      }
+    }
+  },
+  "135483cf-5b21-48ee-9462-e9c125d88673": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "135483cf-5b21-48ee-9462-e9c125d88673",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["각 기획에 대한 일정 산정 및 담당자 할당"]]
+        }
+      }
+    }
+  },
+  "77f27982-65d8-4839-a1a8-45f4c2910187": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "77f27982-65d8-4839-a1a8-45f4c2910187",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["QA 배포 및 운영 배포 항목 점검"]]
+        }
+      }
+    }
+  },
+  "4865650a-8c36-4138-a4b6-ba9f277f121e": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "4865650a-8c36-4138-a4b6-ba9f277f121e",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["git 브랜치 관리 및 히스토리 관리"]]
+        },
+        "content": ["9f63f9e7-073a-4d76-90aa-fac8373018d6"]
+      }
+    }
+  },
+  "9f63f9e7-073a-4d76-90aa-fac8373018d6": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "9f63f9e7-073a-4d76-90aa-fac8373018d6",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["merge 전략 재검토 및 재정의"]]
+        },
+        "content": ["5c875bf5-cfc1-4025-b88b-b0c9d84ee062"]
+      }
+    }
+  },
+  "5c875bf5-cfc1-4025-b88b-b0c9d84ee062": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "5c875bf5-cfc1-4025-b88b-b0c9d84ee062",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["1 commit + rebase and merge 방식으로 정의"]]
+        }
+      }
+    }
+  },
+  "ca676b06-8cba-4c13-abf9-28567eb0f9c2": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "ca676b06-8cba-4c13-abf9-28567eb0f9c2",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["홈퍼니싱 시공 시스템 개선 및 운영 건 처리"]]
+        },
+        "content": [
+          "229962ed-6d4d-40e6-9246-2c83d3de7fac",
+          "d4ba0cae-487f-4e4a-b8ec-c58c5d179c8a"
+        ]
+      }
+    }
+  },
+  "229962ed-6d4d-40e6-9246-2c83d3de7fac": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "229962ed-6d4d-40e6-9246-2c83d3de7fac",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["기획 팀 선정 회의를 통한 개선 건 추가 개발"]]
+        }
+      }
+    }
+  },
+  "d4ba0cae-487f-4e4a-b8ec-c58c5d179c8a": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "d4ba0cae-487f-4e4a-b8ec-c58c5d179c8a",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["운영 버그 건 수정 개발"]]
+        }
+      }
+    }
+  },
+  "b6d7efb8-9131-4f38-81e1-605dc7b3d4a0": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "b6d7efb8-9131-4f38-81e1-605dc7b3d4a0",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["리팩토링"]]
+        },
+        "content": [
+          "06b6317b-a706-4cc8-97e4-fcc95cf61a7f",
+          "de86d6ee-cf42-40ff-8141-388f6db58485",
+          "55ee24c2-b864-4b04-b79b-71d7531d7960",
+          "27ac7a74-2abb-8059-a7ad-cddc4c8aa061",
+          "27ac7a74-2abb-801c-8c13-c55e0bc1008d",
+          "27ac7a74-2abb-8007-94ff-d9b696d89d23",
+          "27ac7a74-2abb-8021-b695-ed9b93c2318f",
+          "27ac7a74-2abb-8094-a1e6-f0aceed394c6",
+          "27ac7a74-2abb-80e0-ac74-fe140d83e98d",
+          "27ac7a74-2abb-8082-b693-eb84abfee994",
+          "6f1b4ff8-1bb9-49d8-9d74-0e61a73c525a"
+        ]
+      }
+    }
+  },
+  "06b6317b-a706-4cc8-97e4-fcc95cf61a7f": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "06b6317b-a706-4cc8-97e4-fcc95cf61a7f",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["CRA → Vite 변경  (보류)"]]
+        },
+        "content": [
+          "60837148-e132-44c3-a535-5ad685336eb9",
+          "46617fb9-3ec6-467c-a47c-9008af891231"
+        ]
+      }
+    }
+  },
+  "60837148-e132-44c3-a535-5ad685336eb9": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "60837148-e132-44c3-a535-5ad685336eb9",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            [
+              "엄격모드 적용으로 인한 업데이트 되지 않는 외부 구형 라이브러리에 대한 런타임 에러 발생"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "46617fb9-3ec6-467c-a47c-9008af891231": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "46617fb9-3ec6-467c-a47c-9008af891231",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["적용을 위한 테스트 코드 작성 계획 중"]]
+        }
+      }
+    }
+  },
+  "de86d6ee-cf42-40ff-8141-388f6db58485": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "de86d6ee-cf42-40ff-8141-388f6db58485",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["any 타입 수정 (진행 중)"]]
+        }
+      }
+    }
+  },
+  "55ee24c2-b864-4b04-b79b-71d7531d7960": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "55ee24c2-b864-4b04-b79b-71d7531d7960",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["eslint + prettier 적용 및 룰에 맞는 코드 수정 (진행 중)"]]
+        }
+      }
+    }
+  },
+  "27ac7a74-2abb-8059-a7ad-cddc4c8aa061": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "27ac7a74-2abb-8059-a7ad-cddc4c8aa061",
+        "type": "text"
+      }
+    }
+  },
+  "27ac7a74-2abb-801c-8c13-c55e0bc1008d": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "27ac7a74-2abb-801c-8c13-c55e0bc1008d",
+        "type": "sub_header",
+        "properties": {
+          "title": [["작업 결과물"]]
+        }
+      }
+    }
+  },
+  "27ac7a74-2abb-8007-94ff-d9b696d89d23": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "27ac7a74-2abb-8007-94ff-d9b696d89d23",
+        "type": "divider"
+      }
+    }
+  },
+  "27ac7a74-2abb-8021-b695-ed9b93c2318f": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "27ac7a74-2abb-8021-b695-ed9b93c2318f",
+        "type": "image",
+        "properties": {
+          "size": [["571 KB"]],
+          "title": [["image.png"]],
+          "source": [
+            ["attachment:ce0df05a-1d16-4c2e-bde8-d5defe04d9eb:image.png"]
+          ],
+          "caption": [["PC 시스템 운영"]]
+        }
+      }
+    }
+  },
+  "27ac7a74-2abb-8094-a1e6-f0aceed394c6": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "27ac7a74-2abb-8094-a1e6-f0aceed394c6",
+        "type": "text"
+      }
+    }
+  },
+  "27ac7a74-2abb-80e0-ac74-fe140d83e98d": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "27ac7a74-2abb-80e0-ac74-fe140d83e98d",
+        "type": "text"
+      }
+    }
+  },
+  "27ac7a74-2abb-8082-b693-eb84abfee994": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "27ac7a74-2abb-8082-b693-eb84abfee994",
+        "type": "text"
+      }
+    }
+  },
+  "6f1b4ff8-1bb9-49d8-9d74-0e61a73c525a": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "6f1b4ff8-1bb9-49d8-9d74-0e61a73c525a",
+        "type": "text"
+      }
+    }
+  },
+  "19517209-adf8-47ec-9a0e-ba4b46dab133": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "19517209-adf8-47ec-9a0e-ba4b46dab133",
+        "type": "text"
+      }
+    }
+  },
+  "aeba9924-4be2-46cd-a506-b754c7af09d0": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "aeba9924-4be2-46cd-a506-b754c7af09d0",
+        "type": "text"
+      }
+    }
+  },
+  "dc13fe0b-8872-4fed-af09-c40d81307a78": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "dc13fe0b-8872-4fed-af09-c40d81307a78",
+        "type": "page",
+        "properties": {
+          "BAod": [["0.9"]],
+          "MQiC": [["yarn berry,monorepo,CSS-in-JS,Typescript"]],
+          "aBeX": [["Front-End"]],
+          "gWTJ": [["한샘"]],
+          "nTgV": [
+            [
+              "‣",
+              [
+                [
+                  "d",
+                  {
+                    "type": "daterange",
+                    "end_date": "2025-02-12",
+                    "start_date": "2024-06-03"
+                  }
+                ]
+              ]
+            ]
+          ],
+          "title": [["한샘몰 디자인 시스템 운영 및 개발"]]
+        },
+        "content": [
+          "2714aadd-c636-4b46-acd7-c4e4d38b5ea8",
+          "2a9dabb5-f9a6-44ff-882a-f9b05246eb26",
+          "b2ed656c-0eb4-4b57-aead-0194e7dcd851",
+          "b73ca421-f2f4-4cb3-adca-0c98e99fb74b",
+          "02ed88b2-d85a-4092-82f6-a030828518ac",
+          "32b9ca4f-9cc3-48bf-92f4-0aba87c0873c",
+          "145c7a74-2abb-80d7-b26c-e2f64de7cfe6",
+          "77e39fdd-2194-43cf-824e-9e573cf5a49a",
+          "f73649ce-b484-40ca-bb0b-6e32e1c80f8a",
+          "3be764f3-b487-483c-bfcf-593bbc15462e",
+          "959d1a61-b157-48cb-86a5-b19b5bf4cd5a",
+          "db330444-52ca-4fc9-af84-e3166b24ee63",
+          "27ac7a74-2abb-80b1-8c7a-cfaad9624675",
+          "63f31e03-4fb9-44ef-894d-1e506a40d62c",
+          "0ae6c745-c9e1-452d-84d7-8508f5c28aea",
+          "27ac7a74-2abb-80a5-9e40-dc26ca7cd3a1",
+          "aaabc4cf-8606-4b5b-816c-7ee6ebf34f63",
+          "8c68a075-53a4-4488-a670-2329115e2878",
+          "f1e76de2-6ece-412b-800f-7da343fc9a22"
+        ]
+      }
+    }
+  },
+  "2714aadd-c636-4b46-acd7-c4e4d38b5ea8": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "2714aadd-c636-4b46-acd7-c4e4d38b5ea8",
+        "type": "text",
+        "properties": {
+          "title": [
+            [
+              "한샘몰(c-side) 및 영업시스템(b-side)에서 사용되는 공통컴포넌트에 대한 디자인시스템 운영 및 개발"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "2a9dabb5-f9a6-44ff-882a-f9b05246eb26": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "2a9dabb5-f9a6-44ff-882a-f9b05246eb26",
+        "type": "sub_header",
+        "properties": {
+          "title": [["업무"]]
+        }
+      }
+    }
+  },
+  "b2ed656c-0eb4-4b57-aead-0194e7dcd851": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "b2ed656c-0eb4-4b57-aead-0194e7dcd851",
+        "type": "divider"
+      }
+    }
+  },
+  "b73ca421-f2f4-4cb3-adca-0c98e99fb74b": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "b73ca421-f2f4-4cb3-adca-0c98e99fb74b",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            [
+              "기존에 운영 중이던 한샘몰 디자인시스템 담당자가 퇴사함으로 인해 인수인계 후 운영 및 개선 작업 진행"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "02ed88b2-d85a-4092-82f6-a030828518ac": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "02ed88b2-d85a-4092-82f6-a030828518ac",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            [
+              "디자이너 및 FE개발자들이 검수할 수 있는 스토리북을 pre-release 로 선 배포 후 사내 저장소인 Nexus 에 라이브러리 배포 진행"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "32b9ca4f-9cc3-48bf-92f4-0aba87c0873c": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "32b9ca4f-9cc3-48bf-92f4-0aba87c0873c",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["단독 진행으로 관리되지 않던 Git merge 전략 및 branch 전략 정리"]
+          ]
+        },
+        "content": [
+          "5d3354d4-4c55-4c8e-9f58-6ccbb5f1808f",
+          "d0f560ee-33a5-4eed-822a-94dab9079f23"
+        ]
+      }
+    }
+  },
+  "5d3354d4-4c55-4c8e-9f58-6ccbb5f1808f": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "5d3354d4-4c55-4c8e-9f58-6ccbb5f1808f",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["브랜치는 정기배포날짜로 정의 ex) "],
+            ["sprint/v20240701", [["c"]]]
+          ]
+        }
+      }
+    }
+  },
+  "d0f560ee-33a5-4eed-822a-94dab9079f23": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "d0f560ee-33a5-4eed-822a-94dab9079f23",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["feature 브랜치에서 개발 브랜치로 merge 시 squash"]]
+        }
+      }
+    }
+  },
+  "145c7a74-2abb-80d7-b26c-e2f64de7cfe6": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "145c7a74-2abb-80d7-b26c-e2f64de7cfe6",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["리팩토링"]]
+        },
+        "content": [
+          "145c7a74-2abb-8049-8e78-d545e693be7c",
+          "145c7a74-2abb-80f0-b2c7-f5b751c965e0",
+          "145c7a74-2abb-8025-a1ea-e41fc0521da9",
+          "145c7a74-2abb-80a2-931a-d5265b716605",
+          "145c7a74-2abb-8017-9262-eb408b419aa7"
+        ]
+      }
+    }
+  },
+  "145c7a74-2abb-8049-8e78-d545e693be7c": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "145c7a74-2abb-8049-8e78-d545e693be7c",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["eslint v9 업데이트 (flat config 적용)"]]
+        }
+      }
+    }
+  },
+  "145c7a74-2abb-80f0-b2c7-f5b751c965e0": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "145c7a74-2abb-80f0-b2c7-f5b751c965e0",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["lint-staged 추가"]]
+        }
+      }
+    }
+  },
+  "145c7a74-2abb-8025-a1ea-e41fc0521da9": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "145c7a74-2abb-8025-a1ea-e41fc0521da9",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["version 관리를 위한 도구 changeset 추가 (CHANGLOG 작성)"]]
+        }
+      }
+    }
+  },
+  "145c7a74-2abb-80a2-931a-d5265b716605": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "145c7a74-2abb-80a2-931a-d5265b716605",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["monorepo 관리 툴 추가 (turborepo)"]]
+        }
+      }
+    }
+  },
+  "145c7a74-2abb-8017-9262-eb408b419aa7": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "145c7a74-2abb-8017-9262-eb408b419aa7",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["번들러 및 트랜스파일러 변경 (rollup → vite 환경)"]]
+        }
+      }
+    }
+  },
+  "77e39fdd-2194-43cf-824e-9e573cf5a49a": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "77e39fdd-2194-43cf-824e-9e573cf5a49a",
+        "type": "text"
+      }
+    }
+  },
+  "f73649ce-b484-40ca-bb0b-6e32e1c80f8a": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "f73649ce-b484-40ca-bb0b-6e32e1c80f8a",
+        "type": "sub_header",
+        "properties": {
+          "title": [["작업 결과물"]]
+        }
+      }
+    }
+  },
+  "3be764f3-b487-483c-bfcf-593bbc15462e": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "3be764f3-b487-483c-bfcf-593bbc15462e",
+        "type": "divider"
+      }
+    }
+  },
+  "959d1a61-b157-48cb-86a5-b19b5bf4cd5a": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "959d1a61-b157-48cb-86a5-b19b5bf4cd5a",
+        "type": "sub_sub_header",
+        "properties": {
+          "title": [["PC Storybook "]]
+        }
+      }
+    }
+  },
+  "db330444-52ca-4fc9-af84-e3166b24ee63": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "db330444-52ca-4fc9-af84-e3166b24ee63",
+        "type": "text",
+        "properties": {
+          "title": [
+            [
+              "‣",
+              [
+                [
+                  "lm",
+                  {
+                    "href": "https://res.remodeling.hanssem.com/design-system/pc/storybook/index.html?path=/docs/docs-intro--docs",
+                    "title": "@storybook/cli - Storybook",
+                    "icon_url": "https://res.remodeling.hanssem.com/design-system/pc/storybook/favicon.svg"
+                  }
+                ]
+              ]
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "27ac7a74-2abb-80b1-8c7a-cfaad9624675": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "27ac7a74-2abb-80b1-8c7a-cfaad9624675",
+        "type": "image",
+        "properties": {
+          "size": [["525.3 KB"]],
+          "title": [["CleanShot 2025-09-26 at 09.04.29@2x.png"]],
+          "source": [
+            [
+              "attachment:c73087e3-9d47-4f84-85b3-61fb068880f9:CleanShot_2025-09-26_at_09.04.292x.png"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "63f31e03-4fb9-44ef-894d-1e506a40d62c": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "63f31e03-4fb9-44ef-894d-1e506a40d62c",
+        "type": "sub_sub_header",
+        "properties": {
+          "title": [["Mobile Storybook"]]
+        }
+      }
+    }
+  },
+  "0ae6c745-c9e1-452d-84d7-8508f5c28aea": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "0ae6c745-c9e1-452d-84d7-8508f5c28aea",
+        "type": "text",
+        "properties": {
+          "title": [
+            [
+              "‣",
+              [
+                [
+                  "lm",
+                  {
+                    "href": "https://res.remodeling.hanssem.com/design-system/mobile/storybook/index.html?path=/docs/docs-intro--docs",
+                    "title": "@storybook/cli - Storybook",
+                    "icon_url": "https://res.remodeling.hanssem.com/design-system/mobile/storybook/favicon.svg"
+                  }
+                ]
+              ]
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "27ac7a74-2abb-80a5-9e40-dc26ca7cd3a1": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "27ac7a74-2abb-80a5-9e40-dc26ca7cd3a1",
+        "type": "text"
+      }
+    }
+  },
+  "aaabc4cf-8606-4b5b-816c-7ee6ebf34f63": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "aaabc4cf-8606-4b5b-816c-7ee6ebf34f63",
+        "type": "sub_sub_header",
+        "properties": {
+          "title": [["라이브러리 Publish"]]
+        }
+      }
+    }
+  },
+  "8c68a075-53a4-4488-a670-2329115e2878": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "8c68a075-53a4-4488-a670-2329115e2878",
+        "type": "image",
+        "properties": {
+          "size": [["158.8KB"]],
+          "title": [["Untitled"]],
+          "source": [
+            [
+              "https://prod-files-secure.s3.us-west-2.amazonaws.com/dd9539cb-fb5f-4678-b0cb-4a86f5fe658e/6d05c9fd-83c7-4a0e-9b01-bf5f10cd00ef/Untitled.png"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "f1e76de2-6ece-412b-800f-7da343fc9a22": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "f1e76de2-6ece-412b-800f-7da343fc9a22",
+        "type": "text"
+      }
+    }
+  },
+  "cbd27d06-1c62-4d2f-93ef-a1ea2b3e10c5": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "cbd27d06-1c62-4d2f-93ef-a1ea2b3e10c5",
+        "type": "page",
+        "properties": {
+          "MQiC": [
+            ["eGovFramework,mybatis,Postgresql,jQuery,jsp,Openlayers,Geoserver"]
+          ],
+          "aBeX": [["Front-End,Back-End"]],
+          "gWTJ": [["공간정보기술"]],
+          "nTgV": [
+            [
+              "‣",
+              [
+                [
+                  "d",
+                  {
+                    "type": "daterange",
+                    "end_date": "2018-03-30",
+                    "start_date": "2018-01-02"
+                  }
+                ]
+              ]
+            ]
+          ],
+          "title": [
+            [
+              "2018년 교통안전시설물관리시스템 (T-GIS) 유지관리 및 기능개선 용역"
+            ]
+          ]
+        },
+        "content": [
+          "210385a3-59e5-4114-8b7f-56ca46dd105a",
+          "ea7a68d8-4782-42ac-a42d-2bfae1ee2d05",
+          "a7b4138e-2683-4d8d-9a61-a1d4117d45c8",
+          "e3040208-7432-4159-b3c9-d60817630699",
+          "3fa74b38-77b5-407c-94b7-5859eb224483",
+          "3a7a672f-392b-4277-a2c9-ad48a82642a0",
+          "371171c2-3003-4f71-b110-935720159039",
+          "13c16eb1-00e5-4c22-95a6-4674c9dbd347",
+          "7b2bdb88-0978-4757-b2cb-38f29711ee1b",
+          "21734bb1-052d-4a51-b706-b959cae209a7",
+          "21fe586c-27ea-40d5-8117-bfd2a9df3bf0",
+          "4daf6b53-7690-41e1-8049-b8b2d64e9e7a",
+          "6098c2c8-d8e7-4b98-9d3e-82dd827dabb0",
+          "d58dc10c-004e-48bd-8a16-03462f5570b3",
+          "2f9b7f71-7f86-47e0-aa13-cf8f8643f2c9"
+        ]
+      }
+    }
+  },
+  "210385a3-59e5-4114-8b7f-56ca46dd105a": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "210385a3-59e5-4114-8b7f-56ca46dd105a",
+        "type": "text",
+        "properties": {
+          "title": [["서울시 교통안전시설물관리시스템 재구축"]]
+        }
+      }
+    }
+  },
+  "ea7a68d8-4782-42ac-a42d-2bfae1ee2d05": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "ea7a68d8-4782-42ac-a42d-2bfae1ee2d05",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["기존 실버라이트 기반 지도에서 Openlayers 로 마이그레이션"]
+          ]
+        }
+      }
+    }
+  },
+  "a7b4138e-2683-4d8d-9a61-a1d4117d45c8": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "a7b4138e-2683-4d8d-9a61-a1d4117d45c8",
+        "type": "text"
+      }
+    }
+  },
+  "e3040208-7432-4159-b3c9-d60817630699": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "e3040208-7432-4159-b3c9-d60817630699",
+        "type": "sub_header",
+        "properties": {
+          "title": [["업무"]]
+        }
+      }
+    }
+  },
+  "3fa74b38-77b5-407c-94b7-5859eb224483": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "3fa74b38-77b5-407c-94b7-5859eb224483",
+        "type": "divider"
+      }
+    }
+  },
+  "3a7a672f-392b-4277-a2c9-ad48a82642a0": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "3a7a672f-392b-4277-a2c9-ad48a82642a0",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["규제,공사,설계관리 기능 페이지 UI 변경"]]
+        },
+        "content": ["79aaacfa-7beb-46b8-899d-26a664d73e58"]
+      }
+    }
+  },
+  "79aaacfa-7beb-46b8-899d-26a664d73e58": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "79aaacfa-7beb-46b8-899d-26a664d73e58",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["기존 "],
+            ["Asp.net", [["a", "http://Asp.net"]]],
+            [
+              " 으로 개발되어있는 백엔드 api 를 spring으로 마이그레이션 하고 디자인에 맞게 화면 UI 수정"
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "371171c2-3003-4f71-b110-935720159039": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "371171c2-3003-4f71-b110-935720159039",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["지도 UI 변경"]]
+        },
+        "content": ["c2a01d12-f0d8-40ac-8fce-54d33d837e2f"]
+      }
+    }
+  },
+  "c2a01d12-f0d8-40ac-8fce-54d33d837e2f": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "c2a01d12-f0d8-40ac-8fce-54d33d837e2f",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [
+            ["Openlayers 를 적용하여 배경지도(Open api) 및 컨트롤 영역 개발"]
+          ]
+        }
+      }
+    }
+  },
+  "13c16eb1-00e5-4c22-95a6-4674c9dbd347": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "13c16eb1-00e5-4c22-95a6-4674c9dbd347",
+        "type": "text"
+      }
+    }
+  },
+  "7b2bdb88-0978-4757-b2cb-38f29711ee1b": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "7b2bdb88-0978-4757-b2cb-38f29711ee1b",
+        "type": "sub_header",
+        "properties": {
+          "title": [["작업 결과물"]]
+        }
+      }
+    }
+  },
+  "21734bb1-052d-4a51-b706-b959cae209a7": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "21734bb1-052d-4a51-b706-b959cae209a7",
+        "type": "divider"
+      }
+    }
+  },
+  "21fe586c-27ea-40d5-8117-bfd2a9df3bf0": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "21fe586c-27ea-40d5-8117-bfd2a9df3bf0",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["메인화면"]]
+        }
+      }
+    }
+  },
+  "4daf6b53-7690-41e1-8049-b8b2d64e9e7a": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "4daf6b53-7690-41e1-8049-b8b2d64e9e7a",
+        "type": "bookmark",
+        "properties": {
+          "link": [["https://tgis.eseoul.go.kr/index.do"]]
+        }
+      }
+    }
+  },
+  "6098c2c8-d8e7-4b98-9d3e-82dd827dabb0": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "6098c2c8-d8e7-4b98-9d3e-82dd827dabb0",
+        "type": "bulleted_list",
+        "properties": {
+          "title": [["지도화면"]]
+        }
+      }
+    }
+  },
+  "d58dc10c-004e-48bd-8a16-03462f5570b3": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "d58dc10c-004e-48bd-8a16-03462f5570b3",
+        "type": "bookmark",
+        "properties": {
+          "link": [["https://tgis.eseoul.go.kr/map/mapMain.do"]]
+        }
+      }
+    }
+  },
+  "2f9b7f71-7f86-47e0-aa13-cf8f8643f2c9": {
+    "value": {
+      "role": "reader",
+      "value": {
+        "id": "2f9b7f71-7f86-47e0-aa13-cf8f8643f2c9",
+        "type": "text"
+      }
+    }
+  },
+  "07d45677-1eaa-48b7-a48d-0500d930e129": {
+    "value": {
+      "role": "none"
+    }
+  }
+}

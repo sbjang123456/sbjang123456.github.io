@@ -8,7 +8,9 @@
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    /* import.meta.glob과 *.webp 모듈 타입은 astro/client가 들고 있다 */
+    "types": ["astro/client"]
   },
   "include": ["src"]
 }

@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .astro/
+.notion-cache/
 test-results/
 playwright-report/
 *.log

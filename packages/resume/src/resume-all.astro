@@ -1,0 +1,32 @@
+---
+import { buttonVariants } from '@site/ui/components/button';
+import { resume as defaultResume, type Resume } from './data';
+import { projects } from './projects/index';
+import CareerBrief from './sections/career-brief.astro';
+
+interface Props {
+  /** 기본값은 이 패키지의 data.ts. 테스트나 미리보기에서 갈아끼울 수 있다. */
+  resume?: Resume;
+}
+
+const { resume = defaultResume } = Astro.props;
+---
+
+<a
+  href="/resume/"
+  class={buttonVariants({ variant: 'ghost', size: 'sm', className: '-ml-3' })}
+>
+  ← 이력서
+</a>
+
+<header class="mt-6 flex flex-col gap-2">
+  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">이력서 전체보기</h1>
+  <p class="text-muted-foreground">
+    회사 {resume.careers.length}곳 · 프로젝트 {projects.length}개. 회사를
+    누르면 그 회사에서 한 일이 펼쳐집니다.
+  </p>
+</header>
+
+<div class="mt-8">
+  <CareerBrief careers={resume.careers} />
+</div>

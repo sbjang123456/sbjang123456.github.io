@@ -1,0 +1,22 @@
+---
+import CompanyDisclosure from '../career/company-disclosure.astro';
+import type { Career } from '../data';
+
+interface Props {
+  careers: Career[];
+}
+
+const { careers } = Astro.props;
+---
+
+{/* 전체보기는 회사·기간·역할만 늘어놓고 상세는 펼쳐서 본다 —
+    랜딩의 카드(소개·스택·학력)는 여기 없다 */}
+<ol class="flex flex-col gap-3">
+  {
+    careers.map((career) => (
+      <li>
+        <CompanyDisclosure career={career} />
+      </li>
+    ))
+  }
+</ol>
