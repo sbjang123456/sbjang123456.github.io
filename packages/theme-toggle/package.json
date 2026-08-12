@@ -2,11 +2,11 @@
   "name": "@site/theme-toggle",
   "private": true,
   "type": "module",
-  "svelte": "./src/ThemeToggle.svelte",
+  "svelte": "./src/theme-toggle.svelte",
   "exports": {
     ".": {
-      "svelte": "./src/ThemeToggle.svelte",
-      "default": "./src/ThemeToggle.svelte"
+      "svelte": "./src/theme-toggle.svelte",
+      "default": "./src/theme-toggle.svelte"
     }
   },
   "peerDependencies": {

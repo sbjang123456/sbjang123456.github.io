@@ -14,6 +14,7 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 │           ├── content/      # 회고 MDX (콘텐츠 컬렉션)
 │           └── layouts/      # 공통 레이아웃 (헤더 네비 + 테마)
 ├── packages/
+│   ├── ui/                   # shadcn/ui 컴포넌트 (CLI 생성물 그대로)
 │   ├── post-search/          # React 아일랜드 — 회고 목록 검색
 │   └── theme-toggle/         # Svelte 아일랜드 — 다크/라이트 전환
 └── .github/workflows/deploy.yml  # main 푸시 시 build → Pages 배포 (apps/site/dist)
@@ -22,6 +23,7 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 - **회고**: `src/content/retrospect/*.mdx` 파일이 곧 글. frontmatter(`title`, `date`)를 콘텐츠 컬렉션 스키마로 검증하고, 목록·본문 모두 정적 HTML로 생성된다. JS 없이도 콘텐츠 전체가 보인다.
 - **아일랜드**: 한 페이지에 React(`client:load` 검색창)와 Svelte(테마 토글)가 공존하며 각자 독립적으로 하이드레이션된다. 아일랜드에 넘기는 props는 직렬화 가능해야 한다.
 - **이력서**: 순수 정적 페이지.
+- **디자인 시스템**: Tailwind CSS v4 + shadcn/ui. 컴포넌트는 `packages/ui`에 두고 Astro 페이지와 React 아일랜드가 함께 쓴다. Astro에서 쓰면 하이드레이션 없이 정적 HTML로만 렌더된다.
 
 > 이전 구조(런타임 Module Federation 셸/리모트)는 `mfa-runtime` 브랜치에 보존되어 있다. 런타임 통합 실험은 그 브랜치 README 참고.
 
@@ -63,6 +65,26 @@ date: 2026-08-11
 2. `apps/site/package.json`에 `"@site/<이름>": "workspace:*"` 추가
 3. 페이지/레이아웃에서 import 후 `client:*` 디렉티브로 사용 (`client:load`, `client:visible`, `client:idle`)
 4. 새 프레임워크라면 `astro.config.mjs`의 `integrations`에 해당 통합 추가
+
+## 파일명 규칙
+
+소스 파일명은 케밥 케이스를 쓴다 — `post-search.tsx`, `theme-toggle.svelte`, `base.astro`. 컴포넌트 **식별자**는 프레임워크 관례대로 파스칼 케이스를 유지한다 (`export function PostSearch`).
+
+패키지 이름(`@site/post-search`), 회고 슬러그(`2026-08-11-foo.mdx` → `/retrospect/2026-08-11-foo/`), shadcn CLI 생성물(`dropdown-menu.tsx`)이 모두 같은 표기라 저장소 전체가 한 규칙으로 맞는다. 프레임워크가 이름을 정하는 파일(`astro.config.mjs`, `content.config.ts`, `index.astro`, `[id].astro`)만 그대로 둔다.
+
+## shadcn/ui 컴포넌트 추가
+
+컴포넌트는 `packages/ui`에 설치한다. 워크스페이스 루트가 아니라 **패키지 디렉터리에서** 실행해야 `components.json`을 찾는다.
+
+```sh
+cd packages/ui
+pnpm dlx shadcn@latest add dialog tabs
+```
+
+- 생성된 파일은 `packages/ui/src/components/*.tsx`. import 별칭은 `@site/ui/components/<이름>`
+- 소비 측에서 `className`으로만 조정하고 **생성물 자체는 수정하지 않는다**. 그래야 `shadcn add --overwrite`로 언제든 갱신할 수 있다
+- 이 원칙을 강제하려고 `biome.json`에서 `packages/ui/src/components`를 검사 대상에서 제외했다 (shadcn 원본 포맷 유지)
+- 디자인 토큰은 `apps/site/src/styles/global.css` 한 곳에 있다
 
 ## 주의점
 

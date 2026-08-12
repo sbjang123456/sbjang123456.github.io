@@ -1,6 +1,8 @@
 ---
 import { getCollection, render } from 'astro:content';
-import Base from '../../layouts/Base.astro';
+import { buttonVariants } from '@site/ui/components/button';
+import { Separator } from '@site/ui/components/separator';
+import Base from '../../layouts/base.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('retrospect');
@@ -9,11 +11,31 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const date = post.data.date.toISOString();
 ---
 
 <Base title={`${post.data.title} — sbjang`}>
-  <article>
-    <p><a href="/retrospect/">← 목록으로</a></p>
-    <Content />
+  <a
+    href="/retrospect/"
+    class={buttonVariants({ variant: 'ghost', size: 'sm', className: '-ml-3' })}
+  >
+    ← 목록으로
+  </a>
+
+  <article class="mt-6">
+    <header class="flex flex-col gap-3">
+      <h1 class="text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+        {post.data.title}
+      </h1>
+      <time datetime={date} class="text-sm text-muted-foreground">
+        {date.slice(0, 10)}
+      </time>
+    </header>
+
+    <Separator className="my-8" />
+
+    <div class="prose prose-zinc max-w-none dark:prose-invert">
+      <Content />
+    </div>
   </article>
 </Base>

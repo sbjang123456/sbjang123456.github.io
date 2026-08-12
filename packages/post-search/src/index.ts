@@ -1,1 +1,1 @@
-export { PostSearch, type PostSummary } from './PostSearch';
+export { PostSearch, type PostSummary } from './post-search';

@@ -5,6 +5,9 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "dependencies": {
+    "@site/ui": "workspace:*"
+  },
   "peerDependencies": {
     "react": "^19.2.0"
   },

@@ -1,19 +1,59 @@
 ---
-import Base from '../layouts/Base.astro';
+import { Badge } from '@site/ui/components/badge';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@site/ui/components/card';
+import Base from '../layouts/base.astro';
+
+const sections = [
+  {
+    title: '소개',
+    description: '어떤 문제를 어떻게 푸는 사람인지',
+    body: '(작성 예정) 프론트엔드 개발자 sbjang입니다.',
+  },
+  {
+    title: '경력',
+    description: '조직과 기간, 맡은 일',
+    body: '(작성 예정)',
+  },
+];
+
+const stack = ['Astro', 'React', 'Svelte', 'TypeScript', 'Tailwind CSS'];
 ---
 
-<Base title="이력서 — sbjang">
-  <h1>이력서</h1>
-  <section>
-    <h2>소개</h2>
-    <p>(작성 예정) 프론트엔드 개발자 sbjang입니다.</p>
-  </section>
-  <section>
-    <h2>경력</h2>
-    <p>(작성 예정)</p>
-  </section>
-  <section>
-    <h2>기술 스택</h2>
-    <p>(작성 예정)</p>
-  </section>
+<Base title="이력서 — sbjang" description="프론트엔드 개발자 sbjang의 이력서.">
+  <header class="flex flex-col gap-2">
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">이력서</h1>
+    <p class="text-muted-foreground">프론트엔드 개발자 sbjang</p>
+  </header>
+
+  <div class="mt-8 flex flex-col gap-4">
+    {
+      sections.map((section) => (
+        <Card>
+          <CardHeader>
+            <CardTitle>{section.title}</CardTitle>
+            <CardDescription>{section.description}</CardDescription>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">
+            {section.body}
+          </CardContent>
+        </Card>
+      ))
+    }
+
+    <Card>
+      <CardHeader>
+        <CardTitle>기술 스택</CardTitle>
+        <CardDescription>주로 쓰는 도구</CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-wrap gap-2">
+        {stack.map((item) => <Badge variant="secondary">{item}</Badge>)}
+      </CardContent>
+    </Card>
+  </div>
 </Base>

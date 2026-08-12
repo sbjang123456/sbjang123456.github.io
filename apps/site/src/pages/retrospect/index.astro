@@ -1,7 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
 import { PostSearch } from '@site/post-search';
-import Base from '../../layouts/Base.astro';
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@site/ui/components/card';
+import Base from '../../layouts/base.astro';
 
 const posts = (await getCollection('retrospect')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
@@ -16,17 +22,37 @@ const summaries = posts.map((post) => ({
 }));
 ---
 
-<Base title="회고 — sbjang">
-  <h1>회고</h1>
-  <PostSearch client:load posts={summaries} />
-  <ul>
+<Base title="회고 — sbjang" description="sbjang이 쓴 개발 회고 모음.">
+  <header class="flex flex-col gap-2">
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">회고</h1>
+    <p class="text-muted-foreground">글 {posts.length}개</p>
+  </header>
+
+  <div class="mt-8">
+    <PostSearch client:load posts={summaries} />
+  </div>
+
+  <ul class="mt-8 flex flex-col gap-3">
     {
       posts.map((post) => (
         <li>
-          <a href={`/retrospect/${post.id}/`}>{post.data.title}</a>{' '}
-          <time datetime={post.data.date.toISOString()}>
-            {post.data.date.toISOString().slice(0, 10)}
-          </time>
+          <a
+            href={`/retrospect/${post.id}/`}
+            class="group block rounded-xl outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          >
+            <Card className="transition-colors group-hover:border-foreground/20 group-hover:bg-accent/40">
+              <CardHeader>
+                <CardTitle className="underline-offset-4 group-hover:underline">
+                  {post.data.title}
+                </CardTitle>
+                <CardDescription>
+                  <time datetime={post.data.date.toISOString()}>
+                    {post.data.date.toISOString().slice(0, 10)}
+                  </time>
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </a>
         </li>
       ))
     }

@@ -1,22 +1,76 @@
 ---
-import Base from '../layouts/Base.astro';
+import { Badge } from '@site/ui/components/badge';
+import { buttonVariants } from '@site/ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@site/ui/components/card';
+import { Separator } from '@site/ui/components/separator';
+import Base from '../layouts/base.astro';
+
+const features = [
+  {
+    title: '사이트 뼈대',
+    description: 'Astro가 빌드 타임에 모든 페이지를 정적 HTML로 생성한다.',
+    tag: 'astro',
+  },
+  {
+    title: '회고',
+    description: 'MDX 콘텐츠 컬렉션. 목록 위 검색창만 React 아일랜드다.',
+    tag: '@site/post-search',
+  },
+  {
+    title: '테마 토글',
+    description: '헤더 오른쪽 버튼은 Svelte 아일랜드로 독립 하이드레이션된다.',
+    tag: '@site/theme-toggle',
+  },
+  {
+    title: '디자인 시스템',
+    description:
+      'shadcn/ui 컴포넌트와 Tailwind 토큰을 워크스페이스로 공유한다.',
+    tag: '@site/ui',
+  },
+];
 ---
 
 <Base>
-  <h1>sbjang의 홈</h1>
-  <p>Astro 아일랜드 아키텍처 기반 개인 사이트입니다.</p>
-  <ul>
-    <li>
-      <strong>사이트 뼈대</strong> — Astro가 빌드 타임에 정적 HTML로 생성
-    </li>
-    <li>
-      <strong>회고</strong> — MDX 콘텐츠 컬렉션. 검색창은 React 아일랜드
-      (워크스페이스 패키지 <code>@site/post-search</code>)
-    </li>
-    <li>
-      <strong>테마 토글</strong> — 헤더 오른쪽 버튼은 Svelte 아일랜드
-      (워크스페이스 패키지 <code>@site/theme-toggle</code>)
-    </li>
-    <li><strong>이력서</strong> — 정적 페이지</li>
-  </ul>
+  <section class="flex flex-col items-start gap-5">
+    <Badge variant="secondary">Astro 아일랜드 아키텍처</Badge>
+    <h1 class="text-4xl font-bold tracking-tight text-balance sm:text-5xl">
+      sbjang의 홈
+    </h1>
+    <p class="max-w-xl text-lg text-muted-foreground text-pretty">
+      정적 HTML을 기본으로 두고, 인터랙션이 필요한 조각만 프레임워크 아일랜드로
+      하이드레이션하는 개인 사이트입니다.
+    </p>
+    <div class="flex flex-wrap gap-3 pt-1">
+      <a href="/retrospect/" class={buttonVariants()}>회고 보기</a>
+      <a href="/resume/" class={buttonVariants({ variant: 'outline' })}>
+        이력서
+      </a>
+    </div>
+  </section>
+
+  <Separator className="my-12" />
+
+  <section class="grid gap-4 sm:grid-cols-2">
+    {
+      features.map((feature) => (
+        <Card className="h-full">
+          <CardHeader>
+            <CardTitle>{feature.title}</CardTitle>
+            <CardDescription>{feature.description}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Badge variant="outline" className="font-mono text-xs">
+              {feature.tag}
+            </Badge>
+          </CardContent>
+        </Card>
+      ))
+    }
+  </section>
 </Base>

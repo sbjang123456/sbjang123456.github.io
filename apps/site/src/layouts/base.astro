@@ -1,0 +1,102 @@
+---
+import ThemeToggle from '@site/theme-toggle';
+import { buttonVariants } from '@site/ui/components/button';
+import { Separator } from '@site/ui/components/separator';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'sbjang',
+  description = 'Astro 아일랜드 아키텍처 기반 개인 사이트 — 회고와 이력서.',
+} = Astro.props;
+
+const path = Astro.url.pathname;
+
+const nav = [
+  { href: '/retrospect/', label: '회고' },
+  { href: '/resume/', label: '이력서' },
+];
+
+const isCurrent = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="ko" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <title>{title}</title>
+    <!-- 첫 페인트 전에 테마를 결정해 깜빡임(FOUC)을 막는다 -->
+    <script is:inline>
+      const stored = localStorage.getItem('theme');
+      document.documentElement.dataset.theme =
+        stored ??
+        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    </script>
+  </head>
+  <body class="flex min-h-svh flex-col antialiased">
+    <header
+      class="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60"
+    >
+      <div
+        class="mx-auto flex h-14 w-full max-w-3xl items-center justify-between gap-4 px-4 sm:px-6"
+      >
+        <a
+          href="/"
+          class="rounded-md font-semibold tracking-tight outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          aria-current={path === '/' ? 'page' : undefined}
+        >
+          sbjang
+        </a>
+        <div class="flex items-center gap-1">
+          <nav class="flex items-center gap-1" aria-label="주요">
+            {
+              nav.map((item) => (
+                <a
+                  href={item.href}
+                  aria-current={isCurrent(item.href) ? 'page' : undefined}
+                  class:list={[
+                    buttonVariants({ variant: 'ghost', size: 'sm' }),
+                    isCurrent(item.href)
+                      ? 'bg-accent text-accent-foreground'
+                      : 'text-muted-foreground',
+                  ]}
+                >
+                  {item.label}
+                </a>
+              ))
+            }
+          </nav>
+          <Separator
+            orientation="vertical"
+            className="mx-1 data-[orientation=vertical]:h-5"
+          />
+          <ThemeToggle client:load />
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto w-full max-w-3xl flex-1 px-4 py-10 sm:px-6 sm:py-14">
+      <slot />
+    </main>
+
+    <footer class="border-t border-border/60">
+      <div
+        class="mx-auto flex w-full max-w-3xl flex-col gap-1 px-4 py-8 text-sm text-muted-foreground sm:px-6"
+      >
+        <p>© {year} sbjang</p>
+        <p>Astro 아일랜드 · React · Svelte · shadcn/ui</p>
+      </div>
+    </footer>
+  </body>
+</html>
