@@ -12,9 +12,9 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "test": "pnpm test:unit && pnpm test:e2e",
-    "test:unit": "pnpm --filter @site/main exec astro sync && vitest run",
+    "test:unit": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "pnpm --filter @site/main build && playwright test"
+    "test:e2e": "pnpm build && playwright test"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.7",

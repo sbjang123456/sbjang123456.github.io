@@ -1,10 +1,28 @@
-import { beforeAll, describe, expect, it } from 'vitest';
-import RetrospectIndex from '../../pages/retrospect/index.astro';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { createContainer, parse, url } from '../container';
+
+// 콘텐츠 레이어(.astro/data-store.json)는 dev 서버만 채운다 — build도 만들지
+// 않는다. 그래서 컨테이너에서 진짜 getCollection을 쓰면 글이 0개로 나온다.
+// 대신 고정 데이터를 주입해 페이지 자체의 로직(정렬·직렬화·마크업)만 본다.
+// 실제 MDX가 실제로 렌더되는지는 E2E가 본다.
+//
+// 일부러 뒤섞인 순서로 준다 — 페이지가 정렬을 하는지 확인하려면 필요하다.
+const FIXTURES = [
+  { id: 'middle', data: { title: '두 번째 글', date: new Date('2026-08-10') } },
+  { id: 'oldest', data: { title: '세 번째 글', date: new Date('2026-08-09') } },
+  { id: 'newest', data: { title: '첫 번째 글', date: new Date('2026-08-11') } },
+];
+
+vi.mock('astro:content', () => ({
+  getCollection: async () => FIXTURES,
+}));
 
 let doc: ReturnType<typeof parse>;
 
 beforeAll(async () => {
+  const { default: RetrospectIndex } = await import(
+    '../../pages/retrospect/index.astro'
+  );
   const container = await createContainer();
   const html = await container.renderToString(RetrospectIndex, {
     request: url('/retrospect/'),
@@ -21,6 +39,7 @@ const island = (framework: 'react' | 'svelte') =>
 
 const postLinks = () =>
   [...doc.querySelectorAll('main ul a[href^="/retrospect/"]')] as {
+    textContent: string | null;
     getAttribute(name: string): string | null;
     querySelector(
       sel: string,
@@ -28,22 +47,28 @@ const postLinks = () =>
   }[];
 
 describe('retrospect/index.astro', () => {
-  it('콘텐츠 컬렉션의 글을 모두 렌더한다', () => {
-    expect(postLinks().length).toBeGreaterThan(0);
+  it('컬렉션의 글을 모두 렌더한다', () => {
+    expect(postLinks()).toHaveLength(FIXTURES.length);
   });
 
-  it('글을 최신순으로 정렬한다', () => {
-    const dates = postLinks().map(
-      (a) => a.querySelector('time')?.getAttribute('datetime') ?? '',
+  it('최신순으로 정렬한다', () => {
+    const dates = postLinks().map((a) =>
+      a.querySelector('time')?.getAttribute('datetime'),
     );
 
-    expect(dates).toEqual([...dates].sort().reverse());
+    expect(dates).toEqual([
+      '2026-08-11T00:00:00.000Z',
+      '2026-08-10T00:00:00.000Z',
+      '2026-08-09T00:00:00.000Z',
+    ]);
   });
 
   it('링크가 트레일링 슬래시를 포함한 슬러그 URL을 가리킨다', () => {
-    for (const a of postLinks()) {
-      expect(a.getAttribute('href')).toMatch(/^\/retrospect\/[^/]+\/$/);
-    }
+    expect(postLinks().map((a) => a.getAttribute('href'))).toEqual([
+      '/retrospect/newest/',
+      '/retrospect/middle/',
+      '/retrospect/oldest/',
+    ]);
   });
 
   it('React 검색창과 Svelte 테마 토글이 한 페이지에 공존한다', () => {
@@ -66,7 +91,7 @@ describe('retrospect/index.astro', () => {
     ];
 
     expect(arrayTag).toBe(1);
-    expect(posts.length).toBe(postLinks().length);
+    expect(posts).toHaveLength(FIXTURES.length);
 
     for (const [, post] of posts) {
       expect(post.date[0]).toBe(0);
@@ -77,7 +102,7 @@ describe('retrospect/index.astro', () => {
 
   it('글 개수를 머리말에 보여준다', () => {
     expect(doc.querySelector('header p')?.textContent).toBe(
-      `글 ${postLinks().length}개`,
+      `글 ${FIXTURES.length}개`,
     );
   });
 });
