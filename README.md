@@ -12,12 +12,14 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 │       └── src/
 │           ├── pages/        # /, /resume/, /retrospect/, /retrospect/[id]/
 │           ├── content/      # 회고 MDX (콘텐츠 컬렉션)
-│           └── layouts/      # 공통 레이아웃 (헤더 네비 + 테마)
+│           ├── layouts/      # 공통 레이아웃 (헤더 네비 + 테마)
+│           └── test/         # Container API 헬퍼 + 페이지 테스트
 ├── packages/
 │   ├── ui/                   # shadcn/ui 컴포넌트 (CLI 생성물 그대로)
 │   ├── post-search/          # React 아일랜드 — 회고 목록 검색
 │   └── theme-toggle/         # Svelte 아일랜드 — 다크/라이트 전환
-└── .github/workflows/deploy.yml  # main 푸시 시 build → Pages 배포 (apps/site/dist)
+├── e2e/                      # Playwright — 빌드 산출물 대상 E2E
+└── .github/workflows/deploy.yml  # main 푸시 시 lint → test → build → Pages 배포
 ```
 
 - **회고**: `src/content/retrospect/*.mdx` 파일이 곧 글. frontmatter(`title`, `date`)를 콘텐츠 컬렉션 스키마로 검증하고, 목록·본문 모두 정적 HTML로 생성된다. JS 없이도 콘텐츠 전체가 보인다.
@@ -35,6 +37,10 @@ pnpm dev            # dev 서버 (http://localhost:4321)
 pnpm build          # 빌드 → apps/site/dist
 pnpm lint           # Biome 검사
 pnpm lint:fix       # Biome 자동 수정
+pnpm test           # 유닛 + E2E 전부
+pnpm test:unit      # Vitest만 (빠름, ~3초)
+pnpm test:watch     # Vitest 워치 모드
+pnpm test:e2e       # 빌드 후 Playwright
 ```
 
 로컬에서 배포 산출물 확인:
@@ -65,6 +71,34 @@ date: 2026-08-11
 2. `apps/site/package.json`에 `"@site/<이름>": "workspace:*"` 추가
 3. 페이지/레이아웃에서 import 후 `client:*` 디렉티브로 사용 (`client:load`, `client:visible`, `client:idle`)
 4. 새 프레임워크라면 `astro.config.mjs`의 `integrations`에 해당 통합 추가
+
+## 테스트
+
+Vitest(유닛·컴포넌트) + Playwright(E2E). 테스트 파일은 대상 소스 옆에 두고, E2E만 `e2e/`에 모은다.
+
+루트 `vitest.config.ts`가 4개 프로젝트를 묶는다 — 실행 환경과 컴파일러가 서로 달라 하나로 합칠 수 없다.
+
+| 프로젝트 | 환경 | 대상 |
+|---|---|---|
+| `ui` | node | `cn()` — 순수 함수 |
+| `post-search` | happy-dom + React | 검색 아일랜드 (Testing Library) |
+| `theme-toggle` | happy-dom + Svelte | 테마 토글 아일랜드 |
+| `site` | node + Astro | `.astro` 레이아웃·페이지 (Container API) |
+
+`site` 프로젝트는 `apps/site/vitest.config.ts`에서 `getViteConfig`로 `astro.config.mjs`의 통합(mdx·react·svelte·tailwind)을 그대로 물려받는다 — 실제 빌드와 같은 파이프라인으로 `.astro`가 변환된다. 헬퍼는 `apps/site/src/test/container.ts`.
+
+E2E는 `astro dev`가 아니라 **`astro preview`** 위에서 돈다. Pages에 실제로 올라가는 산출물(디렉터리 포맷, 트레일링 슬래시)을 그대로 재현해야 하기 때문이다.
+
+### 함정
+
+- **`src/pages/` 안에는 테스트 파일을 두지 말 것.** Astro가 라우트로 취급해 `astro build`가 `/retrospect/index.test`를 렌더하려다 죽는다. 페이지 테스트는 `apps/site/src/test/pages/`에 둔다. 레이아웃·컴포넌트는 라우팅 대상이 아니라 옆에 둬도 된다.
+- **Container API에서 `Astro.site`는 항상 `undefined`다.** astro 7.2.0의 `AstroContainer.create()`는 `astroConfig` 옵션을 타입으로만 받고 구현에서 버리며, 컨테이너 매니페스트에 `site` 필드 자체가 없다. 그래서 `base.astro`는 `Astro.site ?? Astro.url`로 되돌린다. 테스트는 `request`에 절대 URL을 넘겨 origin을 정한다.
+- **E2E에서 아일랜드를 건드리기 전에 하이드레이션을 기다릴 것.** Astro는 `<astro-island>`에 `ssr` 속성을 달아 보내고 하이드레이션 후 지운다. `e2e/site.spec.ts`의 `hydrated()` 헬퍼가 `:not([ssr])`로 이걸 기다린다. 안 기다리면 React가 리스너를 붙이기 전에 입력이 들어가 조용히 실패한다.
+- **Svelte 컴포넌트 테스트엔 설정 두 줄이 필요하다** — `resolve.conditions: ['browser']`(없으면 `svelte/index-server.js`가 잡혀 `mount()`가 없다)와 `server.deps.inline`(testing-library의 `.svelte.js` 헬퍼가 룬을 써서 컴파일을 거쳐야 한다).
+
+### CI
+
+`deploy.yml`의 build 잡에서 `lint → test:unit → build → playwright test` 순으로 돈다. 실패하면 `upload-pages-artifact`까지 못 가서 배포가 막힌다. Playwright 브라우저는 락파일 해시로 캐시하고 Chromium만 받는다. 실패 시 리포트가 아티팩트로 올라간다.
 
 ## 파일명 규칙
 

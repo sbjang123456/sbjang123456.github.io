@@ -1,6 +1,7 @@
 {
   "name": "sbjang123456.github.io",
   "private": true,
+  "type": "module",
   "packageManager": "pnpm@10.28.2",
   "engines": {
     "node": ">=22.12"
@@ -9,10 +10,20 @@
     "dev": "pnpm --filter @site/main dev",
     "build": "pnpm -r build",
     "lint": "biome check .",
-    "lint:fix": "biome check --write ."
+    "lint:fix": "biome check --write .",
+    "test": "pnpm test:unit && pnpm test:e2e",
+    "test:unit": "pnpm --filter @site/main exec astro sync && vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "pnpm --filter @site/main build && playwright test"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.7"
+    "@biomejs/biome": "2.5.7",
+    "@playwright/test": "1.62.1",
+    "@sveltejs/vite-plugin-svelte": "7.3.0",
+    "@vitejs/plugin-react": "5.2.0",
+    "happy-dom": "20.11.2",
+    "vite": "8.2.1",
+    "vitest": "4.1.10"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

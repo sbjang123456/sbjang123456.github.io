@@ -16,6 +16,10 @@ const {
 
 const path = Astro.url.pathname;
 
+// 빌드에서는 astro.config.mjs의 site가 쓰인다. Astro.site가 없는 환경
+// (Container API 등)에서도 죽지 않도록 요청 URL로 되돌린다.
+const canonical = new URL(path, Astro.site ?? Astro.url);
+
 const nav = [
   { href: '/retrospect/', label: '회고' },
   { href: '/resume/', label: '이력서' },
@@ -34,7 +38,7 @@ const year = new Date().getFullYear();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
-    <link rel="canonical" href={new URL(path, Astro.site)} />
+    <link rel="canonical" href={canonical} />
     <title>{title}</title>
     <!-- 첫 페인트 전에 테마를 결정해 깜빡임(FOUC)을 막는다 -->
     <script is:inline>
