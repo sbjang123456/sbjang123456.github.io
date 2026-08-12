@@ -58,6 +58,22 @@ test.describe('네비게이션', () => {
   });
 });
 
+test.describe('이력서', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test('좁은 화면에서 가로로 넘치지 않는다', async ({ page }) => {
+    await page.goto('/resume/');
+
+    // 프로젝트 이름이 길어 nowrap 요소로 깔면 조용히 가로 스크롤이 생긴다
+    const { scroll, viewport } = await page.evaluate(() => ({
+      scroll: document.documentElement.scrollWidth,
+      viewport: document.documentElement.clientWidth,
+    }));
+
+    expect(scroll).toBeLessThanOrEqual(viewport);
+  });
+});
+
 test.describe('테마 토글 (Svelte 아일랜드)', () => {
   test('클릭하면 테마가 바뀌고 새로고침해도 유지된다', async ({ page }) => {
     await page.goto('/');

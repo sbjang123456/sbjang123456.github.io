@@ -25,7 +25,7 @@ const { careers } = Astro.props;
       careers.length === 0 ? (
         <p class="text-sm text-muted-foreground">(작성 예정)</p>
       ) : (
-        <ol class="flex flex-col gap-6">
+        <ol class="flex flex-col gap-8">
           {careers.map((career) => (
             <li class="flex flex-col gap-2">
               <div class="flex flex-wrap items-baseline justify-between gap-x-3">
@@ -43,6 +43,21 @@ const { careers } = Astro.props;
                     <li>{highlight}</li>
                   ))}
                 </ul>
+              )}
+              {career.projects.length > 0 && (
+                /* 프로젝트 이름은 한 줄에 안 들어갈 만큼 길다 — 배지(nowrap)로
+                   깔면 좁은 화면에서 가로 스크롤이 생긴다. 목록으로 흘린다. */
+                <div
+                  data-slot="projects"
+                  class="mt-1 flex flex-col gap-1 border-l-2 border-border pl-3"
+                >
+                  <h4 class="text-xs font-medium">프로젝트</h4>
+                  <ul class="flex flex-col gap-0.5 text-xs text-muted-foreground">
+                    {career.projects.map((project) => (
+                      <li>{project}</li>
+                    ))}
+                  </ul>
+                </div>
               )}
             </li>
           ))}

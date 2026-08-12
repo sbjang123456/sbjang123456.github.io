@@ -1,0 +1,37 @@
+---
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@site/ui/components/card';
+import type { Credential } from '../data';
+
+interface Props {
+  background: Credential[];
+}
+
+const { background } = Astro.props;
+---
+
+<Card>
+  <CardHeader>
+    <CardTitle>학력 · 자격</CardTitle>
+    <CardDescription>그 밖의 이력</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <ul class="flex flex-col gap-2 text-sm">
+      {
+        background.map((item) => (
+          <li class="flex flex-wrap items-baseline justify-between gap-x-3">
+            <span>{item.title}</span>
+            <span class="text-muted-foreground tabular-nums">
+              {item.period}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </CardContent>
+</Card>

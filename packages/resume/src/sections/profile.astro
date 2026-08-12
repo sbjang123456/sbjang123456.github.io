@@ -20,7 +20,7 @@ const { summary } = Astro.props;
     <CardTitle>소개</CardTitle>
     <CardDescription>어떤 문제를 어떻게 푸는 사람인지</CardDescription>
   </CardHeader>
-  <CardContent className="text-sm text-muted-foreground">
-    {summary}
+  <CardContent className="flex flex-col gap-3 text-sm text-muted-foreground">
+    {summary.map((paragraph) => <p>{paragraph}</p>)}
   </CardContent>
 </Card>

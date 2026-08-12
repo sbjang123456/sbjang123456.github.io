@@ -1,4 +1,5 @@
 import type { Resume } from '@site/resume/data';
+import { resume } from '@site/resume/data';
 import { beforeAll, describe, expect, it } from 'vitest';
 import ResumePage from '../../pages/resume.astro';
 import { createContainer, parse, url } from '../container';
@@ -21,9 +22,12 @@ const cardTitles = () =>
     el.textContent?.trim(),
   );
 
+const cardContent = (index: number) =>
+  doc.querySelectorAll('[data-slot="card-content"]')[index];
+
 describe('resume.astro', () => {
   it('패키지의 섹션들을 순서대로 렌더한다', () => {
-    expect(cardTitles()).toEqual(['소개', '경력', '기술 스택']);
+    expect(cardTitles()).toEqual(['소개', '경력', '기술 스택', '학력 · 자격']);
   });
 
   it('머리말에 이름과 직군을 보여준다', () => {
@@ -33,12 +37,34 @@ describe('resume.astro', () => {
     );
   });
 
-  it('경력이 비어 있으면 빈 상태를 보여준다', () => {
-    // data.ts의 careers가 아직 []다. 채워지면 이 테스트가 알려준다.
-    const career = doc.querySelectorAll('[data-slot="card-content"]')[1];
+  it('머리말의 연락처를 링크로 건다', () => {
+    const links = [...doc.querySelectorAll('main header a')];
 
-    expect(career?.textContent?.trim()).toBe('(작성 예정)');
-    expect(career?.querySelector('ol')).toBeNull();
+    expect(links.map((el) => el.getAttribute('href'))).toEqual(
+      resume.contacts.map((contact) => contact.href),
+    );
+  });
+
+  it('소개를 문단으로 나눠 보여준다', () => {
+    expect(cardContent(0)?.querySelectorAll('p')).toHaveLength(
+      resume.summary.length,
+    );
+  });
+
+  it('경력을 최신순으로 나열하고 기간을 붙인다', () => {
+    const orgs = [...(cardContent(1)?.querySelectorAll('ol > li h3') ?? [])];
+
+    expect(orgs).toHaveLength(resume.careers.length);
+    expect(orgs[0]?.textContent).toContain(resume.careers[0]?.org);
+    expect(cardContent(1)?.textContent).toContain('재직 중');
+  });
+
+  it('경력마다 프로젝트를 함께 보여준다', () => {
+    const projects = resume.careers.flatMap((career) => career.projects);
+
+    expect(
+      cardContent(1)?.querySelectorAll('[data-slot="projects"] li'),
+    ).toHaveLength(projects.length);
   });
 
   it('스택을 분류별로 나눠 보여준다', () => {
@@ -48,6 +74,14 @@ describe('resume.astro', () => {
     expect([...groups].map((el) => el.textContent?.trim())).toContain(
       '프레임워크',
     );
+  });
+
+  it('학력·자격을 항목마다 기간과 함께 보여준다', () => {
+    const items = [...(cardContent(3)?.querySelectorAll('li') ?? [])];
+
+    expect(items).toHaveLength(resume.background.length);
+    expect(items[0]?.textContent).toContain(resume.background[0]?.title);
+    expect(items[0]?.textContent).toContain(resume.background[0]?.period);
   });
 
   it('아일랜드는 헤더의 테마 토글 하나뿐이다', () => {

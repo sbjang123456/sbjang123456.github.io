@@ -1,5 +1,6 @@
 ---
 import { resume as defaultResume, type Resume } from './data';
+import Background from './sections/background.astro';
 import Career from './sections/career.astro';
 import Profile from './sections/profile.astro';
 import Stack from './sections/stack.astro';
@@ -17,10 +18,25 @@ const { resume = defaultResume } = Astro.props;
   <p class="text-muted-foreground">
     {resume.headline} {resume.name}
   </p>
+  <ul class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+    {
+      resume.contacts.map((contact) => (
+        <li>
+          <a
+            href={contact.href}
+            class="rounded-sm underline underline-offset-4 outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 text-muted-foreground"
+          >
+            {contact.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
 </header>
 
 <div class="mt-8 flex flex-col gap-4">
   <Profile summary={resume.summary} />
   <Career careers={resume.careers} />
   <Stack stack={resume.stack} />
+  <Background background={resume.background} />
 </div>
