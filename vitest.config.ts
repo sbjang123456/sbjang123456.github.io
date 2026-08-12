@@ -16,6 +16,14 @@ export default defineConfig({
         },
       },
       {
+        test: {
+          name: 'resume',
+          root: './packages/resume',
+          environment: 'node',
+          include: ['src/**/*.test.ts'],
+        },
+      },
+      {
         plugins: [react()],
         test: {
           name: 'post-search',

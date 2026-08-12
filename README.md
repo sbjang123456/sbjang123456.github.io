@@ -16,6 +16,7 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 │           └── test/         # Container API 헬퍼 + 페이지 테스트
 ├── packages/
 │   ├── ui/                   # shadcn/ui 컴포넌트 (CLI 생성물 그대로)
+│   ├── resume/               # Astro 패키지 — 이력 데이터 + 섹션 컴포넌트
 │   ├── post-search/          # React 아일랜드 — 회고 목록 검색
 │   └── theme-toggle/         # Svelte 아일랜드 — 다크/라이트 전환
 ├── e2e/                      # Playwright — 빌드 산출물 대상 E2E
@@ -24,7 +25,7 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 
 - **회고**: `src/content/retrospect/*.mdx` 파일이 곧 글. frontmatter(`title`, `date`)를 콘텐츠 컬렉션 스키마로 검증하고, 목록·본문 모두 정적 HTML로 생성된다. JS 없이도 콘텐츠 전체가 보인다.
 - **아일랜드**: 한 페이지에 React(`client:load` 검색창)와 Svelte(테마 토글)가 공존하며 각자 독립적으로 하이드레이션된다. 아일랜드에 넘기는 props는 직렬화 가능해야 한다.
-- **이력서**: 순수 정적 페이지.
+- **이력서**: 순수 정적 페이지. 내용(`packages/resume/src/data.ts`)과 마크업(`src/sections/*.astro`)을 갈라 뒀다 — 내용을 고칠 때 `.astro`를 열 필요가 없고, 나중에 PDF나 JSON Resume 같은 다른 렌더러를 붙일 때 데이터만 읽으면 된다. 아일랜드가 아니라 클라이언트 JS는 0바이트다.
 - **디자인 시스템**: Tailwind CSS v4 + shadcn/ui. 컴포넌트는 `packages/ui`에 두고 Astro 페이지와 React 아일랜드가 함께 쓴다. Astro에서 쓰면 하이드레이션 없이 정적 HTML로만 렌더된다.
 
 > 이전 구조(런타임 Module Federation 셸/리모트)는 `mfa-runtime` 브랜치에 보존되어 있다. 런타임 통합 실험은 그 브랜치 README 참고.
@@ -65,24 +66,37 @@ date: 2026-08-11
 
 파일명이 URL이 된다: `2026-08-11-foo.mdx` → `/retrospect/2026-08-11-foo/`
 
-## 아일랜드 추가 방법
+## 패키지 추가 방법
 
-1. `packages/<이름>/`에 컴포넌트 패키지 생성 (React `.tsx` 또는 Svelte `.svelte`, `exports`가 소스를 직접 가리킴)
+1. `packages/<이름>/`에 패키지 생성. `exports`가 소스를 직접 가리킨다 (빌드 단계 없음)
 2. `apps/site/package.json`에 `"@site/<이름>": "workspace:*"` 추가
-3. 페이지/레이아웃에서 import 후 `client:*` 디렉티브로 사용 (`client:load`, `client:visible`, `client:idle`)
-4. 새 프레임워크라면 `astro.config.mjs`의 `integrations`에 해당 통합 추가
+3. **`apps/site/src/styles/global.css`에 `@source`를 추가한다** — 빠뜨리면 그 패키지의 Tailwind 클래스가 CSS에 생성되지 않는다. 빌드는 통과하고 스타일만 조용히 빠진다
+4. 테스트가 있으면 루트 `vitest.config.ts`의 `projects`에 등록
+
+**아일랜드**(React `.tsx` / Svelte `.svelte`)라면 추가로:
+
+- 페이지에서 `client:*` 디렉티브로 사용 (`client:load`, `client:visible`, `client:idle`)
+- 새 프레임워크면 `astro.config.mjs`의 `integrations`에 통합 추가
+
+**Astro 패키지**(`.astro`)라면 — `packages/resume`가 예시다:
+
+- `exports`가 `.astro`를 직접 가리켜도 된다. Astro 자신도 `astro/components/*`로 그렇게 한다
+- `astro`를 `peerDependencies`에 둔다
+- **라우트는 `apps/site/src/pages/`에만 살 수 있다.** 페이지 파일은 패키지를 부르는 껍데기로 남는다
+- 하이드레이션이 없어 클라이언트 JS가 늘지 않는다
 
 ## 테스트
 
 Vitest(유닛·컴포넌트) + Playwright(E2E). 테스트 파일은 대상 소스 옆에 두고, E2E만 `e2e/`에 모은다.
 
-루트 `vitest.config.ts`가 4개 프로젝트를 묶는다 — 실행 환경과 컴파일러가 서로 달라 하나로 합칠 수 없다.
+루트 `vitest.config.ts`가 5개 프로젝트를 묶는다 — 실행 환경과 컴파일러가 서로 달라 하나로 합칠 수 없다.
 
 | 프로젝트 | 환경 | 대상 |
 |---|---|---|
 | `ui` | node | `cn()` — 순수 함수 |
 | `post-search` | happy-dom + React | 검색 아일랜드 (Testing Library) |
 | `theme-toggle` | happy-dom + Svelte | 테마 토글 아일랜드 |
+| `resume` | node | 이력 데이터 — `formatPeriod`, 스키마 |
 | `site` | node + Astro | `.astro` 레이아웃·페이지 (Container API) |
 
 `site` 프로젝트는 `apps/site/vitest.config.ts`에서 `getViteConfig`로 `astro.config.mjs`의 통합(mdx·react·svelte·tailwind)을 그대로 물려받는다 — 실제 빌드와 같은 파이프라인으로 `.astro`가 변환된다. 헬퍼는 `apps/site/src/test/container.ts`.

@@ -1,0 +1,26 @@
+---
+import { resume as defaultResume, type Resume } from './data';
+import Career from './sections/career.astro';
+import Profile from './sections/profile.astro';
+import Stack from './sections/stack.astro';
+
+interface Props {
+  /** 기본값은 이 패키지의 data.ts. 테스트나 미리보기에서 갈아끼울 수 있다. */
+  resume?: Resume;
+}
+
+const { resume = defaultResume } = Astro.props;
+---
+
+<header class="flex flex-col gap-2">
+  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">이력서</h1>
+  <p class="text-muted-foreground">
+    {resume.headline} {resume.name}
+  </p>
+</header>
+
+<div class="mt-8 flex flex-col gap-4">
+  <Profile summary={resume.summary} />
+  <Career careers={resume.careers} />
+  <Stack stack={resume.stack} />
+</div>

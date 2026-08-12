@@ -1,0 +1,26 @@
+---
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@site/ui/components/card';
+import type { Resume } from '../data';
+
+interface Props {
+  summary: Resume['summary'];
+}
+
+const { summary } = Astro.props;
+---
+
+<Card>
+  <CardHeader>
+    <CardTitle>소개</CardTitle>
+    <CardDescription>어떤 문제를 어떻게 푸는 사람인지</CardDescription>
+  </CardHeader>
+  <CardContent className="text-sm text-muted-foreground">
+    {summary}
+  </CardContent>
+</Card>

@@ -1,0 +1,42 @@
+---
+import { Badge } from '@site/ui/components/badge';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@site/ui/components/card';
+import type { StackGroup } from '../data';
+
+interface Props {
+  stack: StackGroup[];
+}
+
+const { stack } = Astro.props;
+---
+
+<Card>
+  <CardHeader>
+    <CardTitle>기술 스택</CardTitle>
+    <CardDescription>주로 쓰는 도구</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <dl class="flex flex-col gap-4">
+      {
+        stack.map((group) => (
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:gap-4">
+            <dt class="w-24 shrink-0 text-sm text-muted-foreground">
+              {group.category}
+            </dt>
+            <dd class="flex flex-wrap gap-2">
+              {group.items.map((item) => (
+                <Badge variant="secondary">{item}</Badge>
+              ))}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </CardContent>
+</Card>

@@ -12,6 +12,7 @@
     "@astrojs/react": "6.0.2",
     "@astrojs/svelte": "9.0.1",
     "@site/post-search": "workspace:*",
+    "@site/resume": "workspace:*",
     "@site/theme-toggle": "workspace:*",
     "@site/ui": "workspace:*",
     "@tailwindcss/typography": "^0.5.20",

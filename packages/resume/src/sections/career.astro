@@ -1,0 +1,53 @@
+---
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@site/ui/components/card';
+import { type Career, formatPeriod } from '../data';
+
+interface Props {
+  careers: Career[];
+}
+
+const { careers } = Astro.props;
+---
+
+<Card>
+  <CardHeader>
+    <CardTitle>경력</CardTitle>
+    <CardDescription>조직과 기간, 맡은 일</CardDescription>
+  </CardHeader>
+  <CardContent>
+    {
+      careers.length === 0 ? (
+        <p class="text-sm text-muted-foreground">(작성 예정)</p>
+      ) : (
+        <ol class="flex flex-col gap-6">
+          {careers.map((career) => (
+            <li class="flex flex-col gap-2">
+              <div class="flex flex-wrap items-baseline justify-between gap-x-3">
+                <h3 class="font-medium">
+                  {career.org}
+                  <span class="text-muted-foreground"> · {career.role}</span>
+                </h3>
+                <span class="text-sm text-muted-foreground tabular-nums">
+                  {formatPeriod(career)}
+                </span>
+              </div>
+              {career.highlights.length > 0 && (
+                <ul class="flex list-disc flex-col gap-1 pl-5 text-sm text-muted-foreground">
+                  {career.highlights.map((highlight) => (
+                    <li>{highlight}</li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ol>
+      )
+    }
+  </CardContent>
+</Card>
