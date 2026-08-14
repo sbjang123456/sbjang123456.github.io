@@ -16,6 +16,7 @@ export const projectSlugs: Record<string, string> = {
   '외주 시공프로 관리 서비스 구축': 'site-visit-pro',
   'AS모바일 Hybrid 전환': 'as-mobile-hybrid',
   'MDS(기준정보시스템) 구축': 'mds',
+  '통합기준정보 시스템구축(2단계-MDC통합)': 'mdc',
 
   // 스토어링크
   '스토어링크 5.0 사이트 및 백오피스 재구축, 안정화 및 운영': 'storelink-5',

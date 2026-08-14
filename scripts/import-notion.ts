@@ -13,6 +13,7 @@
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { resume } from '../packages/resume/src/data.ts';
+import { manualProjectNames } from '../packages/resume/src/projects/manual.ts';
 import { projectSlugs } from '../packages/resume/src/projects/slugs.ts';
 import type { Project } from '../packages/resume/src/projects/types.ts';
 import type { PendingImage } from './notion/blocks.ts';
@@ -41,6 +42,8 @@ const joinKey = (name: string) => name.replace(/\s+/g, '');
 const expected = new Map<string, { name: string; org: string }>();
 for (const career of resume.careers) {
   for (const name of career.projects) {
+    // Notion 밖에서 손으로 쓰는 상세(`projects/manual.ts`)는 기대하지 않는다.
+    if (manualProjectNames.has(name)) continue;
     expected.set(joinKey(name), { name, org: career.slug });
   }
 }

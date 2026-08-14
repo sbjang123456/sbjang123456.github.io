@@ -1,4 +1,6 @@
+import { resume } from '../data';
 import { generatedProjects } from './generated/projects';
+import { manualProjects } from './manual';
 import type { Project } from './types';
 
 export { projectSlugs } from './slugs';
@@ -9,8 +11,15 @@ export type {
   TaskNode,
 } from './types';
 
-/** Notion에서 가져온 프로젝트 상세 전부. 순서는 이력서 표시 순서와 같다. */
-export const projects: Project[] = generatedProjects;
+// 임포터가 생성물을 data.ts 순서로 정렬해 두지만 수기 상세는 그 밖에 있다.
+// 둘을 합칠 때 여기서 한 번 더 맞춰야 표시 순서가 흐트러지지 않는다.
+const order = resume.careers.flatMap((career) => career.projects);
+
+/** 프로젝트 상세 전부(Notion 생성 + 수기). 순서는 이력서 표시 순서와 같다. */
+export const projects: Project[] = [
+  ...generatedProjects,
+  ...manualProjects,
+].sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
 
 export const projectsByName = new Map(projects.map((p) => [p.name, p]));
 

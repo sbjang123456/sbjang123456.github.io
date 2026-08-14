@@ -94,6 +94,7 @@ export const resume: Resume = {
         '외주 시공프로 관리 서비스 구축',
         'AS모바일 Hybrid 전환',
         'MDS(기준정보시스템) 구축',
+        '통합기준정보 시스템구축(2단계-MDC통합)',
       ],
     },
     {

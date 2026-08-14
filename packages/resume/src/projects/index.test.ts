@@ -2,7 +2,9 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { resume } from '../data';
+import { generatedProjects } from './generated/projects';
 import { findProject, projectSlugs, projects, projectsByOrg } from './index';
+import { manualProjects } from './manual';
 
 // 상세는 기계가 만든다(`scripts/import-notion.ts`). 사람이 쓴 data.ts와
 // 어긋나면 화면이 조용히 비므로, 여기서 두 데이터를 양방향으로 맞춰 본다.
@@ -14,6 +16,17 @@ const assetPath = (file: string) =>
 describe('프로젝트 상세', () => {
   it('data.ts의 프로젝트 수만큼 있다', () => {
     expect(projects).toHaveLength(names.length);
+  });
+
+  it('수기 상세와 생성 상세의 이름이 겹치지 않는다', () => {
+    // 수기 프로젝트가 나중에 Notion에도 생기면 상세가 둘로 늘어 개수 검사가
+    // 깨진다. 그때 원인이 바로 보이도록 여기서 먼저 잡는다.
+    const generated = new Set(generatedProjects.map((project) => project.name));
+    const both = manualProjects
+      .map((project) => project.name)
+      .filter((name) => generated.has(name));
+
+    expect(both).toEqual([]);
   });
 
   it('슬러그가 유일하고 ascii 케밥 케이스다', () => {
