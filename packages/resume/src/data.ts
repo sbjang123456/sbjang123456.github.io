@@ -95,6 +95,7 @@ export const resume: Resume = {
         'AS모바일 Hybrid 전환',
         'MDS(기준정보시스템) 구축',
         '통합기준정보 시스템구축(2단계-MDC통합)',
+        'AS포탈(업무시스템) 넥사크로 → React 전환',
       ],
     },
     {
