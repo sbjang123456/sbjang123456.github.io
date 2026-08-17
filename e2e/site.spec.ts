@@ -149,6 +149,30 @@ test.describe('이력서 전체보기', () => {
       .poll(() => image.evaluate((el: HTMLImageElement) => el.naturalWidth))
       .toBeGreaterThan(0);
   });
+
+  test('전부 펼쳐 둔 PDF를 내려받는다', async ({ page, request }) => {
+    // dist에 파일이 있어야 통과한다 — scripts/build-resume-pdf.ts가 굽는다
+    await page.goto('/resume/all/');
+    const link = page.getByRole('link', { name: 'PDF 내려받기' });
+
+    // download 속성이 있어야 새 탭으로 열지 않고 파일로 저장한다
+    await expect(link).toHaveAttribute('download', /\.pdf$/);
+
+    const href = (await link.getAttribute('href')) as string;
+    const body = await (await request.get(href)).body();
+
+    expect(body.subarray(0, 5).toString()).toBe('%PDF-');
+  });
+
+  test('인쇄에는 사이트 크롬을 싣지 않는다', async ({ page }) => {
+    // PDF도 이 인쇄 스타일로 찍힌다 (print.css)
+    await page.goto('/resume/all/');
+    await page.emulateMedia({ media: 'print' });
+
+    await expect(page.getByRole('banner')).toBeHidden();
+    await expect(page.getByRole('contentinfo')).toBeHidden();
+    await expect(page.getByRole('link', { name: 'PDF 내려받기' })).toBeHidden();
+  });
 });
 
 test.describe('테마 토글 (Svelte 아일랜드)', () => {

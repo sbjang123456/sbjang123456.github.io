@@ -1,0 +1,73 @@
+/*
+ * 인쇄 · PDF 전용 규칙.
+ *
+ * 전부 @media print 안에 있어 화면에는 아무 영향도 주지 않는다.
+ * `scripts/build-resume-pdf.ts`가 이 페이지를 그대로 인쇄해 resume.pdf를 굽고,
+ * 브라우저에서 직접 Ctrl+P를 눌러도 같은 종이가 나온다.
+ *
+ * "다 펼친 상태"는 여기서 만들지 않는다 — <details>를 CSS로 열면 화면엔 열려
+ * 보여도 [open] 속성은 그대로라 상태가 어긋난다 (disclosure.css의 같은 이유).
+ * 여는 일은 스크립트가 DOM으로 한다.
+ */
+
+@media print {
+  /*
+   * 사이트 크롬은 종이에 옮길 게 없다.
+   *
+   * !important는 필요 없다 — Tailwind 유틸리티는 @layer utilities 안에 있고,
+   * 레이어 밖 선언이 레이어 안 선언을 이긴다 (특정도와 무관하게).
+   */
+  body > header,
+  body > footer,
+  [data-print-hidden] {
+    display: none;
+  }
+
+  /* 화면 폭 제약과 여백은 종이 여백이 대신한다 */
+  body > main {
+    max-width: none;
+    padding: 0;
+  }
+
+  /* 다 펼친 채로 찍으므로 여닫이 화살표는 뜻이 없다 */
+  summary svg {
+    display: none;
+  }
+
+  /* 펼침 연출이 인쇄 순간에 진행 중이면 잘린 채로 찍힌다 */
+  [data-disclosure]::details-content {
+    transition: none;
+  }
+
+  /* 제목이나 요약만 페이지 끝에 홀로 남는 걸 막는다 (섹션 제목은 h5다) */
+  summary,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    break-after: avoid;
+  }
+
+  /*
+   * 코드 블록은 화면에선 max-h-96 안에서 스크롤한다 — 종이에는 스크롤이 없다.
+   * 묶어 둔 채로 찍으면 119줄짜리 디렉터리 트리가 앞부분만 남는다.
+   */
+  pre {
+    max-height: none;
+    overflow: visible;
+    /* 가로 스크롤도 사라지므로 긴 줄은 잘리는 대신 접힌다 */
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /*
+   * 스크린샷은 페이지 경계에서 쪼개지면 못 읽는다.
+   * 코드 블록에는 걸지 않는다 — 대부분 두 쪽이 넘어 어차피 나뉘고,
+   * 그때는 앞 페이지만 비우는 손해가 된다.
+   */
+  img,
+  blockquote {
+    break-inside: avoid;
+  }
+}

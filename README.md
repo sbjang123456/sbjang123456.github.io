@@ -19,7 +19,7 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 │   ├── resume/               # Astro 패키지 — 이력 데이터 + 프로젝트 상세 + 섹션
 │   ├── post-search/          # React 아일랜드 — 회고 목록 검색
 │   └── theme-toggle/         # Svelte 아일랜드 — 다크/라이트 전환
-├── scripts/                  # Notion 임포터 (수동 실행, 빌드와 무관)
+├── scripts/                  # Notion 임포터 (수동) + 이력서 PDF 굽기 (빌드에 붙는다)
 ├── e2e/                      # Playwright — 빌드 산출물 대상 E2E
 └── .github/workflows/deploy.yml  # main 푸시 시 lint → test → build → Pages 배포
 ```
@@ -37,7 +37,7 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 ```sh
 pnpm install        # 의존성 설치
 pnpm dev            # dev 서버 (http://localhost:4321)
-pnpm build          # 빌드 → apps/site/dist
+pnpm build          # 빌드 → apps/site/dist (+ resume.pdf, 크로미움 필요)
 pnpm lint           # Biome 검사
 pnpm lint:fix       # Biome 자동 수정
 pnpm test           # 유닛 + E2E 전부
@@ -68,6 +68,27 @@ date: 2026-08-11
 ```
 
 파일명이 URL이 된다: `2026-08-11-foo.mdx` → `/retrospect/2026-08-11-foo/`
+
+## 이력서 PDF
+
+`/resume/all/` 화면의 **PDF 내려받기** 버튼은 빌드 때 구워 둔 `dist/resume.pdf`를 가리킨다. 브라우저에서 만드는 방식(html2canvas 류)은 글자가 이미지로 바뀌어 검색·복사가 안 되고, 정적 사이트라 서버에서 만들 수도 없다. 그래서 E2E에 이미 쓰는 크로미움으로 빌드 시점에 한 번만 인쇄한다.
+
+```
+astro build → scripts/build-resume-pdf.ts → dist/resume.pdf
+```
+
+- 스크립트가 `dist`를 최소 정적 서버(포트 0)로 띄우고 `/resume/all/`을 연다. `astro preview`를 안 띄우는 이유는 자식 프로세스 뒷정리가 필요 없고 개발 서버와 포트가 부딪히지 않아서다.
+- **다 펼친 상태는 DOM으로 만든다.** 회사 `<details>`는 `name`으로 묶인 아코디언이라 속성을 먼저 떼야 여럿이 열리고, 닫혀 있는 동안은 `loading="lazy"` 이미지가 요청조차 되지 않아 `eager`로 바꿔 받아 온다.
+- **종이 모양은 `packages/resume/src/print.css`가 맡는다.** 전부 `@media print` 안이라 화면에는 영향이 없다. 사이트 헤더·푸터와 `[data-print-hidden]`을 숨기고, 화면에선 `max-h-96` 안에서 스크롤하던 코드 블록을 풀어 준다 — 안 풀면 119줄짜리 디렉터리 트리가 앞부분만 찍힌다.
+- 테마는 `localStorage`에 `light`를 심어 고정한다. 안 그러면 CI 머신의 시스템 설정에 따라 검은 종이가 나온다.
+
+버튼은 `import.meta.env.PROD`일 때만 그린다 — dev 서버에는 PDF가 없다. 화면에서 확인하려면 `pnpm build && pnpm --filter @site/main preview`.
+
+빌드가 `Executable doesn't exist`로 죽으면 브라우저가 없는 것이다:
+
+```sh
+pnpm exec playwright install chromium
+```
 
 ## Notion 가져오기
 

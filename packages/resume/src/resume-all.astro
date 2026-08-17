@@ -1,6 +1,7 @@
 ---
 import { buttonVariants } from '@site/ui/components/button';
 import { resume as defaultResume, type Resume } from './data';
+import './print.css';
 import { projects } from './projects/index';
 import CareerBrief from './sections/career-brief.astro';
 
@@ -10,17 +11,53 @@ interface Props {
 }
 
 const { resume = defaultResume } = Astro.props;
+
+/*
+ * PDF는 빌드 산출물이다 — `scripts/build-resume-pdf.ts`가 dist를 인쇄해 만든다.
+ * dev 서버에는 그 파일이 없으므로 개발 중에는 죽은 링크 대신 버튼을 감춘다.
+ */
+const hasPdf = import.meta.env.PROD;
 ---
 
 <a
   href="/resume/"
+  data-print-hidden
   class={buttonVariants({ variant: 'ghost', size: 'sm', className: '-ml-3' })}
 >
   ← 이력서
 </a>
 
 <header class="mt-6 flex flex-col gap-2">
-  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">이력서 전체보기</h1>
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+      이력서 전체보기
+    </h1>
+    {
+      hasPdf && (
+        <a
+          href="/resume.pdf"
+          download={`${resume.name}-이력서.pdf`}
+          data-print-hidden
+          class={buttonVariants({ variant: 'outline', size: 'sm' })}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <path d="m7 10 5 5 5-5" />
+            <path d="M12 15V3" />
+          </svg>
+          PDF 내려받기
+        </a>
+      )
+    }
+  </div>
   <p class="text-muted-foreground">
     회사 {resume.careers.length}곳 · 프로젝트 {projects.length}개. 회사를
     누르면 그 회사에서 한 일이 펼쳐집니다.
