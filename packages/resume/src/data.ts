@@ -70,6 +70,10 @@ export const resume: Resume = {
     { label: 'sbjang123456@gmail.com', href: 'mailto:sbjang123456@gmail.com' },
     { label: 'Blog', href: 'https://songjang.tistory.com/' },
     { label: 'GitHub', href: 'https://github.com/sbjang123456' },
+    // 사이트 안쪽이지만 절대 주소로 둔다 — 이 줄은 어디에 붙여 넣어도
+    // 그대로 열려야 하는 링크 모음이다
+    { label: '이력서', href: 'https://sbjang123456.github.io/resume/' },
+    { label: '회고', href: 'https://sbjang123456.github.io/retrospect/' },
   ],
   careers: [
     {

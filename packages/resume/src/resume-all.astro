@@ -4,6 +4,7 @@ import { resume as defaultResume, type Resume } from './data';
 import './print.css';
 import { projects } from './projects/index';
 import CareerBrief from './sections/career-brief.astro';
+import Contacts from './sections/contacts.astro';
 
 interface Props {
   /** 기본값은 이 패키지의 data.ts. 테스트나 미리보기에서 갈아끼울 수 있다. */
@@ -62,6 +63,7 @@ const hasPdf = import.meta.env.PROD;
     회사 {resume.careers.length}곳 · 프로젝트 {projects.length}개. 회사를
     누르면 그 회사에서 한 일이 펼쳐집니다.
   </p>
+  <Contacts contacts={resume.contacts} />
 </header>
 
 <div class="mt-8">

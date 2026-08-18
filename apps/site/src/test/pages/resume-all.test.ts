@@ -76,6 +76,15 @@ describe('resume-all.astro', () => {
     expect(doc.querySelector('main a')?.getAttribute('href')).toBe('/resume/');
   });
 
+  it('머리말에 연락처를 랜딩과 똑같이 건다', () => {
+    // 두 화면이 sections/contacts.astro를 함께 쓴다 — 주소는 data.ts 한 곳뿐이다
+    const links = [...doc.querySelectorAll('main header ul a')];
+
+    expect(links.map((el) => el.getAttribute('href'))).toEqual(
+      resume.contacts.map((contact) => contact.href),
+    );
+  });
+
   it('이미지마다 alt와 크기가 있다', () => {
     const images = [...doc.querySelectorAll('img')];
 
