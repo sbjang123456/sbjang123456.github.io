@@ -11,12 +11,12 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 │   └── site/                 # Astro 호스트 — 유일한 배포 단위 (dev :4321)
 │       └── src/
 │           ├── pages/        # /, /resume/, /resume/all/, /retrospect/, /retrospect/[id]/
-│           ├── content/      # 회고 MDX (콘텐츠 컬렉션)
 │           ├── layouts/      # 공통 레이아웃 (헤더 네비 + 테마)
 │           └── test/         # Container API 헬퍼 + 페이지 테스트
 ├── packages/
 │   ├── ui/                   # shadcn/ui 컴포넌트 (CLI 생성물 그대로)
 │   ├── resume/               # Astro 패키지 — 이력 데이터 + 프로젝트 상세 + 섹션
+│   ├── retrospect/           # Astro 패키지 — 회고 MDX + 목록·상세 마크업
 │   ├── post-search/          # React 아일랜드 — 회고 목록 검색
 │   └── theme-toggle/         # Svelte 아일랜드 — 다크/라이트 전환
 ├── scripts/                  # Notion 임포터 (수동) + 이력서 PDF·OG 카드 굽기 (빌드에 붙는다)
@@ -24,7 +24,7 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 └── .github/workflows/deploy.yml  # main 푸시 시 lint → test → build → Pages 배포
 ```
 
-- **회고**: `src/content/retrospect/*.mdx` 파일이 곧 글. frontmatter(`title`, `date`, `description`)를 콘텐츠 컬렉션 스키마로 검증하고, 목록·본문 모두 정적 HTML로 생성된다. JS 없이도 콘텐츠 전체가 보인다.
+- **회고**: `packages/retrospect/content/*.mdx` 파일이 곧 글. frontmatter(`title`, `date`, `description`)를 콘텐츠 컬렉션 스키마로 검증하고, 목록·본문 모두 정적 HTML로 생성된다. JS 없이도 콘텐츠 전체가 보인다.
 - **아일랜드**: 한 페이지에 React(`client:load` 검색창)와 Svelte(테마 토글)가 공존하며 각자 독립적으로 하이드레이션된다. 아일랜드에 넘기는 props는 직렬화 가능해야 한다.
 - **이력서**: 두 밀도로 나뉜 정적 페이지다. `/resume/`는 훑어보기 — 재직 중인 회사의 프로젝트만 펼쳐 볼 수 있고 나머지는 이름만 나열한다. `/resume/all/`은 회사·기간·역할만 늘어놓고 회사를 누르면 그 회사 프로젝트가 펼쳐진다. 내용(`data.ts` + `projects/`)과 마크업(`sections/`·`career/`·`project/`)을 갈라 뒀다 — 내용을 고칠 때 `.astro`를 열 필요가 없고, 나중에 PDF나 JSON Resume 같은 다른 렌더러를 붙일 때 데이터만 읽으면 된다.
 - **펼침은 `<details>`다** — shadcn accordion(React)이 아니다. Radix Collapsible은 닫힌 콘텐츠를 아예 렌더하지 않아(`children: isOpen && children`) 상세 18,000자가 서버 HTML에서 통째로 사라진다. 크롤러·Cmd+F·인쇄·JS 미사용자가 모두 못 본다. `<details>`는 상세가 항상 HTML에 있고, 키보드·스크린리더·인쇄·아코디언 묶기(`name` 속성)를 브라우저가 책임진다. **덕분에 이력서의 클라이언트 JS는 상세를 다 싣고도 여전히 0바이트다** — 페이지 테스트가 `astro-island` 개수 1(헤더 테마 토글)을 못 박아 지킨다.
@@ -56,7 +56,7 @@ python3 -m http.server 8080 -d apps/site/dist
 
 ## 글 쓰기
 
-`apps/site/src/content/retrospect/`에 `.mdx` 파일 추가:
+`packages/retrospect/content/`에 `.mdx` 파일 추가:
 
 ```mdx
 ---
@@ -102,7 +102,7 @@ astro build → scripts/build-og-images.ts → dist/og/{글 슬러그}.png
 ```
 
 - **OG 카드는 빌드 때 크로미움으로 굽는다.** 글마다 한 장 + 목록용(`retrospect.png`) + 공용(`default.png`). 이미지 서비스나 폰트 의존성 없이 이력서 PDF와 같은 브라우저를 빌려 쓴다.
-- **카드는 라우트가 아니라 스크립트 안의 템플릿을 `setContent`로 그린다.** `/og/[id]/` 같은 페이지를 만들면 dist에 크롤러가 주워 갈 빈 페이지가 생기고 sitemap에서 도로 빼야 한다. 라우트가 없으니 글 목록도 소스 MDX의 frontmatter에서 직접 읽는다.
+- **카드는 라우트가 아니라 스크립트 안의 템플릿을 `setContent`로 그린다.** `/og/[id]/` 같은 페이지를 만들면 dist에 크롤러가 주워 갈 빈 페이지가 생기고 sitemap에서 도로 빼야 한다. 라우트가 없으니 글 목록도 `packages/retrospect/content/`의 MDX frontmatter에서 직접 읽는다.
 - 카드 색은 `global.css`의 라이트 토큰을 스크립트 안에 옮겨 적었다. 사이트 CSS를 끌어오면 해시 붙은 Tailwind 산출물 경로에 묶인다.
 - `sitemap.xml`·`rss.xml`은 통합 패키지 없이 `src/pages/*.xml.ts` 엔드포인트로 만든다. 페이지가 여섯 개뿐이라 트레일링 슬래시와 `lastmod`를 직접 쥐는 편이 낫다. XML 이스케이프는 `src/pages/_xml.ts`가 공유한다(언더스코어 = 라우트 아님).
 - **글 상세가 `description`을 안 넘기면 모든 글이 사이트 기본 설명을 공유한다** — 구글이 중복 스니펫으로 보는 모양이다. 스키마가 `description`을 필수로 잡고, `src/test/pages/retrospect-detail.test.ts`가 실제로 나가는지 지킨다.
@@ -150,12 +150,13 @@ Notion 원본에는 사내 시스템 화면이 그대로 담겨 있다. 공개 �
 - 페이지에서 `client:*` 디렉티브로 사용 (`client:load`, `client:visible`, `client:idle`)
 - 새 프레임워크면 `astro.config.mjs`의 `integrations`에 통합 추가
 
-**Astro 패키지**(`.astro`)라면 — `packages/resume`가 예시다:
+**Astro 패키지**(`.astro`)라면 — `packages/resume`·`packages/retrospect`가 예시다:
 
 - `exports`가 `.astro`를 직접 가리켜도 된다. Astro 자신도 `astro/components/*`로 그렇게 한다
 - `astro`를 `peerDependencies`에 둔다
 - **라우트는 `apps/site/src/pages/`에만 살 수 있다.** 페이지 파일은 패키지를 부르는 껍데기로 남는다
-- 하이드레이션이 없어 클라이언트 JS가 늘지 않는다
+- **패키지 안에서 아일랜드를 쓰면 그 아일랜드 패키지는 `apps/site/package.json`에도 남겨 둔다.** Astro는 `client:*` 컴포넌트의 임포트 경로를 해석하지 않고 bare specifier(`@site/post-search`) 그대로 클라이언트 빌드 엔트리로 넘긴다 — 해석은 앱 루트에서 일어나므로 앱이 그 패키지를 모르면 `astro build`가 `UNRESOLVED_ENTRY`로 죽는다
+- **`astro.config.mjs`의 `ssr.noExternal`이 `@site/*`를 잡아 둔다.** 앱 밖(`packages/*`)에 사는 `.astro`가 워크스페이스 패키지를 부르면 Vite가 SSR external로 넘기고, Node가 소스를 직접 읽다 확장자 없는 상대 임포트에서 죽는다. **dev만 500이고 빌드는 멀쩡해 더 늦게 들킨다**
 
 ## 테스트
 

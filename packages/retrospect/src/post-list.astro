@@ -1,0 +1,61 @@
+---
+import { PostSearch } from '@site/post-search';
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@site/ui/components/card';
+import type { Post } from './meta';
+
+interface Props {
+  posts: Post[];
+}
+
+const posts = [...Astro.props.posts].sort(
+  (a, b) => b.date.valueOf() - a.date.valueOf(),
+);
+
+// 아일랜드로 넘기는 props는 직렬화 가능해야 한다 (Date 객체 대신 문자열)
+const summaries = posts.map((post) => ({
+  id: post.id,
+  title: post.title,
+  date: post.date.toISOString().slice(0, 10),
+  url: `/retrospect/${post.id}/`,
+}));
+---
+
+<header class="flex flex-col gap-2">
+  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">회고</h1>
+  <p class="text-muted-foreground">글 {posts.length}개</p>
+</header>
+
+<div class="mt-8">
+  <PostSearch client:load posts={summaries} />
+</div>
+
+<ul class="mt-8 flex flex-col gap-3">
+  {
+    posts.map((post) => (
+      <li>
+        <a
+          href={`/retrospect/${post.id}/`}
+          class="group block rounded-xl outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+        >
+          <Card className="transition-colors group-hover:border-foreground/20 group-hover:bg-accent/40">
+            <CardHeader>
+              <CardTitle className="underline-offset-4 group-hover:underline">
+                {post.title}
+              </CardTitle>
+              <CardDescription>
+                <time datetime={post.date.toISOString()}>
+                  {post.date.toISOString().slice(0, 10)}
+                </time>
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </a>
+      </li>
+    ))
+  }
+</ul>

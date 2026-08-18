@@ -1,11 +1,12 @@
 import { getCollection } from 'astro:content';
+import { RETROSPECT } from '@site/retrospect/meta';
 import type { APIRoute } from 'astro';
 import { SITE } from '../site';
 import { escapeXml, xmlResponse } from './_xml';
 
 const FEED = {
-  title: `${SITE.name} — 회고`,
-  description: 'sbjang이 쓴 개발 회고 모음.',
+  title: `${SITE.name} — ${RETROSPECT.title}`,
+  description: RETROSPECT.description,
 };
 
 export const GET: APIRoute = async () => {

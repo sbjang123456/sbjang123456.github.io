@@ -17,7 +17,7 @@ import { chromium } from '@playwright/test';
 import { OG_SIZE, SITE } from '../apps/site/src/site.ts';
 
 const CONTENT = fileURLToPath(
-  new URL('../apps/site/src/content/retrospect', import.meta.url),
+  new URL('../packages/retrospect/content', import.meta.url),
 );
 const OUT_DIR = fileURLToPath(new URL('../apps/site/dist/og', import.meta.url));
 

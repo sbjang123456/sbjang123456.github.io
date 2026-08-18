@@ -1,0 +1,20 @@
+{
+  "name": "@site/retrospect",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/post-list.astro",
+    "./post": "./src/post.astro",
+    "./meta": "./src/meta.ts"
+  },
+  "dependencies": {
+    "@site/post-search": "workspace:*",
+    "@site/ui": "workspace:*"
+  },
+  "peerDependencies": {
+    "astro": "^7.0.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}
