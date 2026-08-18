@@ -19,12 +19,12 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 │   ├── resume/               # Astro 패키지 — 이력 데이터 + 프로젝트 상세 + 섹션
 │   ├── post-search/          # React 아일랜드 — 회고 목록 검색
 │   └── theme-toggle/         # Svelte 아일랜드 — 다크/라이트 전환
-├── scripts/                  # Notion 임포터 (수동) + 이력서 PDF 굽기 (빌드에 붙는다)
+├── scripts/                  # Notion 임포터 (수동) + 이력서 PDF·OG 카드 굽기 (빌드에 붙는다)
 ├── e2e/                      # Playwright — 빌드 산출물 대상 E2E
 └── .github/workflows/deploy.yml  # main 푸시 시 lint → test → build → Pages 배포
 ```
 
-- **회고**: `src/content/retrospect/*.mdx` 파일이 곧 글. frontmatter(`title`, `date`)를 콘텐츠 컬렉션 스키마로 검증하고, 목록·본문 모두 정적 HTML로 생성된다. JS 없이도 콘텐츠 전체가 보인다.
+- **회고**: `src/content/retrospect/*.mdx` 파일이 곧 글. frontmatter(`title`, `date`, `description`)를 콘텐츠 컬렉션 스키마로 검증하고, 목록·본문 모두 정적 HTML로 생성된다. JS 없이도 콘텐츠 전체가 보인다.
 - **아일랜드**: 한 페이지에 React(`client:load` 검색창)와 Svelte(테마 토글)가 공존하며 각자 독립적으로 하이드레이션된다. 아일랜드에 넘기는 props는 직렬화 가능해야 한다.
 - **이력서**: 두 밀도로 나뉜 정적 페이지다. `/resume/`는 훑어보기 — 재직 중인 회사의 프로젝트만 펼쳐 볼 수 있고 나머지는 이름만 나열한다. `/resume/all/`은 회사·기간·역할만 늘어놓고 회사를 누르면 그 회사 프로젝트가 펼쳐진다. 내용(`data.ts` + `projects/`)과 마크업(`sections/`·`career/`·`project/`)을 갈라 뒀다 — 내용을 고칠 때 `.astro`를 열 필요가 없고, 나중에 PDF나 JSON Resume 같은 다른 렌더러를 붙일 때 데이터만 읽으면 된다.
 - **펼침은 `<details>`다** — shadcn accordion(React)이 아니다. Radix Collapsible은 닫힌 콘텐츠를 아예 렌더하지 않아(`children: isOpen && children`) 상세 18,000자가 서버 HTML에서 통째로 사라진다. 크롤러·Cmd+F·인쇄·JS 미사용자가 모두 못 본다. `<details>`는 상세가 항상 HTML에 있고, 키보드·스크린리더·인쇄·아코디언 묶기(`name` 속성)를 브라우저가 책임진다. **덕분에 이력서의 클라이언트 JS는 상세를 다 싣고도 여전히 0바이트다** — 페이지 테스트가 `astro-island` 개수 1(헤더 테마 토글)을 못 박아 지킨다.
@@ -37,7 +37,7 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 ```sh
 pnpm install        # 의존성 설치
 pnpm dev            # dev 서버 (http://localhost:4321)
-pnpm build          # 빌드 → apps/site/dist (+ resume.pdf, 크로미움 필요)
+pnpm build          # 빌드 → apps/site/dist (+ resume.pdf·og/*.png, 크로미움 필요)
 pnpm lint           # Biome 검사
 pnpm lint:fix       # Biome 자동 수정
 pnpm test           # 유닛 + E2E 전부
@@ -62,6 +62,7 @@ python3 -m http.server 8080 -d apps/site/dist
 ---
 title: '글 제목'
 date: 2026-08-11
+description: '검색 결과에 그대로 나갈 한 줄. 80~120자, 글의 결론이 드러나게.'
 ---
 
 본문…
@@ -89,6 +90,22 @@ astro build → scripts/build-resume-pdf.ts → dist/resume.pdf
 ```sh
 pnpm exec playwright install chromium
 ```
+
+## 검색엔진·링크 미리보기
+
+메타는 `base.astro` 한 곳에서만 나간다. 페이지는 `title`·`description`·`image`·`article`을 props로 넘기고, 레이아웃이 그걸 OG·Twitter·JSON-LD로 편다. `article`(발행일)을 넘긴 페이지만 글로 취급해 `og:type=article`과 `BlogPosting` 구조화 데이터를 붙인다.
+
+사이트 이름·주소·설명은 `apps/site/src/site.ts`에 모여 있다 — 레이아웃·sitemap·RSS·OG 카드가 같은 값을 봐야 해서다. `SITE.url`은 `astro.config.mjs`의 `site`를 따라 적은 사본이니 한쪽만 고치면 canonical과 sitemap이 갈라진다.
+
+```
+astro build → scripts/build-og-images.ts → dist/og/{글 슬러그}.png
+```
+
+- **OG 카드는 빌드 때 크로미움으로 굽는다.** 글마다 한 장 + 목록용(`retrospect.png`) + 공용(`default.png`). 이미지 서비스나 폰트 의존성 없이 이력서 PDF와 같은 브라우저를 빌려 쓴다.
+- **카드는 라우트가 아니라 스크립트 안의 템플릿을 `setContent`로 그린다.** `/og/[id]/` 같은 페이지를 만들면 dist에 크롤러가 주워 갈 빈 페이지가 생기고 sitemap에서 도로 빼야 한다. 라우트가 없으니 글 목록도 소스 MDX의 frontmatter에서 직접 읽는다.
+- 카드 색은 `global.css`의 라이트 토큰을 스크립트 안에 옮겨 적었다. 사이트 CSS를 끌어오면 해시 붙은 Tailwind 산출물 경로에 묶인다.
+- `sitemap.xml`·`rss.xml`은 통합 패키지 없이 `src/pages/*.xml.ts` 엔드포인트로 만든다. 페이지가 여섯 개뿐이라 트레일링 슬래시와 `lastmod`를 직접 쥐는 편이 낫다. XML 이스케이프는 `src/pages/_xml.ts`가 공유한다(언더스코어 = 라우트 아님).
+- **글 상세가 `description`을 안 넘기면 모든 글이 사이트 기본 설명을 공유한다** — 구글이 중복 스니펫으로 보는 모양이다. 스키마가 `description`을 필수로 잡고, `src/test/pages/retrospect-detail.test.ts`가 실제로 나가는지 지킨다.
 
 ## Notion 가져오기
 

@@ -14,7 +14,12 @@ const { Content } = await render(post);
 const date = post.data.date.toISOString();
 ---
 
-<Base title={`${post.data.title} — sbjang`}>
+<Base
+  title={`${post.data.title} — sbjang`}
+  description={post.data.description}
+  image={`/og/${post.id}.png`}
+  article={{ publishedAt: post.data.date }}
+>
   <a
     href="/retrospect/"
     class={buttonVariants({ variant: 'ghost', size: 'sm', className: '-ml-3' })}

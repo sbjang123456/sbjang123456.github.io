@@ -14,6 +14,14 @@ const renderAt = async (path: string, props: Record<string, unknown> = {}) => {
   return parse(html);
 };
 
+const meta = (doc: ReturnType<typeof parse>, selector: string) =>
+  doc.querySelector(selector)?.getAttribute('content');
+
+const jsonLd = (doc: ReturnType<typeof parse>) => {
+  const raw = doc.querySelector('script[type="application/ld+json"]');
+  return raw ? JSON.parse(raw.textContent ?? '') : null;
+};
+
 const currentNavLabels = (doc: ReturnType<typeof parse>) =>
   [...doc.querySelectorAll('[aria-current="page"]')].map((el) =>
     el.textContent?.trim(),
@@ -63,6 +71,78 @@ describe('base.astro', () => {
     expect(
       doc.querySelector('link[rel="canonical"]')?.getAttribute('href'),
     ).toBe('https://sbjang123456.github.io/retrospect/');
+  });
+
+  it('글 정보를 주면 og:type=article과 BlogPosting JSON-LD를 낸다', async () => {
+    const doc = await renderAt('/retrospect/post/', {
+      title: '어떤 회고 — sbjang',
+      description: '어떤 회고의 요약.',
+      image: '/og/post.png',
+      article: { publishedAt: new Date('2026-08-11T00:00:00Z') },
+    });
+
+    expect(meta(doc, 'meta[property="og:type"]')).toBe('article');
+    expect(jsonLd(doc)).toMatchObject({
+      '@type': 'BlogPosting',
+      // <title>용 꼬리표(— sbjang)는 구조화 데이터에 섞이지 않아야 한다
+      headline: '어떤 회고',
+      description: '어떤 회고의 요약.',
+      datePublished: '2026-08-11T00:00:00.000Z',
+      author: { name: '장수빈' },
+      url: 'https://sbjang123456.github.io/retrospect/post/',
+      image: 'https://sbjang123456.github.io/og/post.png',
+      inLanguage: 'ko-KR',
+    });
+  });
+
+  it('글이 아니면 og:type=website이고 JSON-LD를 넣지 않는다', async () => {
+    const doc = await renderAt('/resume/', { title: '이력서 — sbjang' });
+
+    expect(meta(doc, 'meta[property="og:type"]')).toBe('website');
+    expect(jsonLd(doc)).toBeNull();
+  });
+
+  it('상대경로로 준 카드도 og:image는 절대 URL로 낸다', async () => {
+    // 크롤러 상당수가 상대경로 og:image를 그냥 버린다
+    const doc = await renderAt('/retrospect/post/', { image: '/og/post.png' });
+
+    expect(meta(doc, 'meta[property="og:image"]')).toBe(
+      'https://sbjang123456.github.io/og/post.png',
+    );
+    expect(meta(doc, 'meta[name="twitter:image"]')).toBe(
+      'https://sbjang123456.github.io/og/post.png',
+    );
+  });
+
+  it('description이 없으면 사이트 기본값을 og·twitter까지 함께 쓴다', async () => {
+    const doc = await renderAt('/');
+    const fallback =
+      'Astro 아일랜드 아키텍처 기반 개인 사이트 — 회고와 이력서.';
+
+    expect(meta(doc, 'meta[name="description"]')).toBe(fallback);
+    expect(meta(doc, 'meta[property="og:description"]')).toBe(fallback);
+    expect(meta(doc, 'meta[name="twitter:description"]')).toBe(fallback);
+    expect(meta(doc, 'meta[property="og:image"]')).toBe(
+      'https://sbjang123456.github.io/og/default.png',
+    );
+  });
+
+  it('og:url을 canonical과 같은 주소로 맞춘다', async () => {
+    const doc = await renderAt('/retrospect/');
+
+    expect(meta(doc, 'meta[property="og:url"]')).toBe(
+      doc.querySelector('link[rel="canonical"]')?.getAttribute('href'),
+    );
+  });
+
+  it('RSS를 자동 발견할 수 있게 alternate 링크를 건다', async () => {
+    const doc = await renderAt('/');
+
+    expect(
+      doc
+        .querySelector('link[rel="alternate"][type="application/rss+xml"]')
+        ?.getAttribute('href'),
+    ).toBe('/rss.xml');
   });
 
   it('테마 토글을 Svelte 아일랜드로 하이드레이션한다', async () => {

@@ -175,6 +175,76 @@ test.describe('이력서 전체보기', () => {
   });
 });
 
+/**
+ * 크롤러가 읽는 파일들. 전부 빌드 산출물이라 여기서만 존재를 확인할 수 있다 —
+ * 유닛 테스트는 컨테이너로 컴포넌트만 그리므로 dist를 보지 못한다.
+ */
+test.describe('검색엔진용 파일', () => {
+  const postCount = async (page: Page) => {
+    await page.goto('/retrospect/');
+    return page.locator('main ul a[href^="/retrospect/"]').count();
+  };
+
+  test('sitemap.xml이 회고 URL을 트레일링 슬래시로 담는다', async ({
+    page,
+    request,
+  }) => {
+    await page.goto('/retrospect/');
+    const hrefs = await page
+      .locator('main ul a[href^="/retrospect/"]')
+      .evaluateAll((links) => links.map((link) => link.getAttribute('href')));
+
+    const response = await request.get('/sitemap.xml');
+    expect(response.status()).toBe(200);
+
+    // 빌드 시점에 굽히므로 preview 주소가 아니라 배포 도메인이 들어간다
+    const xml = await response.text();
+    for (const href of [...hrefs, '/retrospect/']) {
+      expect(xml).toContain(`<loc>https://sbjang123456.github.io${href}</loc>`);
+    }
+  });
+
+  test('rss.xml이 글 개수만큼 항목을 담는다', async ({ page, request }) => {
+    const count = await postCount(page);
+
+    const response = await request.get('/rss.xml');
+    expect(response.status()).toBe(200);
+    expect(response.headers()['content-type']).toContain('xml');
+
+    const xml = await response.text();
+    expect(xml.match(/<item>/g)).toHaveLength(count);
+  });
+
+  test('robots.txt가 sitemap 위치를 알린다', async ({ request }) => {
+    const response = await request.get('/robots.txt');
+
+    expect(response.status()).toBe(200);
+    expect(await response.text()).toContain(
+      'Sitemap: https://sbjang123456.github.io/sitemap.xml',
+    );
+  });
+
+  test('글 상세의 og:image가 실제 PNG를 가리킨다', async ({
+    page,
+    request,
+  }) => {
+    await page.goto('/retrospect/');
+    await page.locator('main ul a[href^="/retrospect/"]').first().click();
+
+    const src = await page
+      .locator('meta[property="og:image"]')
+      .getAttribute('content');
+    expect(src).toMatch(/\/og\/.+\.png$/);
+
+    // dist에 파일이 있어야 통과한다 — scripts/build-og-images.ts가 굽는다
+    const body = await (
+      await request.get(new URL(src as string).pathname)
+    ).body();
+
+    expect(body.subarray(0, 4).toString('hex')).toBe('89504e47'); // \x89PNG
+  });
+});
+
 test.describe('테마 토글 (Svelte 아일랜드)', () => {
   test('클릭하면 테마가 바뀌고 새로고침해도 유지된다', async ({ page }) => {
     await page.goto('/');
