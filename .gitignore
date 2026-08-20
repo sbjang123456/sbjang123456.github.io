@@ -6,3 +6,8 @@ test-results/
 playwright-report/
 *.log
 .DS_Store
+
+.agents/skills/*-query
+.claude/skills/*-query
+.atlassian/
+skills-lock.json
