@@ -175,13 +175,14 @@ Vitest(유닛·컴포넌트) + Playwright(E2E). 테스트 파일은 대상 소�
 
 `site` 프로젝트는 `apps/site/vitest.config.ts`에서 `getViteConfig`로 `astro.config.mjs`의 통합(mdx·react·svelte·tailwind)을 그대로 물려받는다 — 실제 빌드와 같은 파이프라인으로 `.astro`가 변환된다. 헬퍼는 `apps/site/src/test/container.ts`.
 
-E2E는 `astro dev`가 아니라 **`astro preview`** 위에서 돈다. Pages에 실제로 올라가는 산출물(디렉터리 포맷, 트레일링 슬래시)을 그대로 재현해야 하기 때문이다.
+E2E는 `astro dev`가 아니라 **`astro preview`** 위에서 돈다. Pages에 실제로 올라가는 산출물(디렉터리 포맷, 트레일링 슬래시)을 그대로 재현해야 하기 때문이다. 포트는 dev(4321)와 갈라 **4322**를 쓰고, 그 서버의 생명주기는 Playwright의 `webServer`가 아니라 `e2e/preview-server.ts`가 쥔다.
 
 ### 함정
 
 - **`src/pages/` 안에는 테스트 파일을 두지 말 것.** Astro가 라우트로 취급해 `astro build`가 `/retrospect/index.test`를 렌더하려다 죽는다. 페이지 테스트는 `apps/site/src/test/pages/`에 둔다. 레이아웃·컴포넌트는 라우팅 대상이 아니라 옆에 둬도 된다.
 - **Container API에서 `getCollection`은 글을 못 읽는다.** 콘텐츠 스토어(`.astro/data-store.json`)는 **dev 서버만** 만든다 — `astro sync`도 `astro build`도 만들지 않는다. 그래서 컬렉션을 쓰는 페이지 테스트는 `vi.mock('astro:content')`로 고정 데이터를 주입하고, 페이지 자신의 로직(정렬·직렬화·마크업)만 본다. 실제 MDX가 렌더되는지는 E2E가 본다. dev 서버를 한 번이라도 띄운 로컬에선 스토어가 남아 있어 진짜 컬렉션으로도 통과하니, **이 차이를 모르면 CI에서만 깨진다.**
 - **Container API에서 `Astro.site`는 항상 `undefined`다.** astro 7.2.0의 `AstroContainer.create()`는 `astroConfig` 옵션을 타입으로만 받고 구현에서 버리며, 컨테이너 매니페스트에 `site` 필드 자체가 없다. 그래서 `base.astro`는 `Astro.site ?? Astro.url`로 되돌린다. 테스트는 `request`에 절대 URL을 넘겨 origin을 정한다.
+- **`astro preview`는 Playwright의 `webServer`로 못 다룬다.** 부모를 죽여도 혼자 살아남아 포트를 붙들고(실행마다 하나씩 흘린다), 프로젝트당 하나만 도는 데몬이라 그 찌꺼기가 남아 있으면 다음 실행은 포트를 바꿔도 `already running`만 남기고 즉시 끝난다 — Playwright에는 `webServer exited early`로 보인다. 포트가 dev와 겹치면 더 조용히 깨진다. `reuseExistingServer`가 dev 서버를 그대로 붙잡는데 dev는 `dist/`를 서빙하지 않아, 페이지는 멀쩡하고 og PNG와 `resume.pdf`만 404 HTML로 온다. 그래서 `globalSetup`에서 `astro preview stop` → `--background`로 열고 끝나면 다시 `stop`한다. `stop`은 떠 있지 않아도 0으로 끝나고 `--background`는 리슨을 시작한 뒤 반환하므로, 정리와 준비 대기가 이 두 명령으로 끝난다.
 - **E2E에서 아일랜드를 건드리기 전에 하이드레이션을 기다릴 것.** Astro는 `<astro-island>`에 `ssr` 속성을 달아 보내고 하이드레이션 후 지운다. `e2e/site.spec.ts`의 `hydrated()` 헬퍼가 `:not([ssr])`로 이걸 기다린다. 안 기다리면 React가 리스너를 붙이기 전에 입력이 들어가 조용히 실패한다.
 - **`<details>`를 `:target`으로 열지 말 것.** `#슬러그` 앵커로 들어온 항목을 `[data-disclosure]:target::details-content { block-size: auto }`로 펼치면 화면엔 열려 보이지만 `[open]` 속성은 그대로다 — 사용자가 눌러도 접히지 않는 상태가 된다(직접 확인). Chromium은 조각 이동 시 조상 `<details>`를 알아서 열어 주므로 앵커는 그쪽에 맡긴다. 그 기능이 없는 브라우저에선 앵커가 아무 일도 하지 않을 뿐, 잘못 동작하지는 않는다.
 - **Svelte 컴포넌트 테스트엔 설정 두 줄이 필요하다** — `resolve.conditions: ['browser']`(없으면 `svelte/index-server.js`가 잡혀 `mount()`가 없다)와 `server.deps.inline`(testing-library의 `.svelte.js` 헬퍼가 룬을 써서 컴파일을 거쳐야 한다).
