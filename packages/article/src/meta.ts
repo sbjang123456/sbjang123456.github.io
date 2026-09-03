@@ -8,7 +8,7 @@ export const ARTICLE = {
 export interface Article {
   id: string;
   title: string;
-  /** 정리한 날. 원문이 발행된 날이 아니다 */
+  /** 원문이 발행된 날 */
   date: Date;
   description: string;
   /** 원문 주소 — 상세의 '원문 보기'가 그대로 가리킨다 */

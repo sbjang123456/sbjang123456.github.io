@@ -4,13 +4,13 @@ import { createContainer, parse, url } from '../container';
 // 회고 상세 테스트와 같은 이유로 astro:content를 고정 데이터로 바꾼다.
 // 여기서 보는 건 상세가 원문 링크를 안전하게 내고 SEO 메타를 실제로 내보내는지다.
 const ARTICLE = {
-  id: '2026-09-03-astro-5-content-layer',
+  id: '2026-07-28-mcp-specification',
   data: {
-    title: 'Astro 5.0 — 콘텐츠 컬렉션이 src/content를 벗어났다',
-    date: new Date('2026-09-03T00:00:00Z'),
-    description: 'Astro 5.0 발표 글을 정리했다.',
-    source: 'https://astro.build/blog/astro-5/',
-    publisher: 'Astro Blog',
+    title: 'MCP 2026-07-28 스펙: 세션을 버리고 무상태 프로토콜이 되었다',
+    date: new Date('2026-07-28T00:00:00Z'),
+    description: 'MCP 2026-07-28 스펙 발표 글을 정리했다.',
+    source: 'https://blog.modelcontextprotocol.io/posts/2026-07-28/',
+    publisher: 'Model Context Protocol Blog',
   },
 };
 
@@ -87,7 +87,7 @@ describe('article/[id].astro', () => {
       '@type': 'BlogPosting',
       headline: ARTICLE.data.title,
       description: ARTICLE.data.description,
-      datePublished: '2026-09-03T00:00:00.000Z',
+      datePublished: '2026-07-28T00:00:00.000Z',
       url: `https://sbjang123456.github.io/article/${ARTICLE.id}/`,
     });
   });

@@ -22,7 +22,7 @@ const article = defineCollection({
   }),
   schema: z.object({
     title: z.string(),
-    // 정리한 날이다. 원문 발행일은 본문에 적는다
+    // 원문이 발행된 날. 목록 정렬과 파일명 접두어가 이 날짜를 따른다
     date: z.coerce.date(),
     description: z.string(),
     // 원문 주소 — 상세의 '원문 보기' 버튼이 그대로 가리킨다

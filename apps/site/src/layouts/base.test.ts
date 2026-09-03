@@ -45,7 +45,7 @@ describe('base.astro', () => {
   });
 
   it('아티클 상세 경로도 아티클 탭을 현재로 표시한다', async () => {
-    const doc = await renderAt('/article/2026-09-03-astro-5-content-layer/');
+    const doc = await renderAt('/article/2026-07-28-mcp-specification/');
 
     expect(currentNavLabels(doc)).toEqual(['아티클']);
   });

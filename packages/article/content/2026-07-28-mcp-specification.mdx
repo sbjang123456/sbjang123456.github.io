@@ -1,0 +1,116 @@
+---
+title: 'MCP 2026-07-28 스펙: 세션을 버리고 무상태 프로토콜이 되었다'
+date: 2026-07-28
+description: 'MCP 2026-07-28 스펙 발표 글을 정리했다. initialize 핸드셰이크와 세션 헤더가 사라지고 요청마다 자기 정보를 싣는 무상태 코어가 되었다. 서버가 사용자에게 되묻는 일은 MRTR로, 라우팅은 HTTP 헤더로 옮겼다.'
+source: 'https://blog.modelcontextprotocol.io/posts/2026-07-28/'
+publisher: 'Model Context Protocol Blog'
+---
+
+2026년 7월 28일에 MCP 공식 블로그가 낸 새 스펙 발표 글이다. 지난해 11월 판
+이후 Tier 1 SDK 다운로드가 한 달에 5억 회에 가까워졌고, TypeScript와 Python
+SDK는 누적 10억 회를 넘었다고 한다. 그 규모에서 프로토콜의 뼈대를 바꿨다.
+양방향으로 상태를 유지하던 프로토콜이 **요청/응답 무상태 프로토콜**로
+바뀐 것이 이번 판의 핵심이고, 서버의 안정성과 확장성 때문에 가장 많이
+요청된 변경이었다고 밝힌다.
+
+## 핸드셰이크와 세션이 없어졌다
+
+`initialize`/`initialized` 교환과 `Mcp-Session-Id` 헤더가 공식적으로 퇴역했다
+(SEP-2575, SEP-2567). 요청 하나하나가 프로토콜 버전, 클라이언트 정보,
+클라이언트 capabilities를 `_meta`에 싣고 혼자 다닌다. 서버의 capabilities를
+먼저 알고 싶은 클라이언트는 새로 생긴 `server/discover` RPC를 부르면 되지만
+필수는 아니다. 그래서 어떤 요청이든 공유 저장소 없이 라운드로빈 로드밸런서
+뒤의 아무 인스턴스에 떨어져도 된다.
+
+```http
+POST /mcp HTTP/1.1
+MCP-Protocol-Version: 2026-07-28
+Mcp-Method: tools/call
+Mcp-Name: search
+
+{"jsonrpc":"2.0","id":1,"method":"tools/call",
+ "params":{"name":"search","arguments":{"q":"otters"},
+ "_meta":{"io.modelcontextprotocol/clientInfo":{"name":"my-app","version":"1.0"}}}}
+```
+
+프로토콜에서 세션을 뺐다고 애플리케이션까지 무상태여야 하는 것은 아니다.
+호출 사이에 상태가 필요하면 툴이 명시적인 핸들을 발급하고, 모델이 그 핸들을
+다음 툴의 인자로 되돌려 주게 하라고 안내한다. 전송 계층에 숨어 있는 세션
+상태보다 이 방식이 더 잘 동작했다는 것이 이유다. 모델이 핸들을 볼 수 있어
+툴 사이에 직접 이어 준다.
+
+## Multi Round-Trip Requests (MRTR)
+
+서버가 클라이언트에게 보내던 `elicitation/create`, `sampling/createMessage`,
+`roots/list` 요청은 스트림을 열어 둬야 했다. MRTR(SEP-2322)이 이를 대체한다.
+툴이 호출 도중에 사용자 확인이나 빠진 인자가 필요해지면, 서버는
+`resultType: "input_required"`와 함께 답을 받아야 할 요청들을 응답으로
+돌려보낸다. 클라이언트는 그 답을 `inputResponses`에 붙여 원래 호출을 다시
+보낸다. 무상태 프로토콜 위에서 되묻기가 성립하는 방식이다.
+
+## 헤더 기반 라우팅
+
+Streamable HTTP 요청은 이제 `Mcp-Method`와 `Mcp-Name` 헤더를 반드시 싣는다
+(SEP-2243). 게이트웨이, 레이트 리미터, WAF가 JSON 본문을 파싱하지 않고
+헤더만으로 라우팅과 계량, 인가를 할 수 있다.
+
+## 목록 응답을 캐시할 수 있다
+
+`tools/list`, `prompts/list`, `resources/list`, `resources/read` 응답에
+`ttlMs`와 `cacheScope`가 붙는다(SEP-2549). 클라이언트가 캐시 전략을 정할 수
+있고, 목록 순서가 결정적이라 재접속을 거쳐도 업스트림 프롬프트 캐시가
+흔들리지 않는다.
+
+## 인가 강화
+
+구현자들이 통합에 가장 많은 시간을 쓰는 곳이 인가라고 했다. 이번 판의 변경은
+네 가지다.
+
+- 인가 서버는 RFC 9207에 따라 `iss` 파라미터를 돌려주고, 클라이언트는 코드를
+  교환하기 전에 이를 검증해야 한다(SEP-2468). 인가 서버 혼동 공격을 막는다
+- Dynamic Client Registration(DCR) 때 클라이언트가 `application_type`을
+  지정해, 인가 서버가 데스크톱·CLI 앱의 `localhost` 리다이렉트를 거부하지
+  않게 했다(SEP-837). CLI 클라이언트의 OAuth 흐름에서 `redirect_uri` 오류를
+  봤다면 대개 이 문제였다고 한다
+- 클라이언트 자격 증명은 발급한 issuer에 묶인다. 다른 인가 서버에서 재사용할
+  수 없다(SEP-2352)
+- DCR 자체는 Client ID Metadata Documents(CIMD)로 대체되어 공식 폐기되었다.
+  호환을 위해 당분간 동작하지만 다음 판에서 제거된다
+
+## 확장 프레임워크와 Tasks
+
+확장 프레임워크가 정식으로 자리를 잡았고, MCP Apps와 Enterprise Managed
+Authorization(EMA) 옆에 Tasks가 합류했다. Tasks는 실험 코어에서
+`io.modelcontextprotocol/tasks` 확장으로 옮겨 가며 폴링 방식의 `tasks/get`과
+새 `tasks/update`를 갖는다(SEP-2663). 변경 알림은 예전 HTTP GET 엔드포인트
+대신 `subscriptions/listen` 스트림 하나로 모이고, 클라이언트가 알림 종류별로
+구독을 선택한다.
+
+## 폐기 정책
+
+Roots, Sampling, Logging이 폐기되었다(SEP-2577). 당장 동작을 멈추지는 않고
+최소 12개월은 유지되지만 새 구현은 채택하지 말라고 한다. 레거시 HTTP+SSE
+전송도 공식 폐기되어 1년의 유예 기간을 둔다. 이번 판부터 최소 12개월 유예를
+보장하는 공식 폐기 정책이 생겨, 업그레이드에 쫓기지 않고 계획할 수 있게
+되었다.
+
+## SDK
+
+TypeScript, Python, Go, C# 네 Tier 1 SDK가 발표 당일부터 `2026-07-28`을
+지원하고, Rust SDK는 베타로 지원한다. 세션 ID에 의존하던 코드는 마이그레이션
+비용이 있다고 인정하면서, 베타 기간의 피드백을 반영해 그 과정을 줄였다고
+한다. 발표 글 뒷부분은 AWS, Cloudflare, Google Cloud, Microsoft 등 파트너의
+지원 소감으로 채워져 있다.
+
+## 읽고 남는 것
+
+세션을 전송 계층에서 빼고, 필요한 상태는 모델이 볼 수 있는 인자로 올리라는
+판단이 가장 눈에 띈다. 캐시 힌트, 헤더 라우팅, 결정적 순서 같은 변경도 모두
+MCP를 일반 HTTP 워크로드처럼 다루려는 방향이다. 웹 프로토콜이 수십 년 동안
+쌓은 관행을 늦게라도 받아들인 판이라, 서버를 어디에 어떻게 올릴지 고민이
+크게 단순해진다.
+
+---
+
+원문: [The 2026-07-28 Specification](https://blog.modelcontextprotocol.io/posts/2026-07-28/)
+(Model Context Protocol Blog, 2026-07-28)

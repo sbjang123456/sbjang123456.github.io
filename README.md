@@ -26,7 +26,7 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 ```
 
 - **회고**: `packages/retrospect/content/*.mdx` 파일이 곧 글. frontmatter(`title`, `date`, `description`)를 콘텐츠 컬렉션 스키마로 검증하고, 목록·본문 모두 정적 HTML로 생성된다. JS 없이도 콘텐츠 전체가 보인다.
-- **아티클**: 기사나 공식 블로그·커뮤니티 글을 읽고 정리한 노트. `packages/article/content/*.mdx`가 곧 글이고 구조는 회고와 같다. 회고와 다른 점은 frontmatter에 원문 주소(`source`)와 출처(`publisher`)가 필수라는 것 — 상세의 **원문 보기** 버튼(새 탭, `noopener`)과 목록·OG 카드의 출처 표기가 여기서 나온다. `date`는 정리한 날이지 원문 발행일이 아니다.
+- **아티클**: 기사나 공식 블로그·커뮤니티 글을 읽고 정리한 노트. `packages/article/content/*.mdx`가 곧 글이고 구조는 회고와 같다. 회고와 다른 점은 frontmatter에 원문 주소(`source`)와 출처(`publisher`)가 필수라는 것 — 상세의 **원문 보기** 버튼(새 탭, `noopener`)과 목록·OG 카드의 출처 표기가 여기서 나온다. `date`는 원문이 발행된 날이고 파일명 접두어도 그 날짜를 쓴다.
 - **아일랜드**: 한 페이지에 React(`client:load` 검색창)와 Svelte(테마 토글)가 공존하며 각자 독립적으로 하이드레이션된다. 아일랜드에 넘기는 props는 직렬화 가능해야 한다.
 - **이력서**: 두 밀도로 나뉜 정적 페이지다. `/resume/`는 훑어보기 — 재직 중인 회사의 프로젝트만 펼쳐 볼 수 있고 나머지는 이름만 나열한다. `/resume/all/`은 회사·기간·역할만 늘어놓고 회사를 누르면 그 회사 프로젝트가 펼쳐진다. 내용(`data.ts` + `projects/`)과 마크업(`sections/`·`career/`·`project/`)을 갈라 뒀다 — 내용을 고칠 때 `.astro`를 열 필요가 없고, 나중에 PDF나 JSON Resume 같은 다른 렌더러를 붙일 때 데이터만 읽으면 된다.
 - **펼침은 `<details>`다** — shadcn accordion(React)이 아니다. Radix Collapsible은 닫힌 콘텐츠를 아예 렌더하지 않아(`children: isOpen && children`) 상세 18,000자가 서버 HTML에서 통째로 사라진다. 크롤러·Cmd+F·인쇄·JS 미사용자가 모두 못 본다. `<details>`는 상세가 항상 HTML에 있고, 키보드·스크린리더·인쇄·아코디언 묶기(`name` 속성)를 브라우저가 책임진다. **덕분에 이력서의 클라이언트 JS는 상세를 다 싣고도 여전히 0바이트다** — 페이지 테스트가 `astro-island` 개수 1(헤더 테마 토글)을 못 박아 지킨다.
@@ -75,7 +75,7 @@ description: '검색 결과에 그대로 나갈 한 줄. 80~120자, 글의 결�
 ```mdx
 ---
 title: '정리 글 제목 (원문 제목을 그대로 써도 된다)'
-date: 2026-09-03
+date: 2026-07-28
 description: '원문이 무슨 글이고 왜 남겨 두는지 한 줄.'
 source: 'https://example.com/blog/post/'
 publisher: 'Example Blog'
@@ -84,7 +84,7 @@ publisher: 'Example Blog'
 정리한 내용…
 ```
 
-파일명이 URL이 된다: `2026-08-11-foo.mdx` → `/retrospect/2026-08-11-foo/`, `2026-09-03-bar.mdx` → `/article/2026-09-03-bar/`. 두 컬렉션의 스키마는 모두 `apps/site/src/content.config.ts`에 있다.
+파일명이 URL이 된다: `2026-08-11-foo.mdx` → `/retrospect/2026-08-11-foo/`, `2026-07-28-bar.mdx` → `/article/2026-07-28-bar/`. 두 컬렉션의 스키마는 모두 `apps/site/src/content.config.ts`에 있다.
 
 ## 이력서 PDF
 
