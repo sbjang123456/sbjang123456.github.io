@@ -86,6 +86,8 @@ publisher: 'Example Blog'
 
 파일명이 URL이 된다: `2026-08-11-foo.mdx` → `/retrospect/2026-08-11-foo/`, `2026-07-28-bar.mdx` → `/article/2026-07-28-bar/`. 두 컬렉션의 스키마는 모두 `apps/site/src/content.config.ts`에 있다.
 
+본문에 넣을 이미지·영상은 `packages/article/assets/{슬러그}/`에 두고 MDX 첫머리에서 `import`해 `src={...}`로 쓴다(이미지는 Astro가 메타데이터로 주므로 `.src`). `apps/site/public/`이 아니라 소스에 두는 이유는 이력서 스크린샷과 같다: 콘텐츠 해시로 캐시가 갈리고, 파일이 없으면 빌드가 실패한다. 첫 사례는 MCP 2026-07-28 아티클의 데모 영상이고, E2E가 아티클 본문의 `img`·`video`가 가리키는 파일이 dist에 실제로 있는지 확인한다. 남의 저작물을 실을 때는 캡션에 저작자·원문 링크·라이선스와 손댄 부분을 적는다. MCP 블로그 글은 저장소 LICENSE가 문서 기여물을 CC BY 4.0으로 정해 두어 표기만 갖추면 실을 수 있다.
+
 ## 이력서 PDF
 
 `/resume/all/` 화면의 **PDF 내려받기** 버튼은 빌드 때 구워 둔 `dist/resume.pdf`를 가리킨다. 브라우저에서 만드는 방식(html2canvas 류)은 글자가 이미지로 바뀌어 검색·복사가 안 되고, 정적 사이트라 서버에서 만들 수도 없다. 그래서 E2E에 이미 쓰는 크로미움으로 빌드 시점에 한 번만 인쇄한다.

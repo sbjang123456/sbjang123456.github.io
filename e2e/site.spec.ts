@@ -102,6 +102,44 @@ test.describe('아티클', () => {
       page.locator('[aria-live="polite"] a').first(),
     ).toHaveAttribute('href', /^\/article\/.+\/$/);
   });
+
+  test('본문의 이미지·영상이 dist에 있는 파일을 가리킨다', async ({
+    page,
+    request,
+  }) => {
+    await page.goto('/article/');
+    const hrefs = await page
+      .locator('main ul a[href^="/article/"]')
+      .evaluateAll((links) => links.map((link) => link.getAttribute('href')));
+
+    // 자산은 public/이 아니라 packages/article/assets/에서 import로 들어온다.
+    // 워크스페이스 패키지 밖의 파일을 Vite가 dist/_astro로 옮겼는지는 빌드
+    // 산출물을 실제로 받아 봐야 안다 — 유닛 테스트는 본문을 픽스처로 바꾼다.
+    const urls: string[] = [];
+    for (const href of hrefs) {
+      await page.goto(href as string);
+      const found = await page
+        .locator('article .prose :is(img, video, video source)')
+        .evaluateAll((media) =>
+          media.flatMap((el) =>
+            [el.getAttribute('src'), el.getAttribute('poster')].filter(
+              (value): value is string => value !== null,
+            ),
+          ),
+        );
+      urls.push(...found);
+    }
+    // MCP 2026-07-28 아티클이 데모 영상과 포스터를 싣는다 — 비어 있으면 헛돈 것이다
+    expect(urls.length).toBeGreaterThan(0);
+
+    for (const url of urls) {
+      const response = await request.get(url);
+      expect(response.status(), url).toBe(200);
+      expect(response.headers()['content-type'], url).toMatch(
+        /^(image|video)\//,
+      );
+    }
+  });
 });
 
 /**
