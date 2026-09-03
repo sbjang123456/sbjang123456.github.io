@@ -8,6 +8,7 @@
 @source "../../../../packages/theme-toggle/src";
 @source "../../../../packages/resume/src";
 @source "../../../../packages/retrospect/src";
+@source "../../../../packages/article/src";
 
 /* shadcn 기본값은 `.dark` 클래스지만, 이 사이트는 <html data-theme>를 쓴다 */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));

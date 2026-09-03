@@ -1,0 +1,48 @@
+---
+import { buttonVariants } from '@site/ui/components/button';
+import { Separator } from '@site/ui/components/separator';
+import type { Article } from './meta';
+
+interface Props {
+  article: Article;
+}
+
+const { article } = Astro.props;
+const date = article.date.toISOString();
+---
+
+<a
+  href="/article/"
+  class={buttonVariants({ variant: 'ghost', size: 'sm', className: '-ml-3' })}
+>
+  ← 목록으로
+</a>
+
+<article class="mt-6">
+  <header class="flex flex-col gap-3">
+    <p class="text-sm font-medium text-muted-foreground">{article.publisher}</p>
+    <h1 class="text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+      {article.title}
+    </h1>
+    <div
+      class="flex flex-wrap items-center gap-3 text-sm text-muted-foreground"
+    >
+      <time datetime={date}>{date.slice(0, 10)}</time>
+      <!-- 원문은 다른 사이트다 — 새 탭으로 열고 opener를 끊는다 -->
+      <a
+        href={article.source}
+        target="_blank"
+        rel="noopener noreferrer"
+        class={buttonVariants({ variant: 'outline', size: 'sm' })}
+      >
+        원문 보기 <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </header>
+
+  <Separator className="my-8" />
+
+  <div class="prose prose-zinc max-w-none dark:prose-invert">
+    <slot />
+  </div>
+</article>

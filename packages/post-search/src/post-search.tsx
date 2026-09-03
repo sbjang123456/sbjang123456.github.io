@@ -9,10 +9,17 @@ export type PostSummary = {
 };
 
 /**
- * 회고 목록 검색 아일랜드.
+ * 글 목록 검색 아일랜드. 회고와 아티클 목록이 함께 쓴다.
  * 정적 목록 위에 얹히는 점진적 향상 — JS가 없어도 목록 자체는 보인다.
  */
-export function PostSearch({ posts }: { posts: PostSummary[] }) {
+export function PostSearch({
+  posts,
+  label,
+}: {
+  posts: PostSummary[];
+  /** 검색창의 접근성 이름. 어느 목록을 뒤지는지 목록마다 다르게 준다 */
+  label: string;
+}) {
   const [query, setQuery] = useState('');
   const listId = useId();
   const trimmed = query.trim().toLowerCase();
@@ -29,7 +36,7 @@ export function PostSearch({ posts }: { posts: PostSummary[] }) {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         placeholder="글 제목 검색…"
-        aria-label="회고 검색"
+        aria-label={label}
         aria-controls={listId}
       />
 

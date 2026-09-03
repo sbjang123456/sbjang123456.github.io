@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import ArticleList from '@site/article';
+import { ARTICLE } from '@site/article/meta';
+import Base from '../../layouts/base.astro';
+
+const articles = (await getCollection('article')).map((article) => ({
+  id: article.id,
+  ...article.data,
+}));
+---
+
+<Base
+  title={`${ARTICLE.title} — sbjang`}
+  description={ARTICLE.description}
+  image={ARTICLE.ogImage}
+>
+  <ArticleList articles={articles} />
+</Base>

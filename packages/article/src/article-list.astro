@@ -1,0 +1,72 @@
+---
+import { PostSearch } from '@site/post-search';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@site/ui/components/card';
+import { ARTICLE, type Article } from './meta';
+
+interface Props {
+  articles: Article[];
+}
+
+const articles = [...Astro.props.articles].sort(
+  (a, b) => b.date.valueOf() - a.date.valueOf(),
+);
+
+// 아일랜드로 넘기는 props는 직렬화 가능해야 한다 (Date 객체 대신 문자열)
+const summaries = articles.map((article) => ({
+  id: article.id,
+  title: article.title,
+  date: article.date.toISOString().slice(0, 10),
+  url: `/article/${article.id}/`,
+}));
+---
+
+<header class="flex flex-col gap-2">
+  <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+    {ARTICLE.title}
+  </h1>
+  <p class="text-muted-foreground">{ARTICLE.description}</p>
+  <p class="text-sm text-muted-foreground">글 {articles.length}개</p>
+</header>
+
+<div class="mt-8">
+  <PostSearch client:load posts={summaries} label="아티클 검색" />
+</div>
+
+<ul class="mt-8 flex flex-col gap-3">
+  {
+    articles.map((article) => (
+      <li>
+        <a
+          href={`/article/${article.id}/`}
+          class="group block rounded-xl outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+        >
+          <Card className="transition-colors group-hover:border-foreground/20 group-hover:bg-accent/40">
+            <CardHeader>
+              <CardTitle className="underline-offset-4 group-hover:underline">
+                {article.title}
+              </CardTitle>
+              <CardDescription>
+                <span>{article.publisher}</span>
+                <span aria-hidden="true"> · </span>
+                <time datetime={article.date.toISOString()}>
+                  {article.date.toISOString().slice(0, 10)}
+                </time>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p class="line-clamp-2 text-sm text-muted-foreground">
+                {article.description}
+              </p>
+            </CardContent>
+          </Card>
+        </a>
+      </li>
+    ))
+  }
+</ul>

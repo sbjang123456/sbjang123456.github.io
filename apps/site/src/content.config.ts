@@ -15,4 +15,21 @@ const retrospect = defineCollection({
   }),
 });
 
-export const collections = { retrospect };
+const article = defineCollection({
+  loader: glob({
+    base: '../../packages/article/content',
+    pattern: '**/*.mdx',
+  }),
+  schema: z.object({
+    title: z.string(),
+    // 정리한 날이다. 원문 발행일은 본문에 적는다
+    date: z.coerce.date(),
+    description: z.string(),
+    // 원문 주소 — 상세의 '원문 보기' 버튼이 그대로 가리킨다
+    source: z.string().url(),
+    // 원문을 낸 곳(매체·공식 블로그·커뮤니티). 목록과 OG 카드에 날짜와 함께 나간다
+    publisher: z.string(),
+  }),
+});
+
+export const collections = { retrospect, article };

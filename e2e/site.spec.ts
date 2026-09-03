@@ -23,6 +23,9 @@ test.describe('네비게이션', () => {
     await nav(page).getByRole('link', { name: '회고' }).click();
     await expect(page).toHaveURL('/retrospect/');
 
+    await nav(page).getByRole('link', { name: '아티클' }).click();
+    await expect(page).toHaveURL('/article/');
+
     await nav(page).getByRole('link', { name: '이력서' }).click();
     await expect(page).toHaveURL('/resume/');
 
@@ -55,6 +58,49 @@ test.describe('네비게이션', () => {
     await expect(page).toHaveURL(href as string);
     await expect(page.locator('article h1')).toBeVisible();
     await expect(page.locator('article .prose')).not.toBeEmpty();
+  });
+});
+
+test.describe('아티클', () => {
+  test('목록에서 상세로 들어가면 원문 링크가 새 탭으로 열린다', async ({
+    page,
+  }) => {
+    await page.goto('/article/');
+
+    const first = page.locator('main ul a[href^="/article/"]').first();
+    const href = await first.getAttribute('href');
+    await first.click();
+
+    await expect(page).toHaveURL(href as string);
+    await expect(page.locator('article h1')).toBeVisible();
+    await expect(page.locator('article .prose')).not.toBeEmpty();
+    // 아티클 하위 경로에서도 네비게이션은 아티클 탭을 켜 둔다
+    await expect(
+      nav(page).getByRole('link', { name: '아티클' }),
+    ).toHaveAttribute('aria-current', 'page');
+
+    // 원문은 다른 사이트다 — 현재 탭을 떠나지 않고 opener도 넘기지 않는다
+    const source = page.getByRole('link', { name: '원문 보기' });
+    await expect(source).toHaveAttribute('href', /^https?:\/\//);
+    await expect(source).toHaveAttribute('target', '_blank');
+    await expect(source).toHaveAttribute('rel', /noopener/);
+  });
+
+  test('검색창이 아티클 목록을 거른다', async ({ page }) => {
+    await page.goto('/article/');
+    await hydrated(page, 'PostSearch');
+
+    const first = await page
+      .locator('main ul a[href^="/article/"] [data-slot="card-title"]')
+      .first()
+      .textContent();
+    const keyword = (first ?? '').trim().slice(0, 4);
+
+    await page.getByRole('searchbox', { name: '아티클 검색' }).fill(keyword);
+
+    await expect(
+      page.locator('[aria-live="polite"] a').first(),
+    ).toHaveAttribute('href', /^\/article\/.+\/$/);
   });
 });
 
@@ -204,6 +250,18 @@ test.describe('검색엔진용 파일', () => {
     }
   });
 
+  test('sitemap.xml이 아티클 URL도 담는다', async ({ page, request }) => {
+    await page.goto('/article/');
+    const hrefs = await page
+      .locator('main ul a[href^="/article/"]')
+      .evaluateAll((links) => links.map((link) => link.getAttribute('href')));
+
+    const xml = await (await request.get('/sitemap.xml')).text();
+    for (const href of [...hrefs, '/article/']) {
+      expect(xml).toContain(`<loc>https://sbjang123456.github.io${href}</loc>`);
+    }
+  });
+
   test('rss.xml이 글 개수만큼 항목을 담는다', async ({ page, request }) => {
     const count = await postCount(page);
 
@@ -237,6 +295,25 @@ test.describe('검색엔진용 파일', () => {
     expect(src).toMatch(/\/og\/.+\.png$/);
 
     // dist에 파일이 있어야 통과한다 — scripts/build-og-images.ts가 굽는다
+    const body = await (
+      await request.get(new URL(src as string).pathname)
+    ).body();
+
+    expect(body.subarray(0, 4).toString('hex')).toBe('89504e47'); // \x89PNG
+  });
+
+  test('아티클 상세의 og:image가 하위 디렉터리의 실제 PNG를 가리킨다', async ({
+    page,
+    request,
+  }) => {
+    await page.goto('/article/');
+    await page.locator('main ul a[href^="/article/"]').first().click();
+
+    const src = await page
+      .locator('meta[property="og:image"]')
+      .getAttribute('content');
+    expect(src).toMatch(/\/og\/article\/.+\.png$/);
+
     const body = await (
       await request.get(new URL(src as string).pathname)
     ).body();

@@ -44,6 +44,9 @@ importers:
       '@astrojs/svelte':
         specifier: 9.0.1
         version: 9.0.1(@types/node@26.2.0)(astro@7.2.0(@astrojs/markdown-remark@7.2.2)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.2.0)(jiti@2.7.0))(esbuild@0.28.2)(jiti@2.7.0)(svelte@5.56.8)(typescript@7.0.2)
+      '@site/article':
+        specifier: workspace:*
+        version: link:../../packages/article
       '@site/post-search':
         specifier: workspace:*
         version: link:../../packages/post-search
@@ -99,6 +102,22 @@ importers:
       vitest:
         specifier: 4.1.10
         version: 4.1.10(@types/node@26.2.0)(happy-dom@20.11.2)(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0))
+
+  packages/article:
+    dependencies:
+      '@site/post-search':
+        specifier: workspace:*
+        version: link:../post-search
+      '@site/ui':
+        specifier: workspace:*
+        version: link:../ui
+      astro:
+        specifier: ^7.0.0
+        version: 7.2.0(@astrojs/markdown-remark@7.2.2)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@26.2.0)(jiti@2.7.0)
+    devDependencies:
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
 
   packages/post-search:
     dependencies:

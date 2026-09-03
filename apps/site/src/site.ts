@@ -12,7 +12,7 @@ export const SITE = {
   url: 'https://sbjang123456.github.io',
   name: 'sbjang',
   author: '장수빈',
-  description: 'Astro 아일랜드 아키텍처 기반 개인 사이트 — 회고와 이력서.',
+  description: 'Astro 아일랜드 아키텍처 기반 개인 사이트 — 회고·아티클·이력서.',
   locale: 'ko_KR',
 } as const;
 

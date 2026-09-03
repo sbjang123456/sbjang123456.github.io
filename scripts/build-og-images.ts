@@ -8,6 +8,9 @@
  * 문자열을 `setContent`로 그린다. `/og/[id]/` 같은 라우트를 만들면 dist에
  * 크롤러가 주워 갈 쓰레기 페이지가 생기고 sitemap에서 도로 빼야 한다.
  * 라우트가 없으니 글 목록도 dist가 아니라 소스 MDX에서 직접 읽는다.
+ *
+ * 회고 카드는 `og/{id}.png`, 아티클 카드는 `og/article/{id}.png`에 둔다.
+ * 두 컬렉션의 슬러그가 같은 파일명으로 부딪히지 않게 뒤에 붙인 쪽만 갈랐다.
  */
 
 import { mkdir, readdir, readFile } from 'node:fs/promises';
@@ -15,10 +18,11 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from '@playwright/test';
 import { OG_SIZE, SITE } from '../apps/site/src/site.ts';
+import { ARTICLE } from '../packages/article/src/meta.ts';
+import { RETROSPECT } from '../packages/retrospect/src/meta.ts';
 
-const CONTENT = fileURLToPath(
-  new URL('../packages/retrospect/content', import.meta.url),
-);
+const contentDir = (pkg: string) =>
+  fileURLToPath(new URL(`../packages/${pkg}/content`, import.meta.url));
 const OUT_DIR = fileURLToPath(new URL('../apps/site/dist/og', import.meta.url));
 
 type Card = { file: string; eyebrow: string; title: string; meta: string };
@@ -33,32 +37,38 @@ const field = (block: string, key: string, file: string) => {
 };
 
 /**
- * 소스 MDX의 프론트매터만 읽는다.
+ * 소스 MDX의 프론트매터에서 `keys`만 읽는다.
  *
- * 스키마(content.config.ts)가 title·date·description을 필수로 잡아 두므로
- * 여기서 빠진 값을 만나면 빌드가 이미 앞에서 죽었어야 한다 — 그래도 던져서
- * 두부 카드가 조용히 나가는 일은 막는다.
+ * 스키마(content.config.ts)가 해당 키를 필수로 잡아 두므로 여기서 빠진 값을
+ * 만나면 빌드가 이미 앞에서 죽었어야 한다 — 그래도 던져서 두부 카드가
+ * 조용히 나가는 일은 막는다.
  */
-const readPosts = async () => {
-  const files = (await readdir(CONTENT))
+const readEntries = async <K extends string>(dir: string, keys: K[]) => {
+  const files = (await readdir(dir))
     .filter((name) => name.endsWith('.mdx'))
     .sort();
 
   return Promise.all(
     files.map(async (name) => {
-      const source = await readFile(join(CONTENT, name), 'utf8');
+      const source = await readFile(join(dir, name), 'utf8');
       const block = FRONTMATTER.exec(source)?.[1];
       if (!block) throw new Error(`${name}: 프론트매터가 없다`);
+
+      const fields = Object.fromEntries(
+        keys.map((key) => [key, field(block, key, name)]),
+      ) as Record<K, string>;
 
       return {
         // 글 URL과 카드 파일명은 같은 슬러그를 쓴다 (glob 로더의 id 규칙)
         id: name.replace(/\.mdx$/, ''),
-        title: field(block, 'title', name),
-        date: field(block, 'date', name).slice(0, 10),
+        ...fields,
       };
     }),
   );
 };
+
+/** 프론트매터의 date는 ISO 날짜로 시작한다 — 시간이 붙어 있어도 날짜만 쓴다 */
+const day = (date: string) => date.slice(0, 10);
 
 const ENTITIES: Record<string, string> = {
   '&': '&amp;',
@@ -124,32 +134,52 @@ const markup = ({ eyebrow, title, meta }: Card) => `<!doctype html>
   </body>
 </html>`;
 
-const posts = await readPosts();
-const eyebrow = `${SITE.name} · 회고`;
+const posts = await readEntries(contentDir('retrospect'), ['title', 'date']);
+const articles = await readEntries(contentDir('article'), [
+  'title',
+  'date',
+  'publisher',
+]);
+
+const retrospectEyebrow = `${SITE.name} · ${RETROSPECT.title}`;
+const articleEyebrow = `${SITE.name} · ${ARTICLE.title}`;
 
 const cards: Card[] = [
-  // 회고가 아닌 페이지(홈·이력서)가 물려받는 공용 카드
+  // 글이 아닌 페이지(홈·이력서)가 물려받는 공용 카드
   {
     file: 'default.png',
     eyebrow: SITE.name,
     title: 'Astro 아일랜드 아키텍처 기반 개인 사이트',
-    meta: '회고와 이력서',
+    meta: `${RETROSPECT.title} · ${ARTICLE.title} · 이력서`,
   },
   {
     file: 'retrospect.png',
-    eyebrow,
-    title: '회고',
+    eyebrow: retrospectEyebrow,
+    title: RETROSPECT.title,
     meta: `글 ${posts.length}개`,
   },
   ...posts.map((post) => ({
     file: `${post.id}.png`,
-    eyebrow,
+    eyebrow: retrospectEyebrow,
     title: post.title,
-    meta: post.date,
+    meta: day(post.date),
+  })),
+  {
+    file: 'article.png',
+    eyebrow: articleEyebrow,
+    title: ARTICLE.title,
+    meta: `글 ${articles.length}개`,
+  },
+  // 아티클은 제목이 원문 제목과 같을 수 있어 어디 글인지를 날짜 옆에 붙인다
+  ...articles.map((article) => ({
+    file: `article/${article.id}.png`,
+    eyebrow: articleEyebrow,
+    title: article.title,
+    meta: `${article.publisher} · ${day(article.date)}`,
   })),
 ];
 
-await mkdir(OUT_DIR, { recursive: true });
+await mkdir(join(OUT_DIR, 'article'), { recursive: true });
 
 const browser = await chromium.launch().catch((error: unknown) => {
   const message = error instanceof Error ? error.message : String(error);

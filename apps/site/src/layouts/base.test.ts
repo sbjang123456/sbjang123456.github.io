@@ -40,7 +40,14 @@ describe('base.astro', () => {
 
   it('현재 경로의 네비게이션 항목만 aria-current를 갖는다', async () => {
     expect(currentNavLabels(await renderAt('/retrospect/'))).toEqual(['회고']);
+    expect(currentNavLabels(await renderAt('/article/'))).toEqual(['아티클']);
     expect(currentNavLabels(await renderAt('/resume/'))).toEqual(['이력서']);
+  });
+
+  it('아티클 상세 경로도 아티클 탭을 현재로 표시한다', async () => {
+    const doc = await renderAt('/article/2026-09-03-astro-5-content-layer/');
+
+    expect(currentNavLabels(doc)).toEqual(['아티클']);
   });
 
   it('회고 상세 경로도 회고 탭을 현재로 표시한다', async () => {
@@ -117,7 +124,7 @@ describe('base.astro', () => {
   it('description이 없으면 사이트 기본값을 og·twitter까지 함께 쓴다', async () => {
     const doc = await renderAt('/');
     const fallback =
-      'Astro 아일랜드 아키텍처 기반 개인 사이트 — 회고와 이력서.';
+      'Astro 아일랜드 아키텍처 기반 개인 사이트 — 회고·아티클·이력서.';
 
     expect(meta(doc, 'meta[name="description"]')).toBe(fallback);
     expect(meta(doc, 'meta[property="og:description"]')).toBe(fallback);

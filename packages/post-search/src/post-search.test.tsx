@@ -22,14 +22,14 @@ const searchbox = () => screen.getByRole('searchbox', { name: '회고 검색' })
 
 describe('PostSearch', () => {
   it('검색어가 없으면 결과 목록을 렌더하지 않는다', () => {
-    render(<PostSearch posts={posts} />);
+    render(<PostSearch posts={posts} label="회고 검색" />);
 
     expect(searchbox()).toHaveValue('');
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 
   it('제목 부분일치로 거른다', async () => {
-    render(<PostSearch posts={posts} />);
+    render(<PostSearch posts={posts} label="회고 검색" />);
     await userEvent.type(searchbox(), '아일랜드');
 
     expect(
@@ -39,7 +39,7 @@ describe('PostSearch', () => {
   });
 
   it('대소문자를 무시한다', async () => {
-    render(<PostSearch posts={posts} />);
+    render(<PostSearch posts={posts} label="회고 검색" />);
     await userEvent.type(searchbox(), 'mfa');
 
     expect(
@@ -48,14 +48,14 @@ describe('PostSearch', () => {
   });
 
   it('공백만 입력하면 검색하지 않는다', async () => {
-    render(<PostSearch posts={posts} />);
+    render(<PostSearch posts={posts} label="회고 검색" />);
     await userEvent.type(searchbox(), '   ');
 
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 
   it('결과가 없으면 검색어를 담은 안내를 보여준다', async () => {
-    render(<PostSearch posts={posts} />);
+    render(<PostSearch posts={posts} label="회고 검색" />);
     await userEvent.type(searchbox(), '없는글');
 
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
@@ -63,7 +63,7 @@ describe('PostSearch', () => {
   });
 
   it('결과 링크가 url과 date를 그대로 싣는다', async () => {
-    render(<PostSearch posts={posts} />);
+    render(<PostSearch posts={posts} label="회고 검색" />);
     await userEvent.type(searchbox(), '아일랜드');
 
     const link = screen.getByRole('link', {
@@ -77,7 +77,7 @@ describe('PostSearch', () => {
   });
 
   it('결과 영역이 스크린리더에 갱신을 알린다', async () => {
-    render(<PostSearch posts={posts} />);
+    render(<PostSearch posts={posts} label="회고 검색" />);
     await userEvent.type(searchbox(), '아일랜드');
 
     // 검색창의 aria-controls가 결과 컨테이너를 가리키고, 그 컨테이너가 live region이다

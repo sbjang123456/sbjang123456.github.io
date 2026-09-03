@@ -18,8 +18,9 @@ const features = [
     tag: 'astro',
   },
   {
-    title: '회고',
-    description: 'MDX 콘텐츠 컬렉션. 목록 위 검색창만 React 아일랜드다.',
+    title: '회고·아티클',
+    description:
+      '패키지에 사는 MDX 콘텐츠 컬렉션 둘. 목록 위 검색창만 React 아일랜드다.',
     tag: '@site/post-search',
   },
   {
@@ -48,6 +49,9 @@ const features = [
     </p>
     <div class="flex flex-wrap gap-3 pt-1">
       <a href="/retrospect/" class={buttonVariants()}>회고 보기</a>
+      <a href="/article/" class={buttonVariants({ variant: 'outline' })}>
+        아티클
+      </a>
       <a href="/resume/" class={buttonVariants({ variant: 'outline' })}>
         이력서
       </a>
