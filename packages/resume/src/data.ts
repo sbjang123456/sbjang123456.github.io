@@ -13,7 +13,7 @@ export type Career = {
   slug: string;
   org: string;
   role: string;
-  /** YYYY-MM 형식. 재직 중이면 `to`를 비운다. */
+  /** YYYY-MM-DD 형식. 재직 중이면 `to`를 비운다. */
   from: string;
   to?: string;
   highlights: string[];
@@ -80,7 +80,7 @@ export const resume: Resume = {
       slug: 'hanssem',
       org: '한샘',
       role: 'Front-end Engineer',
-      from: '2023-08',
+      from: '2023-08-16',
       highlights: [
         '프론트엔드 개발팀 ERP 파트 리딩 — git 브랜치·머지 전략 수립, Changeset 기반 버저닝 관리',
         'commitlint로 커밋 메시지 품질을, lint-staged로 prettier·lint를 강제해 코드 품질을 관리',
@@ -106,8 +106,8 @@ export const resume: Resume = {
       slug: 'storelink',
       org: '스토어링크',
       role: 'Front-end Engineer',
-      from: '2022-05',
-      to: '2023-08',
+      from: '2022-05-02',
+      to: '2023-08-10',
       highlights: [
         '개발팀 FE 파트 리딩 — git 브랜치·머지 전략 수립, Jira 워크플로 정의 및 사용 가이드 문서화',
         'FE 신기술 및 아키텍처 검토',
@@ -126,8 +126,8 @@ export const resume: Resume = {
       slug: 'wmpo',
       org: '위메프오',
       role: 'Front-end Engineer',
-      from: '2021-10',
-      to: '2022-04',
+      from: '2021-10-25',
+      to: '2022-04-25',
       highlights: [
         '팀 내 O2O 관련 화면 FE 개발',
         '위메프오 웹뷰 및 백오피스 운영 개선·유지보수',
@@ -145,8 +145,8 @@ export const resume: Resume = {
       slug: 'innopam',
       org: '이노팸',
       role: 'R&D Engineer',
-      from: '2019-07',
-      to: '2021-10',
+      from: '2019-07-01',
+      to: '2021-10-22',
       highlights: [
         '드론 신청·물량·배차 관련 백엔드 API 개발',
         '드론 비행 중 촬영한 실시간 이미지를 웹 브라우저 지도에 렌더링',
@@ -170,8 +170,8 @@ export const resume: Resume = {
       slug: 'shinhan',
       org: '신한항업',
       role: 'Software Engineer',
-      from: '2018-04',
-      to: '2019-06',
+      from: '2018-04-23',
+      to: '2019-06-28',
       highlights: [
         'OpenLayers를 활용한 지도 컨트롤·이벤트·공간 데이터 렌더링',
         'Spring MVC(Java)와 JavaScript + jQuery로 개발 업무 수행',
@@ -187,8 +187,8 @@ export const resume: Resume = {
       slug: 'spatial-info',
       org: '공간정보기술',
       role: 'Software Engineer',
-      from: '2014-09',
-      to: '2018-04',
+      from: '2014-09-04',
+      to: '2018-04-18',
       highlights: [
         '통계 쿼리 결과 데이터 화면 노출 개발',
         'OpenLayers를 활용한 지도 컨트롤·액션 및 공간 데이터 화면 개발',
