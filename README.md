@@ -29,7 +29,7 @@ Astro가 메인 컨테이너로 모든 페이지를 빌드 타임에 정적 HTML
 - **아티클**: 기사나 공식 블로그·커뮤니티 글을 읽고 정리한 노트. `packages/article/content/*.mdx`가 곧 글이고 구조는 회고와 같다. 회고와 다른 점은 frontmatter에 원문 주소(`source`)와 출처(`publisher`)가 필수라는 것 — 상세의 **원문 보기** 버튼(새 탭, `noopener`)과 목록·OG 카드의 출처 표기가 여기서 나온다. `date`는 원문이 발행된 날이고 파일명 접두어도 그 날짜를 쓴다.
 - **아일랜드**: 한 페이지에 React(`client:load` 검색창)와 Svelte(테마 토글)가 공존하며 각자 독립적으로 하이드레이션된다. 아일랜드에 넘기는 props는 직렬화 가능해야 한다.
 - **이력서**: 두 밀도로 나뉜 정적 페이지다. `/resume/`는 훑어보기 — 재직 중인 회사의 프로젝트만 펼쳐 볼 수 있고 나머지는 이름만 나열한다. `/resume/all/`은 회사·기간·역할만 늘어놓고 회사를 누르면 그 회사 프로젝트가 펼쳐진다. 내용(`data.ts` + `projects/`)과 마크업(`sections/`·`career/`·`project/`)을 갈라 뒀다 — 내용을 고칠 때 `.astro`를 열 필요가 없고, 나중에 PDF나 JSON Resume 같은 다른 렌더러를 붙일 때 데이터만 읽으면 된다.
-- **펼침은 `<details>`다** — shadcn accordion(React)이 아니다. Radix Collapsible은 닫힌 콘텐츠를 아예 렌더하지 않아(`children: isOpen && children`) 상세 18,000자가 서버 HTML에서 통째로 사라진다. 크롤러·Cmd+F·인쇄·JS 미사용자가 모두 못 본다. `<details>`는 상세가 항상 HTML에 있고, 키보드·스크린리더·인쇄·아코디언 묶기(`name` 속성)를 브라우저가 책임진다. **덕분에 이력서의 클라이언트 JS는 상세를 다 싣고도 여전히 0바이트다** — 페이지 테스트가 `astro-island` 개수 1(헤더 테마 토글)을 못 박아 지킨다.
+- **펼침은 `<details>`다** — shadcn accordion(React)이 아니다. Radix Collapsible은 닫힌 콘텐츠를 아예 렌더하지 않아(`children: isOpen && children`) 상세 18,000자가 서버 HTML에서 통째로 사라진다. 크롤러·Cmd+F·인쇄·JS 미사용자가 모두 못 본다. `<details>`는 상세가 항상 HTML에 있고, 키보드·스크린리더·인쇄·아코디언 묶기(`name` 속성)를 브라우저가 책임진다. **덕분에 이력서는 상세를 다 싣고도 하이드레이션하는 아일랜드가 없다** — 페이지 테스트가 `astro-island` 개수 1(헤더 테마 토글)을 못 박아 지킨다. 이력서에 있는 JS는 전체보기의 PDF 파일명에 내려받는 날짜를 붙이는 인라인 몇 줄이 전부다.
 - **디자인 시스템**: Tailwind CSS v4 + shadcn/ui. 컴포넌트는 `packages/ui`에 두고 Astro 페이지와 React 아일랜드가 함께 쓴다. Astro에서 쓰면 하이드레이션 없이 정적 HTML로만 렌더된다.
 
 > 이전 구조(런타임 Module Federation 셸/리모트)는 `mfa-runtime` 브랜치에 보존되어 있다. 런타임 통합 실험은 그 브랜치 README 참고.
@@ -100,6 +100,7 @@ astro build → scripts/build-resume-pdf.ts → dist/resume.pdf
 - **다 펼친 상태는 DOM으로 만든다.** 회사 `<details>`는 `name`으로 묶인 아코디언이라 속성을 먼저 떼야 여럿이 열리고, 닫혀 있는 동안은 `loading="lazy"` 이미지가 요청조차 되지 않아 `eager`로 바꿔 받아 온다.
 - **종이 모양은 `packages/resume/src/print.css`가 맡는다.** 전부 `@media print` 안이라 화면에는 영향이 없다. 사이트 헤더·푸터와 `[data-print-hidden]`을 숨기고, 화면에선 `max-h-96` 안에서 스크롤하던 코드 블록을 풀어 준다 — 안 풀면 119줄짜리 디렉터리 트리가 앞부분만 찍힌다.
 - 테마는 `localStorage`에 `light`를 심어 고정한다. 안 그러면 CI 머신의 시스템 설정에 따라 검은 종이가 나온다.
+- **저장 파일명은 `{이름}-이력서_YYYY-MM-DD.pdf`다.** 날짜는 내려받는 날이라 빌드 때는 알 수 없고, `resume-all.astro`의 인라인 스크립트가 `download` 속성 뒤에 붙인다. 스크립트가 돌지 않으면 날짜 없이 저장된다. E2E가 속성에 날짜가 붙는지 본다.
 
 버튼은 `import.meta.env.PROD`일 때만 그린다 — dev 서버에는 PDF가 없다. 화면에서 확인하려면 `pnpm build && pnpm --filter @site/main preview`.
 

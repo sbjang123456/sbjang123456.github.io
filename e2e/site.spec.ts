@@ -239,8 +239,12 @@ test.describe('이력서 전체보기', () => {
     await page.goto('/resume/all/');
     const link = page.getByRole('link', { name: 'PDF 내려받기' });
 
-    // download 속성이 있어야 새 탭으로 열지 않고 파일로 저장한다
-    await expect(link).toHaveAttribute('download', /\.pdf$/);
+    // download 속성이 있어야 새 탭으로 열지 않고 파일로 저장한다.
+    // 파일명 끝의 날짜는 내려받는 날 — 인라인 스크립트가 붙인다
+    await expect(link).toHaveAttribute(
+      'download',
+      /-이력서_\d{4}-\d{2}-\d{2}\.pdf$/,
+    );
 
     const href = (await link.getAttribute('href')) as string;
     const body = await (await request.get(href)).body();
