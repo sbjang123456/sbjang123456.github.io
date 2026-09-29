@@ -7,6 +7,10 @@ export const generatedProjects: Project[] = [
     "name": "ERP 디자인 시스템 개발",
     "org": "hanssem",
     "summary": "ERP 개발팀의 UI 표준을 위한 디자인 시스템 개발",
+    "period": {
+      "from": "2023-10-23",
+      "to": "2024-01-31"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -185,6 +189,10 @@ export const generatedProjects: Project[] = [
     "name": "홈퍼니싱 시공 PC/모바일 운영",
     "org": "hanssem",
     "summary": "시스템 운영 및 개선",
+    "period": {
+      "from": "2023-09-01",
+      "to": "2025-02-12"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -287,6 +295,10 @@ export const generatedProjects: Project[] = [
     "name": "한샘몰 디자인 시스템 운영 및 개발",
     "org": "hanssem",
     "summary": "한샘몰(c-side) 및 영업시스템(b-side)에서 사용되는 공통컴포넌트에 대한 디자인시스템 운영 및 개발",
+    "period": {
+      "from": "2024-06-03",
+      "to": "2025-02-12"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -391,6 +403,10 @@ export const generatedProjects: Project[] = [
     "name": "외주 시공프로 관리 서비스 구축",
     "org": "hanssem",
     "summary": "외주 시공프로 기사들의 출석 및 현장 출입, 시공 종류를 관리하기 위한 신규 서비스 구축",
+    "period": {
+      "from": "2024-09-19",
+      "to": "2025-02-12"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -509,6 +525,10 @@ export const generatedProjects: Project[] = [
     "name": "AS모바일 Hybrid 전환",
     "org": "hanssem",
     "summary": "레거시 환경의 Native AOS 개발 환경에서 하이브리드 웹뷰 환경으로 전환하기 위한 프로젝트",
+    "period": {
+      "from": "2025-02-01",
+      "to": "2025-08-30"
+    },
     "sections": [
       {
         "heading": "",
@@ -602,6 +622,10 @@ export const generatedProjects: Project[] = [
     "name": "MDS(기준정보시스템) 구축",
     "org": "hanssem",
     "summary": "레거시 MDM 솔루션의 제작 업체 폐업으로 시스템 운영 및 관리가 어려워짐에 따라 기준정보시스템(MDM) 구축을 위한 프로젝트",
+    "period": {
+      "from": "2025-08-18",
+      "to": "2025-12-19"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -704,6 +728,10 @@ export const generatedProjects: Project[] = [
     "name": "스토어링크 5.0 사이트 및 백오피스 재구축, 안정화 및 운영",
     "org": "storelink",
     "summary": "기존 vuejs + firebase 형태의 시스템을 nextjs + spring web flux 로 재구축",
+    "period": {
+      "from": "2022-09-26",
+      "to": "2023-07-21"
+    },
     "note": "스토어링크의 메인 프로젝트로 FE 파트에서 전체적인 파트를 맡으며 리딩\n산발적으로 흩어져있는 Github의 FE 저장소를 보다 관리에 용이하게 하기 위해 monorepo 를 적극 제안",
     "sections": [
       {
@@ -796,6 +824,10 @@ export const generatedProjects: Project[] = [
     "name": "애드링크 시스템 신규 구축",
     "org": "storelink",
     "summary": "광고업체를 관리하고 마케팅 시 사기사례를 서로 공유하여 피해를 최소화하고, 향 후 광고 성과 분석 기능의 확장을 통해 마케팅의 효율성을 가시화하는 시스템의 프론트엔드를 담당",
+    "period": {
+      "from": "2022-12-01",
+      "to": "2022-12-30"
+    },
     "note": "사이드하게 진행된 시스템 개발 건",
     "sections": [
       {
@@ -835,6 +867,10 @@ export const generatedProjects: Project[] = [
     "name": "쿠팡 모니터링 시스템 신규 개발",
     "org": "storelink",
     "summary": "쿠팡상품 목록을 크롤링 이 후 현재 등록한 상품의 가격의 인상 및 인하를 모니터링 하는 시스템의 프론트엔드 영역의 개발을 담당",
+    "period": {
+      "from": "2022-07-04",
+      "to": "2023-08-10"
+    },
     "note": "사내에서 긴급하게 나온 신규 시스템 개발건으로 고객들에게 사이드하게 서비스로 제공을 위해서 제작\n추 후 개발될 스토어링크 5.0 과의 로그인 공유를 위한 쿠키 토큰 저장 방식 선택",
     "sections": [
       {
@@ -870,6 +906,10 @@ export const generatedProjects: Project[] = [
     "name": "유니비 시스템 유지보수",
     "org": "storelink",
     "summary": "베트남 공동구매 이커머스 플랫폼",
+    "period": {
+      "from": "2022-06-13",
+      "to": "2022-10-28"
+    },
     "note": "베트남에서 사용하는 마케팅 캠페인 시스템으로 신규구축 때는 참여하지 않았지만 사이트맵과 seo 메타태그를 적용해보며, og 공유를 통해 특정 url에서 공유 시 보여지는 미리보기를 확인할 수 있었습니다. 또한 다국어처리를 삽입 시 next export 기능을 사용하지 못한점을 해결하지 못해서 아쉬웠습니다.",
     "sections": [
       {
@@ -914,6 +954,10 @@ export const generatedProjects: Project[] = [
     "name": "스토어링크 4.0 백오피스 기능개선 및 유지보수",
     "org": "storelink",
     "summary": "기존 레거시 스토어링크 4.0 기능개선",
+    "period": {
+      "from": "2022-05-04",
+      "to": "2022-10-07"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -935,6 +979,10 @@ export const generatedProjects: Project[] = [
     "name": "위메프오 플러스 웹뷰 및 어드민 시스템 기능 개선 및 유지보수",
     "org": "wmpo",
     "summary": "프랜차이즈의 자체 앱 솔루션을 제공하는 D2C 솔루션 플랫폼 개발",
+    "period": {
+      "from": "2021-10-25",
+      "to": "2022-04-25"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -989,6 +1037,10 @@ export const generatedProjects: Project[] = [
     "name": "위메프오 POS 웹뷰 기능 개선 및 유지보수",
     "org": "wmpo",
     "summary": "위메프오 결제 시 가맹점에서 주문을 처리하는 POS 시스템의 웹(하이브리드) 화면 기능개선 및 유지보수",
+    "period": {
+      "from": "2021-10-25",
+      "to": "2022-04-25"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1034,6 +1086,10 @@ export const generatedProjects: Project[] = [
     "name": "위메프오 앱 내 일부 웹뷰 시스템 기능 개선 및 유지보수",
     "org": "wmpo",
     "summary": "위메프오 앱 내의 웹뷰화면에 대한 유지보수",
+    "period": {
+      "from": "2021-10-25",
+      "to": "2022-04-25"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1084,6 +1140,10 @@ export const generatedProjects: Project[] = [
     "name": "위메프오 파트너스 서비스 기능 개선 및 유지보수",
     "org": "wmpo",
     "summary": "위메프오 입점 사장님들을 위한 파트너스 시스템(하이브리드) 기능 개선 및 유지보수",
+    "period": {
+      "from": "2021-10-25",
+      "to": "2022-04-25"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1134,6 +1194,10 @@ export const generatedProjects: Project[] = [
     "name": "위메프오 어드민 시스템 기능 개선 및 유지보수",
     "org": "wmpo",
     "summary": "위메프오 앱 내의 홈 구성 및 매장, 메뉴, 쿠폰 등 위메프오 사내에서 사용하는 관리자 시스템(백오피스) 기능 개선 및 유지보수",
+    "period": {
+      "from": "2021-10-25",
+      "to": "2022-04-25"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1202,6 +1266,10 @@ export const generatedProjects: Project[] = [
     "name": "드론 영상 AI 분석 시스템 고도화 사업",
     "org": "innopam",
     "summary": "드론 영상을 AI 분석하여 항행장애물, 재성충, 작물에 대한 검출결과를 웹 지도 상에 렌더링하는 시스템 개발(파일럿)",
+    "period": {
+      "from": "2021-08-23",
+      "to": "2021-10-08"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1232,6 +1300,10 @@ export const generatedProjects: Project[] = [
     "name": "2020년도 창업성장기술개발사업 디딤돌 창업과제",
     "org": "innopam",
     "summary": "드론 영상 매핑 및 AI 분석 결과 웹 지도 상의 렌더링하는 뷰어 시스템 개발",
+    "period": {
+      "from": "2021-03-02",
+      "to": "2021-10-08"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1275,6 +1347,10 @@ export const generatedProjects: Project[] = [
     "name": "서울산업진흥원 2020년도 테스트베드 서울 실증지원 사업",
     "org": "innopam",
     "summary": "서울시 내 자치구별 불법건축물 탐지를 위한 시스템",
+    "period": {
+      "from": "2021-03-02",
+      "to": "2021-08-20"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1350,6 +1426,10 @@ export const generatedProjects: Project[] = [
     "name": "인공지능(AI) 학습용 데이터 구축 2차",
     "org": "innopam",
     "summary": "드론에서 촬영한 이미지를 통한 월동작물에 대한 분류 및 재배을 면적 측정하는 시스템 개발",
+    "period": {
+      "from": "2020-12-30",
+      "to": "2021-02-26"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1401,6 +1481,10 @@ export const generatedProjects: Project[] = [
     "name": "국립공원공단 드론 영상 보관 및 처리 시스템 구축",
     "org": "innopam",
     "summary": "국립공원공단에서 관리하는 국립공원을 드론으로 촬영 한 뒤, 전체 사진을 지오레퍼런싱하여, 그 결과를 배경 위성사진과 비교할 수 있도록 하는 시스템 구현",
+    "period": {
+      "from": "2020-06-01",
+      "to": "2020-12-30"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1500,6 +1584,10 @@ export const generatedProjects: Project[] = [
     "name": "항공안전기술원 2020년 드론 실증도시 구축 사업",
     "org": "innopam",
     "summary": "드론 기체로 부터 오는 실시간 이미지 및 AI 결과(차, 사람 등) 를 확인할 수 있는 시스템",
+    "period": {
+      "from": "2019-07-01",
+      "to": "2020-10-23"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1535,6 +1623,10 @@ export const generatedProjects: Project[] = [
     "name": "장기 체공형 태양광 드론과 인공지능을 이용한 산불 모니터링 플랫폼 개발",
     "org": "innopam",
     "summary": "장시간 체공하는 드론을 통해 산불 감지 시 즉각 대응할 수 있는 플랫폼(파일럿)",
+    "period": {
+      "from": "2019-07-22",
+      "to": "2020-04-24"
+    },
     "sections": [
       {
         "heading": "",
@@ -1590,6 +1682,10 @@ export const generatedProjects: Project[] = [
     "name": "국립공원공단 드론관리시스템 구축",
     "org": "innopam",
     "summary": "국립공원공단에서 관리하는 드론을 보다 효율적으로 관리하기 위한 통합 시스템 구현",
+    "period": {
+      "from": "2019-09-16",
+      "to": "2019-12-20"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1641,6 +1737,10 @@ export const generatedProjects: Project[] = [
     "name": "클라우드 기반의 드론 매핑 서비스 플랫폼 개발",
     "org": "innopam",
     "summary": "AWS 기반의 드론 매핑 플랫폼 신규 개발",
+    "period": {
+      "from": "2019-07-01",
+      "to": "2019-09-13"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1681,6 +1781,10 @@ export const generatedProjects: Project[] = [
     "name": "KT 5G NMS 구축 사업",
     "org": "shinhan",
     "summary": "5G 망 확장으로 인한 기지국 및 중계기 위치 기반 시스템 플랫폼 개발",
+    "period": {
+      "from": "2018-12-04",
+      "to": "2019-06-14"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1705,6 +1809,10 @@ export const generatedProjects: Project[] = [
     "name": "사내 공간정보 포털시스템 구축",
     "org": "shinhan",
     "summary": "각 통계 데이터(지자체별 인구 밀도, 나이대별 인구 분포)를 통한 영업용 통계 지도",
+    "period": {
+      "from": "2018-09-17",
+      "to": "2018-11-30"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1734,6 +1842,10 @@ export const generatedProjects: Project[] = [
     "name": "2018 항공사진 관리시스템 구축",
     "org": "shinhan",
     "summary": "항공사진을 통해 해당 지역 내 건출물들을 확인할 수 있는 사내 영업용 시스템",
+    "period": {
+      "from": "2018-05-02",
+      "to": "2018-09-14"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1798,6 +1910,10 @@ export const generatedProjects: Project[] = [
     "name": "2018년 교통안전시설물관리시스템(T-GIS) 유지관리 및 기능개선 용역",
     "org": "spatial-info",
     "summary": "서울시 교통안전시설물관리시스템 재구축",
+    "period": {
+      "from": "2018-01-02",
+      "to": "2018-03-30"
+    },
     "sections": [
       {
         "heading": "",
@@ -1871,6 +1987,10 @@ export const generatedProjects: Project[] = [
     "name": "서울시 2017년 교통안전시설물 관리시스템(T-GIS) 도로점용공사장 관리 기능",
     "org": "spatial-info",
     "summary": "서울시 도로점용 공사 관리를 위한 시스템 구축",
+    "period": {
+      "from": "2017-12-01",
+      "to": "2017-12-29"
+    },
     "sections": [
       {
         "heading": "",
@@ -1918,6 +2038,10 @@ export const generatedProjects: Project[] = [
     "name": "광주광역시 도로 및 상하수도 관리시스템 고도화",
     "org": "spatial-info",
     "summary": "투입 인력의 리소스 부족으로 인해 추가 투입",
+    "period": {
+      "from": "2017-08-01",
+      "to": "2017-08-31"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -1955,6 +2079,10 @@ export const generatedProjects: Project[] = [
     "name": "대전광역시 교통안전시설물 관리시스템(T-GIS) 구축 용역",
     "org": "spatial-info",
     "summary": "대전시 교통안전시설물을 관리하는 시스템 신규 구축",
+    "period": {
+      "from": "2017-04-03",
+      "to": "2017-12-29"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -2014,6 +2142,10 @@ export const generatedProjects: Project[] = [
     "name": "개발제한구역 항공사진판독시스템 재구축 및 서비스 확대",
     "org": "spatial-info",
     "summary": "기 구축된 Visual Basic 프로그램의 ArcObjects 9 버전을 닷넷 기반 ArcObjects 13으로 마이그레이션",
+    "period": {
+      "from": "2016-08-01",
+      "to": "2016-12-30"
+    },
     "sections": [
       {
         "heading": "",
@@ -2047,6 +2179,10 @@ export const generatedProjects: Project[] = [
     "name": "서부발전 부동산영상정보 유지관리 용역",
     "org": "spatial-info",
     "summary": "상시 시스템 점검 및 유지관리",
+    "period": {
+      "from": "2016-09-01",
+      "to": "2018-03-30"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -2068,6 +2204,10 @@ export const generatedProjects: Project[] = [
     "name": "울산시 교통안전시설물 유지관리시스템 기능개선 및 유지보수 용역",
     "org": "spatial-info",
     "summary": "울산시에서 기존에 만들어져있던 Daum api 로 구성된 지도 페이지를 Openlayers 로 마이그레이션",
+    "period": {
+      "from": "2016-11-01",
+      "to": "2016-12-16"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -2105,6 +2245,10 @@ export const generatedProjects: Project[] = [
     "name": "농지정보시스템 개발 및 정보화사업 발전방향 수립",
     "org": "spatial-info",
     "summary": "농어촌공사에서 관리하는 농지정보시스템의 페이지 개발",
+    "period": {
+      "from": "2015-09-01",
+      "to": "2016-10-28"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -2141,6 +2285,10 @@ export const generatedProjects: Project[] = [
     "name": "부동산 영상 정보 시스템 구축",
     "org": "spatial-info",
     "summary": "한국서부발전소의 부동산 영상 자산에 대한 관리 시스템 구축",
+    "period": {
+      "from": "2015-04-01",
+      "to": "2015-07-31"
+    },
     "sections": [
       {
         "heading": "업무",
@@ -2241,6 +2389,10 @@ export const generatedProjects: Project[] = [
     "name": "교통지리정보시스템(TGIS) 기능개선 및 고도화 사업",
     "org": "spatial-info",
     "summary": "청주시 교통안전시설물에 대한 기구축된 관리시스템(VB)을 웹 시스템으로 재구축",
+    "period": {
+      "from": "2014-09-08",
+      "to": "2015-03-31"
+    },
     "sections": [
       {
         "heading": "업무",

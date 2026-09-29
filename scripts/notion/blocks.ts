@@ -7,6 +7,7 @@
 import type {
   Project,
   ProjectBlock,
+  ProjectPeriod,
   ProjectSection,
   TaskNode,
 } from '../../packages/resume/src/projects/types.ts';
@@ -116,6 +117,41 @@ export function pageMentions(map: BlockMap, rootId: string): string[] {
 
 export const pageTitle = (map: BlockMap, id: string): string =>
   plain(block(map, id)?.properties?.title).trim();
+
+/**
+ * 데이터베이스 페이지의 기간 속성(`daterange`)을 읽는다.
+ *
+ * 속성 키(`nTgV`)는 스키마 id라 Notion에서 속성을 새로 만들면 바뀐다.
+ * 키에 기대지 않고 속성 전체에서 날짜 어노테이션(`["d", {...}]`)을 찾는다.
+ */
+export function pagePeriod(
+  map: BlockMap,
+  id: string,
+): ProjectPeriod | undefined {
+  for (const rich of Object.values(block(map, id)?.properties ?? {})) {
+    for (const mark of annotations(rich)) {
+      if (mark[0] !== 'd') continue;
+      const date = mark[1] as { start_date?: string; end_date?: string };
+      if (date?.start_date) {
+        return { from: date.start_date, to: date.end_date ?? date.start_date };
+      }
+    }
+  }
+  return undefined;
+}
+
+/**
+ * 프로젝트 기간을 재직 기간 안으로 자른다. `tenure.to`가 없으면 재직 중이라
+ * 시작 쪽만 자른다. YYYY-MM-DD는 문자열 비교가 곧 날짜 비교다.
+ */
+export function clampPeriod(
+  period: ProjectPeriod,
+  tenure: { from: string; to?: string },
+): ProjectPeriod {
+  const from = period.from < tenure.from ? tenure.from : period.from;
+  const to = tenure.to && period.to > tenure.to ? tenure.to : period.to;
+  return { from, to };
+}
 
 const HEADINGS = new Set(['header', 'sub_header', 'sub_sub_header']);
 
@@ -275,6 +311,7 @@ export function toProject(input: {
     }
   }
   closeSection();
+  const period = pagePeriod(map, pageId);
 
   return {
     project: {
@@ -282,6 +319,7 @@ export function toProject(input: {
       name,
       org,
       summary,
+      ...(period ? { period } : {}),
       ...(note ? { note } : {}),
       sections,
       ...(projectLinks.length ? { links: projectLinks } : {}),

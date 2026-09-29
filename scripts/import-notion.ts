@@ -17,7 +17,12 @@ import { manualProjectNames } from '../packages/resume/src/projects/manual.ts';
 import { projectSlugs } from '../packages/resume/src/projects/slugs.ts';
 import type { Project } from '../packages/resume/src/projects/types.ts';
 import type { PendingImage } from './notion/blocks.ts';
-import { pageMentions, pageTitle, toProject } from './notion/blocks.ts';
+import {
+  clampPeriod,
+  pageMentions,
+  pageTitle,
+  toProject,
+} from './notion/blocks.ts';
 import { loadPage, RESUME_PAGE_ID } from './notion/client.ts';
 import { emit, GENERATED_FILE } from './notion/emit.ts';
 import { pruneImages, writeImages } from './notion/images.ts';
@@ -39,12 +44,21 @@ const fail = (message: string): never => {
  */
 const joinKey = (name: string) => name.replace(/\s+/g, '');
 
-const expected = new Map<string, { name: string; org: string }>();
+type Tenure = { from: string; to?: string };
+
+const expected = new Map<
+  string,
+  { name: string; org: string; tenure: Tenure }
+>();
 for (const career of resume.careers) {
   for (const name of career.projects) {
     // Notion 밖에서 손으로 쓰는 상세(`projects/manual.ts`)는 기대하지 않는다.
     if (manualProjectNames.has(name)) continue;
-    expected.set(joinKey(name), { name, org: career.slug });
+    expected.set(joinKey(name), {
+      name,
+      org: career.slug,
+      tenure: { from: career.from, to: career.to },
+    });
   }
 }
 
@@ -56,6 +70,7 @@ const pageIds = pageMentions(root, RESUME_PAGE_ID);
 const projects: Project[] = [];
 const images: PendingImage[] = [];
 const unknown: string[] = [];
+const clamped: string[] = [];
 
 for (const pageId of pageIds) {
   const map = await loadPage(pageId, { refresh });
@@ -70,7 +85,22 @@ for (const pageId of pageIds) {
   const slug = projectSlugs[match.name];
   if (!slug) fail(`slugs.ts에 슬러그가 없다: ${match.name}`);
 
-  const converted = toProject({ map, pageId, ...match, slug });
+  const { name, org, tenure } = match;
+  const converted = toProject({ map, pageId, name, org, slug });
+  const { period } = converted.project;
+
+  // Notion 기간이 재직 기간 밖으로 나간 경우가 있다 (입사 전 시작, 퇴사 후
+  // 종료). 이력서는 재직 기간을 기준으로 보여 주므로 여기서 자른다.
+  if (period) {
+    const fitted = clampPeriod(period, tenure);
+    if (fitted.from !== period.from || fitted.to !== period.to) {
+      clamped.push(
+        `${name}: ${period.from} — ${period.to} → ${fitted.from} — ${fitted.to}`,
+      );
+      converted.project.period = fitted;
+    }
+  }
+
   projects.push(converted.project);
   images.push(...converted.images);
 }
@@ -93,6 +123,15 @@ if (missing.length) {
     [
       'Notion에서 상세를 못 찾은 data.ts 프로젝트가 있다:',
       ...missing.map((name) => `  · ${name}`),
+    ].join('\n'),
+  );
+}
+
+if (clamped.length) {
+  console.log(
+    [
+      '재직 기간에 맞춰 자른 프로젝트 기간:',
+      ...clamped.map((line) => `  · ${line}`),
     ].join('\n'),
   );
 }

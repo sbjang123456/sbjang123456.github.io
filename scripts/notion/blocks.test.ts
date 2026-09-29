@@ -3,8 +3,10 @@ import fixture from './__fixtures__/page-chunk.json';
 import {
   type BlockMap,
   block,
+  clampPeriod,
   links,
   pageMentions,
+  pagePeriod,
   plain,
   toProject,
 } from './blocks.ts';
@@ -94,6 +96,10 @@ describe('toProject() — ERP 페이지', () => {
     expect(project.summary).toBe(
       'ERP 개발팀의 UI 표준을 위한 디자인 시스템 개발',
     );
+  });
+
+  it('기간 속성을 period로 옮긴다', () => {
+    expect(project.period).toEqual({ from: '2023-10-23', to: '2024-01-31' });
   });
 
   it('헤딩마다 섹션을 끊는다', () => {
@@ -206,6 +212,52 @@ describe('toProject() — 북마크와 헤딩 앞 본문', () => {
   it('자동 링크 오탐이 본문에 남지 않는다', () => {
     expect(JSON.stringify(project)).toContain('Asp.net');
     expect(JSON.stringify(project)).not.toContain('http://Asp.net');
+  });
+});
+
+describe('pagePeriod()', () => {
+  it('기간 속성이 없는 블록은 undefined다', () => {
+    expect(pagePeriod(map, CALLOUT)).toBeUndefined();
+    expect(pagePeriod(map, '없는-id')).toBeUndefined();
+  });
+});
+
+describe('clampPeriod()', () => {
+  const tenure = { from: '2022-05-02', to: '2023-08-10' };
+
+  it('재직 기간 안의 기간은 그대로 둔다', () => {
+    const period = { from: '2022-07-04', to: '2023-07-21' };
+
+    expect(clampPeriod(period, tenure)).toEqual(period);
+  });
+
+  it('퇴사 뒤로 나간 종료일을 퇴사일로 자른다', () => {
+    expect(
+      clampPeriod({ from: '2022-07-04', to: '2024-08-30' }, tenure),
+    ).toEqual({ from: '2022-07-04', to: '2023-08-10' });
+  });
+
+  it('입사 전으로 나간 시작일을 입사일로 자른다', () => {
+    expect(
+      clampPeriod(
+        { from: '2019-05-02', to: '2020-10-23' },
+        {
+          from: '2019-07-01',
+          to: '2021-10-22',
+        },
+      ),
+    ).toEqual({ from: '2019-07-01', to: '2020-10-23' });
+  });
+
+  it('재직 중이면 종료일은 자르지 않는다', () => {
+    expect(
+      clampPeriod(
+        { from: '2023-01-02', to: '2027-01-01' },
+        {
+          from: '2023-08-16',
+        },
+      ),
+    ).toEqual({ from: '2023-08-16', to: '2027-01-01' });
   });
 });
 

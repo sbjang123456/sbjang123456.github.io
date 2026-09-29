@@ -68,6 +68,29 @@ describe('프로젝트 상세', () => {
     }
   });
 
+  it('기간이 YYYY-MM-DD이고 순서가 맞으며 재직 기간 안에 있다', () => {
+    for (const career of resume.careers) {
+      for (const name of career.projects) {
+        const { period } = findProject(name);
+        if (!period) continue;
+
+        expect(period.from, name).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+        expect(period.to, name).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+        expect(period.from <= period.to, name).toBe(true);
+        expect(period.from >= career.from, name).toBe(true);
+        if (career.to) expect(period.to <= career.to, name).toBe(true);
+      }
+    }
+  });
+
+  it('Notion에서 온 상세는 모두 기간이 있다', () => {
+    const missing = generatedProjects
+      .filter((project) => !project.period)
+      .map((project) => project.name);
+
+    expect(missing).toEqual([]);
+  });
+
   it('요약이 비어 있지 않다', () => {
     for (const project of projects) {
       expect(project.summary.trim(), project.name).not.toBe('');

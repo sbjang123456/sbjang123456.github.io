@@ -7,6 +7,7 @@ export { projectSlugs } from './slugs';
 export type {
   Project,
   ProjectBlock,
+  ProjectPeriod,
   ProjectSection,
   TaskNode,
 } from './types';

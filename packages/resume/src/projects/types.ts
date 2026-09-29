@@ -22,6 +22,8 @@ export type ProjectBlock =
 /** Notion sub_header 하나 = 섹션 하나 (업무 / 작업 결과물 / 프로젝트 구조 …). */
 export type ProjectSection = { heading: string; blocks: ProjectBlock[] };
 
+export type ProjectPeriod = { from: string; to: string };
+
 export type Project = {
   /** 전역 유일. #앵커와 <details> id에 쓴다. */
   slug: string;
@@ -31,6 +33,11 @@ export type Project = {
   org: string;
   /** 첫 text 블록. 접힌 <summary>에 함께 보인다. */
   summary: string;
+  /**
+   * 수행 기간(YYYY-MM-DD). Notion 기간 속성을 옮기되 재직 기간 밖으로 나간
+   * 날짜는 재직 기간에 맞춰 자른다. 기간이 없는 상세(수기)는 비워 둔다.
+   */
+  period?: ProjectPeriod;
   /** Notion quote — 배경이나 회고 노트. */
   note?: string;
   sections: ProjectSection[];
