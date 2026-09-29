@@ -179,7 +179,7 @@ export const manualProjects: Project[] = [
     name: 'AS포탈(업무시스템) 넥사크로 → React 전환',
     org: 'hanssem',
     summary:
-      '넥사크로 레거시 A/S 업무시스템 전체를 React로 전환. Claude Code 에이전트 스킬로 분석–PRD–구현–테스트–리뷰–커밋 파이프라인을 만들어 50여 개 화면을 병렬 마이그레이션',
+      '넥사크로 레거시 A/S 업무시스템 전체를 React로 전환. Claude Code 에이전트 스킬로 분석–PRD–구현–테스트–리뷰–커밋 파이프라인을 만들어 170여 개 화면을 병렬 마이그레이션',
     note: '10년 넘게 운영된 넥사크로 기반 A/S 업무시스템을 React SPA로 전면 재구축하는 프로젝트. 화면 수가 많고 레거시 동작을 그대로 보존해야 하는 전환 작업이라, 사람이 화면을 하나씩 옮기는 대신 AI 에이전트가 레거시를 분석해 명세를 만들고 구현·검증까지 수행하는 파이프라인을 설계하는 데 집중했다. 사람은 명세 검토와 머지 같은 게이트에서 판단만 맡는다.',
     sections: [
       {
@@ -195,7 +195,7 @@ export const manualProjects: Project[] = [
                     text: 'React + TypeScript + Vite SPA, FSD 아키텍처. TanStack Query·Table·Virtual, react-hook-form + zod, zustand, Tailwind CSS + shadcn/ui 조합',
                   },
                   {
-                    text: '기준정보·A/S 접수·A/S 요청·조치관리·고객관리·평가분석·정산(유상수금, 현금영수증·카드결제)·게시판·교육·관리자 등 업무 도메인 전반의 화면 50여 개 전환',
+                    text: '기준정보·A/S 접수·A/S 요청·조치관리·고객관리·평가분석·정산(유상수금, 현금영수증·카드결제)·게시판·교육·관리자 등 업무 도메인 전반의 화면 170여 개 전환',
                   },
                 ],
               },
@@ -314,7 +314,7 @@ export const manualProjects: Project[] = [
             kind: 'tasks',
             items: [
               {
-                text: '넥사크로 레거시 업무시스템의 화면 50여 개를 React로 전환 — 작업 이슈 350여 건을 에이전트 파이프라인으로 처리',
+                text: '넥사크로 레거시 업무시스템의 화면 170여 개를 React로 전환 — 작업 이슈 350여 건을 에이전트 파이프라인으로 처리',
               },
               {
                 text: '한 화면씩 수작업으로 옮기던 방식을 여러 화면 동시 진행으로 바꾸고, 자동 보완 루프로 기능 누락을, 공유 컨벤션 스킬로 코드 스타일 불일치를 구조적으로 제거',
