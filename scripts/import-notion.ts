@@ -95,7 +95,7 @@ for (const pageId of pageIds) {
     const fitted = clampPeriod(period, tenure);
     if (fitted.from !== period.from || fitted.to !== period.to) {
       clamped.push(
-        `${name}: ${period.from} — ${period.to} → ${fitted.from} — ${fitted.to}`,
+        `${name}: ${period.from} ~ ${period.to} → ${fitted.from} ~ ${fitted.to}`,
       );
       converted.project.period = fitted;
     }

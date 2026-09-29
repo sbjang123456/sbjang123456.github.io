@@ -55,7 +55,7 @@ export type Resume = {
 
 /** `to`가 없으면 재직 중으로 본다. */
 export const formatPeriod = ({ from, to }: Pick<Career, 'from' | 'to'>) =>
-  `${from} — ${to ?? '재직 중'}`;
+  `${from} ~ ${to ?? '재직 중'}`;
 
 export const resume: Resume = {
   name: '장수빈',
@@ -246,7 +246,7 @@ export const resume: Resume = {
   background: [
     {
       title: '남서울대학교 GIS공학과 졸업',
-      period: '2009-03 — 2015-02',
+      period: '2009-03 ~ 2015-02',
     },
     {
       title: '측량 및 지형공간정보기사 (국가기술자격)',
@@ -254,7 +254,7 @@ export const resume: Resume = {
     },
     {
       title: '육군 병장 만기 전역',
-      period: '2010-05 — 2012-03',
+      period: '2010-05 ~ 2012-03',
     },
   ],
 };

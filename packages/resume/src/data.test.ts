@@ -4,12 +4,12 @@ import { formatPeriod, resume } from './data';
 describe('formatPeriod', () => {
   it('종료일이 있으면 기간을 잇는다', () => {
     expect(formatPeriod({ from: '2023-03-02', to: '2025-08-29' })).toBe(
-      '2023-03-02 — 2025-08-29',
+      '2023-03-02 ~ 2025-08-29',
     );
   });
 
   it('종료일이 없으면 재직 중으로 본다', () => {
-    expect(formatPeriod({ from: '2025-09-01' })).toBe('2025-09-01 — 재직 중');
+    expect(formatPeriod({ from: '2025-09-01' })).toBe('2025-09-01 ~ 재직 중');
   });
 });
 
