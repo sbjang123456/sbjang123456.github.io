@@ -1,0 +1,271 @@
+---
+title: 'Claude Code mods: 이벤트 핸들러로 화면과 동작을 바꾼다'
+date: 2026-10-01
+description: 'Claude Code 공식 문서의 mods 개요를 정리했다. mod는 Claude Code 안에서 도는 JS·TS 이벤트 핸들러를 담은 플러그인으로, 창을 그리고 도구 호출을 가로채고 명령을 더한다. 샌드박스 밖에서 사용자 권한으로 돌기 때문에 설치 전에 하는 일을 확인해야 한다.'
+source: 'https://code.claude.com/docs/ko/plugins/mods/overview'
+publisher: 'Claude Code Docs'
+---
+
+Claude Code 공식 문서 가운데 mods 개요 페이지를 정리했다. mod는 Claude Code의
+모양과 동작을 바꾸는 플러그인으로, JavaScript나 TypeScript로 쓴 이벤트
+핸들러로 이루어진다. 도구 호출, 프롬프트 제출, 인터페이스 렌더링 같은
+이벤트가 생기면 Claude Code가 핸들러를 부르고, 핸들러는 그 이벤트를
+지켜보거나 바꾸거나 직접 처리한다. 요청이 끝날 때마다 컨텍스트가 얼마나
+찼는지 차트로 그려 주는 창 같은 것을 Claude Code에 붙일 수 있다는 뜻이다.
+문서 자체에는 발행일이 없어서, mods가 정식으로 들어간 Claude Code v2.1.287의
+변경 로그 날짜인 2026년 10월 1일(미국 시간 기준)을 이 글의 날짜로 잡았다.
+
+## 설정 훅과 무엇이 다른가
+
+Claude Code에는 원래 훅이 있었다. 이벤트가 생기면 설정 파일에 적어 둔 셸
+명령이나 HTTP 요청, 프롬프트를 실행하는 기능이다. Claude Code는 mod의
+핸들러도 훅이라고 부르기 때문에 문서가 먼저 용어를 정리한다. mods 문서에서
+"훅"은 mod의 핸들러를 뜻하고, 설정 파일로 거는 기존 훅은 "설정 훅"이라고
+부른다. 이 글도 같은 구분을 따른다.
+
+차이는 실행되는 자리에 있다. 설정 훅, 스킬, 상태줄, MCP 서버는 Claude Code
+바깥에서 돌면서 스크립트를 실행하거나 Claude에게 텍스트나 도구를 건넨다.
+mod는 Claude Code 안에서 함수로 돌기 때문에 이들이 하지 못하는 일을 할 수
+있다.
+
+- **직접 쓰는 인터페이스 그리기**: 트랜스크립트 옆 창이나 프롬프트 위 띠
+  영역에 탭, 버튼, 텍스트 필드를 놓는다
+- **Claude Code의 기존 UI 다시 그리기**: 도구 호출 행, 스피너, Claude가
+  질문하는 대화 상자처럼 Claude Code가 직접 그리는 부분을 교체하거나 스타일을
+  바꾼다
+- **도구 호출과 요청에 개입하기**: 사용자에게 묻는 동안 도구 호출을 보류하거나,
+  도구를 실행하지 않고 대신 응답하거나, 특정 요청을 다른 모델로 보낸다
+- **턴 없이 도는 `/command` 만들기**: Claude의 턴을 거치지 않고, Claude가
+  작업하는 중에도 함수를 바로 실행하는 명령을 더한다
+- **훅끼리 데이터 공유하기**: 한 mod의 훅들은 같은 파일의 변수를 공유하므로,
+  한 훅이 세거나 모은 값을 다른 훅이 화면에 그릴 수 있다
+
+## mod는 이렇게 생겼다
+
+작은 mod는 파일 세 개로 이루어진다.
+
+```text
+first-mod/
+├── .claude-plugin/
+│   └── plugin.json
+└── hooks/
+    ├── hooks.json
+    └── register.js
+```
+
+`plugin.json`은 플러그인 매니페스트이고, `hooks.json`은 코드 파일이 어디
+있는지 가리킨다. 실제 코드는 훅 모듈이라고 부르는 `register.js`에 있으며,
+어떤 이벤트에서 어떤 함수를 실행할지 Claude Code에 알려 준다. 문서가 드는
+예시는 Claude가 도구를 호출한 횟수를 세어 스피너 옆에 붙이는 mod다. 아래가
+그 `register.js` 전체다.
+
+```javascript
+// The count, shared by the two hooks below
+let calls = 0
+
+// Claude Code calls this once when the mod loads
+export function register(on) {
+  // Runs each time Claude is about to use a tool
+  on('tool.call', async ($, e, next) => {
+    calls += 1
+    // Ask Claude Code to draw the interface again, so the new count shows
+    $.ui.invalidate('ui.render')
+    // Let the tool run as usual
+    return next(e)
+  })
+
+  // Runs each time Claude Code draws the spinner
+  on('ui.render', { component: 'Spinner' }, async ($, e, next) => {
+    // Keep Claude Code's spinner, with the count added after its word
+    return next({ ...e, props: { ...e.props, suffix: ' · tool calls: ' + calls + '…' } })
+  })
+}
+```
+
+훅은 두 개이고 둘 다 맨 위의 `calls` 변수를 쓴다. `tool.call` 훅은 Claude가
+도구를 쓰려 할 때마다 `calls`를 하나 올리고, 인터페이스를 다시 그려 달라고
+요청한 뒤 도구를 평소대로 실행시킨다. `ui.render` 훅은 Claude Code가 스피너를
+그릴 때마다 원래 스피너를 그대로 두고 문구 뒤에 횟수만 붙인다. 원문에 실린
+녹화 영상에서는 Claude가 디렉터리 목록을 조회하고 파일 두 개를 읽는 동안,
+프롬프트 상자 위 스피너 줄이 `Thinking · tool calls: 1…`, `2…`, `3…` 순으로
+바뀐다.
+
+Claude Code는 이벤트에 맞춰 동작하기 전에 훅을 먼저 실행하므로, 다음에 무슨
+일이 일어날지는 훅이 정한다. 훅이 이벤트로 할 수 있는 일은 세 가지다.
+
+- **관찰**: 위 예의 `tool.call` 훅처럼 일어난 일을 기록만 하고 그대로 진행시킨다
+- **재작성**: `ui.render` 훅처럼 이벤트가 계속 진행되기 전에 내용을 바꾼다
+- **응답**: 명령을 거부할 때처럼 이벤트를 직접 처리해서 원래 동작이 실행되지
+  않게 한다
+
+그리기, 명령 추가, 모델 호출, 파일 읽기, 프로세스 시작, 네트워크 요청처럼
+자기 코드 바깥에 닿는 일은 모두 mods API를 거쳐야 한다. 훅에는 다른 방법이
+없기 때문에, Claude Code는 mod를 실행하지 않고도 그 mod가 무엇을 하려는지
+설치 전에 나열해 보여 줄 수 있다.
+
+## 구하는 방법 세 가지
+
+- **이미 들어 있는 mod 쓰기**: `/diff`처럼 Claude Code 기능 일부가 이미 mod다.
+  아래 내장 mod 절에서 다시 다룬다
+- **Claude에게 요청하기**: 세션에서 원하는 것을 설명하면 Claude가 mod를 써
+  준다. 이때 Claude는 내장된 `plugin-authoring` 스킬을 쓴다. 코드가 어떻게
+  돌아가는지 알고 싶으면 직접 작성해 보는 안내도 따로 있다
+- **마켓플레이스에서 설치하기**: 일반 플러그인처럼 플러그인 이름, `@`,
+  마켓플레이스 이름을 지정한다. 세션 안에서는
+  `/plugin install token-chart@your-org`, 셸에서는
+  `claude plugin install token-chart@your-org`를 실행한다. 세션이 열린 채로
+  셸에서 설치하거나 업데이트했다면 그 세션에서 `/reload-plugins`를 실행해야
+  바로 로드되고, 그렇지 않으면 다음에 Claude Code를 시작할 때 로드된다
+
+Anthropic은 `anthropics/claude-code-playground` 저장소의 `claude-code/mods`
+디렉터리에 샘플 mod를 공유한다. 각 샘플은 완전한 플러그인이고 README에 만든
+방법이 적혀 있지만, 저장소는 샘플을 있는 그대로 공유할 뿐 지원은 하지 않는다고
+밝힌다.
+
+- `token-weather`: 프롬프트 위에 컨텍스트 윈도우 예보를 그린다
+- `blast-radius`: `rm -rf`나 강제 푸시 같은 위험한 셸 명령을 보류하고, 무엇이
+  바뀔지 보여 준 다음 진행하거나 취소하는 버튼을 띄운다
+- `replay-theater`: 직전 턴에서 Claude가 한 파일 편집을 단계별로 살펴보는
+  `/replay` 명령을 더한다
+
+써 보려면 저장소를 클론하고 `--plugin-dir`로 mod 디렉터리를 한 세션 동안만
+로드한다. 계속 쓰려면 클론한 `claude-code/mods` 디렉터리를 마켓플레이스로
+추가하고 `claude-code-playground-mods`에서 설치한다. 다만 마켓플레이스가
+클론을 가리키므로, 클론을 옮기거나 지우면 mod도 더 이상 로드되지 않는다.
+
+## 믿을 수 있는지 먼저 확인한다
+
+문서가 가장 힘주어 말하는 부분이다. mod는 Claude Code 안에서 사용자 권한으로
+도는 코드이고, 로드되면 다음 일을 할 수 있다.
+
+- **사용자로서 컴퓨터에서 작업하기**: 사용자 계정이 접근할 수 있는 모든
+  곳에서 파일을 읽고 쓰고, 프로그램을 실행하고, 네트워크 요청을 보낸다
+- **비밀 정보 읽기**: 환경 변수와 설정 파일, 그 안에 보관된 API 키를 읽는다
+- **세션 보기**: 사용자가 보내는 모든 프롬프트와 Claude의 모든 도구 호출을
+  본다
+- **세션 바꾸기**: 프롬프트나 도구 호출을 재작성하고, 사용자가 직접 입력한
+  것처럼 프롬프트를 제출하고, 사용자의 다른 세션으로 메시지를 보낸다
+- **묻지 않고 승인하기**: 사용자에게 확인을 요청하기 전에 도구 호출을
+  승인한다
+- **사용량 쓰기**: 사용자의 플랜이나 API 키로 모델을 호출한다
+
+mod는 샌드박스에서 돌지 않는다. 샌드박싱을 켜도 격리되는 것은 Claude가
+실행하는 Bash 명령이고, mod가 시작한 프로세스는 샌드박스 밖에서 돈다. 도구
+호출을 승인하는 mod는 `ask` 규칙이 확인을 요청할 호출이나 사용자 자신의
+`PreToolUse` 훅이 차단한 호출도 승인할 수 있다. `deny` 규칙이 거부한 호출까지
+승인할 수 있는 경우는 권한 문서에 따로 정리되어 있다. 대신 권한 프롬프트만은
+mod가 손댈 수 없다. 인터페이스의 많은 부분을 다시 꾸밀 수 있어도, 프롬프트에
+표시되는 내용은 바꾸지 못한다.
+
+설치하기 전에 확인하는 방법은 저장소를 클론하는 식으로 플러그인 파일을 먼저
+받아 두고, 셸에서 그 디렉터리를 대상으로 `claude plugin validate`를 실행하는
+것이다. 이 명령은 mod를 실행하지 않는다.
+
+```bash
+claude plugin validate ./some-mod
+```
+
+출력의 `hooks:` 줄에는 mod가 처리하는 이벤트가, `calls:` 줄에는 mod가 Claude
+Code에 요청하는 작업(파일 읽기, 네트워크 요청 등)이 나열된다.
+
+## 켜고 끄기
+
+mod는 기본으로 켜져 있다. 터미널에서는 Claude Code v2.1.287 이상이 필요하고,
+자체 Claude Code를 포함한 Desktop 앱에서는 v2.1.286부터 동작한다. 터미널은
+`claude --version`으로, Desktop 앱은 Code 탭의 로컬 세션에서 `/status`를
+입력해 **Claude Code** 행에서 버전을 확인한다.
+
+끌 때는 몇 개를 얼마 동안 멈출지에 따라 방법을 고른다. 다시 켜려면 같은
+변경을 되돌리면 된다.
+
+- **mod 하나**: `/plugin`의 **Installed** 탭에서 해당 플러그인을
+  비활성화하거나 제거한다
+- **설치한 모든 mod를 한 세션 동안**: `--safe-mode`로 Claude Code를 시작한다.
+  다른 사용자 지정 항목도 함께 꺼진다
+- **사용자가 설치한 모든 mod를 모든 세션에서**: `~/.claude/settings.json`에
+  `"disableAllHooks": true`를 둔다. 설정 훅과 사용자 지정 상태줄도 같이
+  멈추고, 조직이 관리하는 항목은 계속 실행된다
+
+`disableAllHooks`와 조직 설정인 `allowManagedModsOnly`는 mod만 멈추고
+플러그인의 나머지는 건드리지 않는다. 플러그인은 설치된 채로 남고, 같은
+플러그인의 스킬, 명령, 에이전트, MCP 서버도 그대로 로드된다. 얼리 액세스
+기간에 `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS`를 설정해 두었다면 지우라고 안내한다.
+v2.1.287부터는 이 값을 무시하므로 `0`으로 두어도 mod가 꺼진 상태로 남지 않는다.
+
+세션이 어떤 mod를 로드했는지는 터미널 프롬프트에서 `/plugin`을 실행하면 알 수
+있다. 탭 아래 흐린 줄에 `1 mod active · first-mod`처럼 개수와 이름이
+표시된다. 이 줄에 내장 mod는 나오지 않는다.
+
+## 훅은 어디서나 돌고, 그림은 두 곳에서만 보인다
+
+훅은 플러그인을 로드하는 모든 종류의 세션에서 돈다. 반면 mod가 그린 창,
+밴드, 대체된 행은 터미널과 Desktop 앱에서만 보인다.
+
+| 실행 위치 | 훅 실행 | 그린 내용 표시 |
+| :-- | :-- | :-- |
+| 터미널의 `claude`(에디터 통합 터미널, JetBrains 플러그인 포함) | 된다 | 된다 |
+| Desktop 앱의 Code 탭(WSL 세션 제외) | 된다 | 된다. 단, 터미널 전용 요소는 빠진다 |
+| Desktop 앱의 WSL 세션 | 안 된다. WSL 세션에서는 플러그인을 쓸 수 없다 | 안 된다 |
+| VS Code 확장의 채팅 패널 | 된다 | 안 된다 |
+| `claude -p`, Agent SDK | 된다 | 안 된다 |
+| claude.ai나 모바일 앱의 Remote Control | 된다. 사용자 컴퓨터의 세션에서 돈다 | 그 컴퓨터의 터미널에 표시된다 |
+| 클라우드 세션 | 클라우드 세션으로 넘어가는 플러그인만 된다 | 안 된다 |
+
+그리는 mod는 자기가 어느 앱에서 도는지 확인하고, 아무것도 그려지지 않는
+곳에서는 트랜스크립트의 한 줄이나 명령의 텍스트 응답으로 대신할 수 있다.
+
+## mod, 설정 훅, 스킬, MCP 서버 중 무엇을 고르나
+
+넷은 서로 겹치는 부분이 있어서 문서가 비교 표를 따로 둔다.
+
+| | Mod | 설정 훅 | 스킬 | MCP 서버 |
+| :-- | :-- | :-- | :-- | :-- |
+| 정의 | Claude Code가 자기 프로세스 안에서 호출하는 플러그인 속 함수 | 라이프사이클 이벤트에서 실행되는 셸 명령, HTTP 요청, 프롬프트 | Claude가 읽는 지침을 담은 `SKILL.md` 파일 | Claude에게 도구를 주는 외부 프로세스나 서비스 |
+| 바꿀 수 있는 것 | 도구 호출, 프롬프트, 명령, 턴, 인터페이스에 그려지는 내용 | 도구 호출과 프롬프트의 진행 여부, 도구 호출의 인수와 결과, Claude에 더하는 컨텍스트 | Claude가 알고 수행하는 것 | Claude가 쓸 수 있는 도구 |
+| 그리기 | 된다 | 안 된다 | 안 된다 | 안 된다 |
+| 작성 언어 | JS, TS | 스크립트와 `settings.json` 항목 | Markdown | 어떤 언어든 쓸 수 있는 서버 |
+| 고를 때 | 창, 프롬프트 위 띠, 사용자 지정 명령이 필요하거나 이벤트를 재작성하려 할 때 | 이미 있는 스크립트로 이벤트를 차단하거나 허용하거나 기록하려 할 때 | 같은 지침을 채팅에 반복해서 붙여 넣고 있을 때 | Claude가 외부 시스템에 접근해야 할 때 |
+
+플러그인 하나에 이 넷을 모두 담을 수 있으므로, mod를 스킬이나 MCP 서버와 같은
+플러그인에 묶어 배포해도 된다.
+
+## Claude Code 기능 일부가 이미 mod다
+
+Claude Code의 몇몇 기능은 그 자체가 mod다. `/plugin`의 **Installed** 탭에서
+**Built-in** 아래에 나열되고, 업데이트하거나 제거할 수는 없다.
+
+| `/plugin`에 표시되는 이름 | 하는 일 | 끄는 방법 |
+| :-- | :-- | :-- |
+| `cc-plugin-agents-md` | `AGENTS.md`를 프로젝트 지침으로 로드한다 | `/plugin`에서 비활성화하거나, 로드할 지침 파일을 고른다 |
+| `cc-plugin-diff` | `/diff`를 대신 처리하고 창을 그린다 | `/plugin`에서 비활성화한다. 그래도 `/diff`는 남고 Claude Code에 내장된 명령이 처리한다 |
+| `cc-plugin-plugin-authoring` | mod 작성용 `plugin-authoring` 스킬을 준다. 스킬만 있고 mod 코드는 없다 | `/plugin`에서 비활성화한다 |
+| `cc-plugin-sec-default` | 사용자가 설치한 mod로부터 조직이 관리하는 항목을 보호한다 | 끌 수 없다. 관리자가 관리형 설정에서 순서를 지정한다 |
+| `cc-plugin-telemetry` | Claude Code와 내장 mod가 로그에 남기는 분석 레코드를 보낸다 | `/plugin`에서 비활성화하거나, `DISABLE_TELEMETRY` 등으로 분석을 끈다 |
+| `cc-plugin-you-should-know` | Claude가 긴 작업을 하는 동안 보조 에이전트가 상황을 살피다가, 놓치기 쉬운 내용을 프롬프트 위에 알린다 | 기본으로 꺼져 있다. 조직에서 쓸 수 있으면 `/plugin enable cc-plugin-you-should-know@builtin`으로 켜고, `/plugin`에서 끈다 |
+
+`disableAllHooks`, `--bare`, `--safe-mode`처럼 설치한 mod를 멈추는 설정과
+플래그로는 내장 mod가 꺼지지 않는다. 이 가운데 `diff`, `agents-md`,
+`sec-default`, `telemetry`의 소스는 `anthropics/claude-code` 저장소의 `mods/`
+디렉터리에 공개되어 있다. 각각 훅 모듈과 테스트를 갖춘 완전한 플러그인이라서,
+mod를 직접 쓸 때 실제 예제로 읽어 볼 수 있다.
+
+## 읽고 남는 것
+
+설정 훅이 Claude Code 바깥에서 이벤트를 막거나 허용하는 장치였다면, mod는
+Claude Code 안에 들어와 화면과 동작을 직접 고쳐 쓰는 장치다. `/diff`와
+`AGENTS.md` 로딩까지 mod로 옮겨 둔 것을 보면, Anthropic도 이 구조를 Claude
+Code를 확장하는 기본 방식으로 삼으려는 것 같다. 스피너 문구 하나를 바꾸는 데
+파일 세 개면 되고 Claude에게 맡겨도 되니 시작은 쉽지만, 그만큼 신뢰 판단은
+설치하는 사람에게 넘어온다. 샌드박스 밖에서 내 권한으로 돌고 `ask` 규칙을
+건너뛰어 도구 호출을 승인할 수도 있기 때문이다. 남이 만든 mod를 들일 때는
+`claude plugin validate`의 `hooks:`와 `calls:` 두 줄을 먼저 읽는 습관을
+들여 두는 편이 좋겠다.
+
+---
+
+원문: [Mods 개요](https://code.claude.com/docs/ko/plugins/mods/overview)
+(Claude Code Docs. 문서에 발행일이 없어 mods가 정식으로 나온 v2.1.287의 변경
+로그 날짜 2026-10-01을 미국 시간 기준으로 글의 날짜로 정했다. Desktop 앱에서는
+하루 앞선 v2.1.286부터 mod가 동작하고, 그 전에는
+`CLAUDE_CODE_ENABLE_FUNCTION_HOOKS` 환경 변수를 쓰던 얼리 액세스 기간이 있었다.
+한국어판과 영문판의 내용은 같다)
